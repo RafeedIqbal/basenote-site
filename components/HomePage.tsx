@@ -99,14 +99,12 @@ export default function HomePage({ content }: HomePageProps) {
       if (!reduceMotion && heroVideo.length > 0 && heroWrapper.length > 0) {
         gsap.to(heroVideo, {
           scale: 1.08,
-          yPercent: 6,
+          yPercent: 0,
           ease: "none",
           scrollTrigger: {
             trigger: heroWrapper[0],
             start: "top top",
-            // We want the scale effect to happen just during the initial part of scroll, 
-            // similar to before, which was 'bottom top' of HeroSection.
-            end: "100vh top",
+            end: "bottom top",
             scrub: 0.85
           }
         });

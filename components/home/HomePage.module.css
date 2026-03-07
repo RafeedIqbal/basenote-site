@@ -254,6 +254,7 @@
   position: relative;
   width: 100%;
   isolation: isolate;
+  background: var(--color-night);
 }
 
 .videoBackground {
@@ -264,6 +265,7 @@
   overflow: hidden;
   z-index: 0;
   pointer-events: none;
+  background: var(--color-night);
 }
 
 .heroOpportunityContent {

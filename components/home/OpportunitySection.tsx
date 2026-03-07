@@ -1,16 +1,23 @@
 import type { HomePageContent } from "@/data/home-content";
 import styles from "./OpportunitySection.module.css";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-function splitIntoAnimatedCharacters(text: string) {
-    return Array.from(text).map((character, index) => (
+function splitIntoTypewriterCharacters(text: string, lineIndex: number) {
+    return text.trim().split(/\s+/).map((word, wordIndex) => (
         <span
-            key={`${character}-${index}`}
-            className={styles.opportunityChar}
-            data-opportunity-char=""
+            key={`${lineIndex}-${word}-${wordIndex}`}
+            className={styles.opportunityWordWrap}
         >
-            {character === " " ? "\u00A0" : character}
+            {Array.from(word).map((character, characterIndex) => (
+                <span
+                    key={`${lineIndex}-${wordIndex}-${character}-${characterIndex}`}
+                    className={styles.opportunityChar}
+                    data-opportunity-char=""
+                >
+                    {character}
+                </span>
+            ))}
         </span>
     ));
 }
@@ -21,44 +28,6 @@ type OpportunitySectionProps = {
 
 export default function OpportunitySection({ content }: OpportunitySectionProps) {
     const rootRef = useRef<HTMLElement>(null);
-    const viewportRefs = useRef<Array<HTMLDivElement | null>>([]);
-    const lineRefs = useRef<Array<HTMLParagraphElement | null>>([]);
-    const [lineScales, setLineScales] = useState<number[]>([]);
-
-    useEffect(() => {
-        const updateLineScales = () => {
-            setLineScales(
-                content.opportunity.lines.map((_, index) => {
-                    const viewport = viewportRefs.current[index];
-                    const line = lineRefs.current[index];
-
-                    if (!viewport || !line) {
-                        return 1;
-                    }
-
-                    const viewportWidth = viewport.clientWidth;
-                    const lineWidth = line.scrollWidth;
-
-                    if (viewportWidth <= 0 || lineWidth <= 0) {
-                        return 1;
-                    }
-
-                    return Math.min(1, viewportWidth / lineWidth);
-                })
-            );
-        };
-
-        const animationFrameId = window.requestAnimationFrame(updateLineScales);
-        const timeoutId = window.setTimeout(updateLineScales, 160);
-
-        window.addEventListener("resize", updateLineScales);
-
-        return () => {
-            window.cancelAnimationFrame(animationFrameId);
-            window.clearTimeout(timeoutId);
-            window.removeEventListener("resize", updateLineScales);
-        };
-    }, [content.opportunity.lines]);
 
     useGSAP(
         () => {
@@ -74,11 +43,11 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
                     gsap.to(opportunityCharacters, {
                         autoAlpha: 1,
                         y: 0,
-                        duration: 0.6,
-                        stagger: 0.008,
+                        duration: 0.8,
+                        stagger: 0.01,
                         scrollTrigger: {
                             trigger: rootRef.current,
-                            start: "top 72%",
+                            start: "top 75%",
                             once: true
                         }
                     });
@@ -88,7 +57,7 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
                             scrollTrigger: {
                                 trigger: rootRef.current,
                                 start: "top top",
-                                end: "+=110%",
+                                end: "+=160%",
                                 scrub: 0.9,
                                 pin: true,
                                 anticipatePin: 1,
@@ -99,7 +68,7 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
                             autoAlpha: 1,
                             y: 0,
                             ease: "none",
-                            stagger: 0.017
+                            stagger: 0.014
                         });
                 }
             }
@@ -147,27 +116,9 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
 
                 <div className={styles.opportunityCopy}>
                     {content.opportunity.lines.map((line, index) => (
-                        <div
-                            key={`${line}-${index}`}
-                            className={styles.opportunityLineViewport}
-                            ref={(element) => {
-                                viewportRefs.current[index] = element;
-                            }}
-                        >
-                            <p
-                                ref={(element) => {
-                                    lineRefs.current[index] = element;
-                                }}
-                                className={styles.opportunityLine}
-                                style={
-                                    {
-                                        "--line-scale": lineScales[index] ?? 1
-                                    } as CSSProperties
-                                }
-                            >
-                                {splitIntoAnimatedCharacters(line)}
-                            </p>
-                        </div>
+                        <p key={`${line}-${index}`} className={styles.opportunityLine}>
+                            {splitIntoTypewriterCharacters(line, index)}
+                        </p>
                     ))}
                 </div>
             </div>

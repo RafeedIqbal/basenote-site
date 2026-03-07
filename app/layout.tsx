@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Antonio, IBM_Plex_Mono, Schibsted_Grotesk } from "next/font/google";
 
+import SmoothScroll from "@/components/SmoothScroll";
+
 import "./globals.css";
 
 const antonio = Antonio({
@@ -62,7 +64,10 @@ export default function RootLayout({
       lang="en"
       className={`${antonio.variable} ${schibstedGrotesk.variable} ${ibmPlexMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   );
 }

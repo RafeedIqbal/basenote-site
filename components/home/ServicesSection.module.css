@@ -3,6 +3,8 @@
     /* Clean white Deformo style */
     color: #000;
     padding: 8rem 2rem;
+    position: relative;
+    z-index: 2;
 }
 
 .container {

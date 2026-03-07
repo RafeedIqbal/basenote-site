@@ -2,7 +2,7 @@
     background-color: transparent;
     color: #fff;
     padding: clamp(5rem, 10vw, 8rem) 2rem clamp(6rem, 11vw, 9rem);
-    min-height: 80vh;
+    min-height: 100svh;
     display: flex;
     align-items: center;
 }
@@ -65,32 +65,36 @@
     max-width: 1000px;
     margin-left: auto;
     display: grid;
-    gap: 0.9rem;
-}
-
-.opportunityLineViewport {
-    max-width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: thin;
-    -webkit-overflow-scrolling: touch;
+    gap: clamp(0.7rem, 1.5vw, 1.15rem);
 }
 
 .opportunityLine {
     font-family: var(--font-sans, sans-serif);
-    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-size: clamp(1.85rem, 4.6vw, 4.35rem);
     font-weight: 500;
-    line-height: 1.1;
+    line-height: 1.05;
     letter-spacing: -0.03em;
-    color: rgba(255, 255, 255, 0.15);
+    color: #fff;
     margin: 0;
-    white-space: nowrap;
-    width: max-content;
+    max-width: 100%;
+}
+
+.opportunityWordWrap {
+    display: inline-flex;
+    margin-right: 0.26em;
+    margin-bottom: 0.06em;
 }
 
 .opportunityChar {
     display: inline-block;
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(0.26em);
     color: #fff;
+    will-change: opacity, transform;
+}
+
+@media (max-width: 900px) {
+    .opportunitySection {
+        min-height: 100svh;
+    }
 }
