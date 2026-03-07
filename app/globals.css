@@ -1,0 +1,72 @@
+:root {
+  --color-night: #061427;
+  --color-night-soft: #0d2038;
+  --color-paper: #fffcf5;
+  --color-paper-strong: #f3eee4;
+  --color-ink: #121723;
+  --color-muted: #5d6470;
+  --color-accent: #ff6d42;
+  --color-accent-deep: #cf431f;
+  --color-accent-soft: #ffd6cb;
+  --border-dark: rgba(255, 255, 255, 0.14);
+  --border-light: rgba(18, 23, 35, 0.1);
+  --shadow-soft: 0 24px 80px rgba(18, 23, 35, 0.1);
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-2xl: 2.5rem;
+  --container: min(1240px, calc(100vw - 2rem));
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body), sans-serif;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: rgba(255, 109, 66, 0.25);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
