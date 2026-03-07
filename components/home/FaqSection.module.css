@@ -1,0 +1,110 @@
+.faqSection {
+    background-color: #f8f8f8;
+    color: #000;
+    padding: 8rem 2rem;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--max-width, 800px);
+    /* Narrower for reading */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.sectionIntro {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.eyebrow {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.sectionHeading {
+    font-family: var(--font-sans, sans-serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.sectionLede {
+    font-size: 1.125rem;
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 1.6;
+}
+
+.faqList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.faqItem {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.faqButton {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    background: none;
+    border: none;
+    color: inherit;
+    font-family: var(--font-sans, sans-serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faqButton:hover {
+    color: #00ccff;
+    /* Interactive accent */
+}
+
+.faqQuestion {
+    padding-right: 2rem;
+}
+
+.faqToggle {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.faqToggleOpen {
+    transform: rotate(45deg);
+    /* Turns the + into an x */
+}
+
+.faqPanel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    opacity: 0;
+    padding-bottom: 0;
+}
+
+.faqPanelOpen {
+    max-height: 500px;
+    /* Safe upper limit for transition */
+    opacity: 1;
+    padding-bottom: 1.5rem;
+}
+
+.faqAnswer {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.7);
+    line-height: 1.6;
+}

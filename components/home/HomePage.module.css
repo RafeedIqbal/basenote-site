@@ -31,7 +31,7 @@
   mix-blend-mode: normal;
 }
 
-.siteHeader > * {
+.siteHeader>* {
   pointer-events: auto;
 }
 
@@ -250,10 +250,25 @@
   color: var(--color-paper);
 }
 
-.heroMedia {
-  position: absolute;
-  inset: 0;
+.heroOpportunityWrapper {
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+}
+
+.videoBackground {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  margin-bottom: -100svh;
   overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.heroOpportunityContent {
+  position: relative;
+  z-index: 1;
 }
 
 .heroVideo {
@@ -321,7 +336,7 @@
   overflow: hidden;
 }
 
-.heroTitleLine > span {
+.heroTitleLine>span {
   display: block;
   will-change: transform;
 }
@@ -507,7 +522,7 @@
   will-change: transform, opacity;
 }
 
-.portfolioCard + .portfolioCard {
+.portfolioCard+.portfolioCard {
   margin-top: -6.75rem;
 }
 
@@ -631,7 +646,7 @@
   align-items: start;
 }
 
-.portfolioCardFooter > div {
+.portfolioCardFooter>div {
   display: grid;
   gap: 1rem;
 }
@@ -1168,6 +1183,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .menuOverlay,
   .menuPanel,
   .menuLink,

@@ -1,0 +1,234 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import type { HomePageContent } from "@/data/home-content";
+import { gsap, useGSAP } from "@/lib/gsap";
+
+import BasenoteSymbol from "./home/BasenoteSymbol";
+import styles from "./home/HomePage.module.css";
+
+import HeroSection from "./home/HeroSection";
+import OpportunitySection from "./home/OpportunitySection";
+import PortfolioSection from "./home/PortfolioSection";
+import ServicesSection from "./home/ServicesSection";
+import ProcessSection from "./home/ProcessSection";
+import WhyBasenoteSection from "./home/WhyBasenoteSection";
+import FaqSection from "./home/FaqSection";
+import ContactFooter from "./home/ContactFooter";
+
+type HomePageProps = {
+  content: HomePageContent;
+};
+
+export default function HomePage({ content }: HomePageProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const firstMenuLinkRef = useRef<HTMLAnchorElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const previousMenuOpen = useRef(false);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = previousOverflow;
+    }
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (menuOpen) {
+      const timer = window.setTimeout(() => {
+        firstMenuLinkRef.current?.focus();
+      }, 120);
+
+      previousMenuOpen.current = true;
+
+      return () => {
+        window.clearTimeout(timer);
+      };
+    }
+
+    if (previousMenuOpen.current) {
+      menuButtonRef.current?.focus();
+      previousMenuOpen.current = false;
+    }
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      return;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [menuOpen]);
+
+  useGSAP(
+    () => {
+      const q = gsap.utils.selector(rootRef);
+      const logoSymbol = q("[data-logo-symbol]");
+
+      gsap.set(logoSymbol, {
+        autoAlpha: 0.08,
+        scale: 0.92,
+        transformOrigin: "center center",
+        force3D: true
+      });
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      const heroVideo = q("[data-hero-video]");
+      const heroWrapper = q(`.${styles.heroOpportunityWrapper}`);
+
+      if (!reduceMotion && heroVideo.length > 0 && heroWrapper.length > 0) {
+        gsap.to(heroVideo, {
+          scale: 1.08,
+          yPercent: 6,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroWrapper[0],
+            start: "top top",
+            // We want the scale effect to happen just during the initial part of scroll, 
+            // similar to before, which was 'bottom top' of HeroSection.
+            end: "100vh top",
+            scrub: 0.85
+          }
+        });
+      }
+    },
+    { scope: rootRef }
+  );
+
+  return (
+    <div ref={rootRef} className={styles.page}>
+      <header className={styles.siteHeader} data-menu-open={menuOpen}>
+        <a
+          className={styles.brandMark}
+          href="#home"
+          aria-label="Basenote Solutions home"
+        >
+          <BasenoteSymbol className={styles.headerSymbol} data-logo-symbol="" />
+          <span className={styles.headerWordmark} aria-hidden="true">
+            <span className={styles.headerWordmarkPrimary}>Basenote</span>
+            <span className={styles.headerWordmarkSecondary}>Solutions</span>
+          </span>
+        </a>
+
+        <button
+          ref={menuButtonRef}
+          type="button"
+          className={styles.menuButton}
+          aria-expanded={menuOpen}
+          aria-controls="site-menu"
+          onClick={() => setMenuOpen((current) => !current)}
+        >
+          <span className={styles.menuButtonLabel}>
+            {menuOpen ? "Close" : "Menu"}
+          </span>
+        </button>
+      </header>
+
+      <div
+        id="site-menu"
+        className={styles.menuOverlay}
+        data-open={menuOpen}
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!menuOpen}
+      >
+        <button
+          type="button"
+          className={styles.menuBackdrop}
+          onClick={() => setMenuOpen(false)}
+          aria-label="Close navigation overlay"
+        />
+        <div className={styles.menuPanel}>
+          <div className={styles.menuColumn}>
+            <span className={styles.eyebrow}>Navigation</span>
+            <nav className={styles.menuNav} aria-label="Primary">
+              {content.nav.map((item, index) => (
+                <a
+                  key={item.href}
+                  ref={index === 0 ? firstMenuLinkRef : undefined}
+                  href={item.href}
+                  className={styles.menuLink}
+                  onClick={() => setMenuOpen(false)}
+                  tabIndex={menuOpen ? 0 : -1}
+                >
+                  <span className={styles.menuNumber}>{item.number}</span>
+                  <span className={styles.menuText}>{item.label}</span>
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className={styles.menuMeta}>
+            <div>
+              <span className={styles.eyebrow}>Basenote Solutions</span>
+              <p className={styles.menuSummary}>{content.hero.supporting}</p>
+            </div>
+
+            <div className={styles.menuContact}>
+              <div>
+                <span className={styles.eyebrow}>Contact</span>
+                <a
+                  href={`mailto:${content.contact.email}`}
+                  className={styles.menuEmail}
+                  tabIndex={menuOpen ? 0 : -1}
+                >
+                  {content.contact.email}
+                </a>
+              </div>
+              <p className={styles.menuFootnote}>{content.contact.note}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <main>
+        <div className={styles.heroOpportunityWrapper}>
+          <div className={styles.videoBackground} aria-hidden="true">
+            <video
+              className={styles.heroVideo}
+              data-hero-video=""
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+            >
+              <source src="/media/hero-background2.mp4" type="video/mp4" />
+            </video>
+            <div className={styles.heroGradient} />
+          </div>
+          <div className={styles.heroOpportunityContent}>
+            <HeroSection content={content} />
+            <OpportunitySection content={content} />
+          </div>
+        </div>
+        <ServicesSection content={content} />
+        <PortfolioSection content={content} />
+        <WhyBasenoteSection content={content} />
+        <ProcessSection content={content} />
+        <FaqSection content={content} />
+        <ContactFooter content={content} />
+      </main>
+    </div>
+  );
+}

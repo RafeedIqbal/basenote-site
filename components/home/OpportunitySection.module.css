@@ -1,0 +1,96 @@
+.opportunitySection {
+    background-color: transparent;
+    color: #fff;
+    padding: clamp(5rem, 10vw, 8rem) 2rem clamp(6rem, 11vw, 9rem);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--max-width, 1400px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 7vw, 6rem);
+}
+
+.sectionIntro {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .sectionIntro {
+        grid-template-columns: 1fr 2fr;
+    }
+}
+
+.eyebrow {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.sectionIntroBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+}
+
+.sectionHeading {
+    font-family: var(--font-sans, sans-serif);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.sectionLede {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.opportunityCopy {
+    width: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    display: grid;
+    gap: 0.9rem;
+}
+
+.opportunityLineViewport {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+}
+
+.opportunityLine {
+    font-family: var(--font-sans, sans-serif);
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: rgba(255, 255, 255, 0.15);
+    margin: 0;
+    white-space: nowrap;
+    width: max-content;
+}
+
+.opportunityChar {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(12px);
+    color: #fff;
+}
