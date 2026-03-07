@@ -98,102 +98,128 @@ export default function HomePage({ content }: HomePageProps) {
         "(prefers-reduced-motion: reduce)"
       ).matches;
       const media = gsap.matchMedia();
+      const q = gsap.utils.selector(rootRef);
+      const heroSection = q("[data-hero]")[0];
+      const heroVideo = q("[data-hero-video]");
+      const logoSymbol = q("[data-logo-symbol]");
+      const opportunitySection = q("[data-opportunity]")[0];
+      const opportunityCharacters = q("[data-opportunity-char]");
 
-      gsap.set("[data-logo-symbol]", { opacity: 0.08, scale: 0.92 });
+      gsap.set(logoSymbol, {
+        autoAlpha: 0.08,
+        scale: 0.92,
+        transformOrigin: "center center",
+        force3D: true
+      });
 
       gsap
         .timeline({ defaults: { ease: "power3.out" } })
-        .from("[data-hero-word]", {
-          yPercent: 108,
-          duration: 1.1,
-          stagger: 0.1
+        .from(q("[data-hero-word]"), {
+          yPercent: 106,
+          duration: reduceMotion ? 0.7 : 1,
+          stagger: reduceMotion ? 0.05 : 0.085
         })
         .from(
-          "[data-hero-copy]",
+          q("[data-hero-copy]"),
           {
-            opacity: 0,
-            y: 28,
-            duration: 0.75
+            autoAlpha: 0,
+            y: 24,
+            duration: reduceMotion ? 0.55 : 0.75
           },
-          "-=0.65"
+          "-=0.58"
         )
         .from(
-          "[data-hero-actions] > *",
+          q("[data-hero-actions] > *"),
           {
-            opacity: 0,
-            y: 18,
+            autoAlpha: 0,
+            y: 16,
             duration: 0.55,
-            stagger: 0.08
+            stagger: 0.07
           },
-          "-=0.45"
+          "-=0.4"
         );
 
-      gsap.to("[data-logo-symbol]", {
-        opacity: 1,
-        scale: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "[data-hero]",
-          start: "top top",
-          end: "bottom top",
-          scrub: reduceMotion ? false : 1
-        }
-      });
-
-      const opportunityCharacters =
-        gsap.utils.toArray<HTMLElement>("[data-opportunity-char]");
-
-      if (reduceMotion) {
-        gsap.to(opportunityCharacters, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.008,
-          scrollTrigger: {
-            trigger: "[data-opportunity]",
-            start: "top 72%",
-            once: true
-          }
-        });
-      } else {
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: "[data-opportunity]",
-            start: "top 72%",
-            end: "bottom 45%",
-            scrub: 1
-          }
-        }).to(opportunityCharacters, {
-          opacity: 1,
-          y: 0,
+      if (heroSection) {
+        gsap.to(logoSymbol, {
+          autoAlpha: 1,
+          scale: 1,
           ease: "none",
-          stagger: 0.018
+          scrollTrigger: {
+            trigger: heroSection,
+            start: "top top",
+            end: "bottom top",
+            scrub: reduceMotion ? false : 0.8
+          }
         });
       }
 
-      gsap.utils
-        .toArray<HTMLElement>("[data-reveal]")
-        .forEach((element, index) => {
-          gsap.fromTo(
-            element,
-            {
-              opacity: 0,
-              y: reduceMotion ? 0 : 36
-            },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              ease: "power2.out",
-              delay: index === 0 ? 0.1 : 0,
-              scrollTrigger: {
-                trigger: element,
-                start: "top 84%",
-                once: true
-              }
-            }
-          );
+      if (!reduceMotion && heroSection) {
+        gsap.to(heroVideo, {
+          scale: 1.08,
+          yPercent: 6,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroSection,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.85
+          }
         });
+      }
+
+      if (opportunitySection && opportunityCharacters.length > 0) {
+        if (reduceMotion) {
+          gsap.to(opportunityCharacters, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.008,
+            scrollTrigger: {
+              trigger: opportunitySection,
+              start: "top 72%",
+              once: true
+            }
+          });
+        } else {
+          gsap
+            .timeline({
+              scrollTrigger: {
+                trigger: opportunitySection,
+                start: "top 76%",
+                end: "bottom 38%",
+                scrub: 0.9
+              }
+            })
+            .to(opportunityCharacters, {
+              autoAlpha: 1,
+              y: 0,
+              ease: "none",
+              stagger: 0.017
+            });
+        }
+      }
+
+      q("[data-reveal]").forEach((element, index) => {
+        gsap.fromTo(
+          element,
+          {
+            autoAlpha: 0,
+            y: reduceMotion ? 0 : 30
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.78,
+            ease: "power2.out",
+            delay: index === 0 ? 0.08 : 0,
+            scrollTrigger: {
+              trigger: element,
+              start: "top 85%",
+              once: true
+            }
+          }
+        );
+      });
 
       media.add("(min-width: 901px)", () => {
         gsap.utils
@@ -202,19 +228,19 @@ export default function HomePage({ content }: HomePageProps) {
             gsap.fromTo(
               card,
               {
-                opacity: reduceMotion ? 1 : 0.55,
-                y: reduceMotion ? 0 : 72
+                autoAlpha: reduceMotion ? 1 : 0.72,
+                y: reduceMotion ? 0 : 24
               },
               {
-                opacity: 1,
+                autoAlpha: 1,
                 y: 0,
-                ease: "power3.out",
-                duration: 0.9,
+                ease: "power2.out",
+                duration: 0.8,
                 scrollTrigger: {
                   trigger: card,
                   start: "top 92%",
-                  end: reduceMotion ? "top 92%" : "top 58%",
-                  scrub: reduceMotion ? false : 1
+                  end: reduceMotion ? "top 92%" : "top 62%",
+                  scrub: reduceMotion ? false : 0.65
                 }
               }
             );
@@ -236,7 +262,7 @@ export default function HomePage({ content }: HomePageProps) {
 
             if (reduceMotion) {
               gsap.to(secondary, {
-                opacity: 1,
+                autoAlpha: 1,
                 duration: 0.45,
                 ease: "power2.out",
                 scrollTrigger: {
@@ -247,7 +273,7 @@ export default function HomePage({ content }: HomePageProps) {
               });
 
               gsap.to(primary, {
-                opacity: 0.18,
+                autoAlpha: 0.18,
                 duration: 0.45,
                 ease: "power2.out",
                 scrollTrigger: {
@@ -264,15 +290,15 @@ export default function HomePage({ content }: HomePageProps) {
               scrollTrigger: {
                 trigger: card,
                 start: "top 82%",
-                end: "bottom 40%",
-                scrub: 1
+                end: "bottom 38%",
+                scrub: 0.9
               }
             })
               .to(
                 primary,
                 {
-                  opacity: 0.2,
-                  scale: 1.03,
+                  autoAlpha: 0.2,
+                  scale: 1.02,
                   ease: "none"
                 },
                 0
@@ -280,7 +306,7 @@ export default function HomePage({ content }: HomePageProps) {
               .to(
                 secondary,
                 {
-                  opacity: 1,
+                  autoAlpha: 1,
                   scale: 1,
                   ease: "none"
                 },
@@ -325,6 +351,10 @@ export default function HomePage({ content }: HomePageProps) {
           aria-label="Basenote Solutions home"
         >
           <BasenoteSymbol className={styles.headerSymbol} data-logo-symbol="" />
+          <span className={styles.headerWordmark} aria-hidden="true">
+            <span className={styles.headerWordmarkPrimary}>Basenote</span>
+            <span className={styles.headerWordmarkSecondary}>Solutions</span>
+          </span>
         </a>
 
         <button
@@ -403,6 +433,7 @@ export default function HomePage({ content }: HomePageProps) {
           <div className={styles.heroMedia} aria-hidden="true">
             <video
               className={styles.heroVideo}
+              data-hero-video=""
               autoPlay
               loop
               muted
@@ -443,7 +474,11 @@ export default function HomePage({ content }: HomePageProps) {
           </div>
         </section>
 
-        <section id="opportunity" className={styles.opportunitySection}>
+        <section
+          id="opportunity"
+          data-opportunity=""
+          className={styles.opportunitySection}
+        >
           <div className={styles.sectionIntro} data-reveal="">
             <span className={styles.eyebrow}>{content.opportunity.eyebrow}</span>
             <div className={styles.sectionIntroBody}>

@@ -1,16 +1,17 @@
 :root {
-  --color-night: #061427;
-  --color-night-soft: #0d2038;
-  --color-paper: #fffcf5;
-  --color-paper-strong: #f3eee4;
-  --color-ink: #121723;
-  --color-muted: #5d6470;
-  --color-accent: #ff6d42;
-  --color-accent-deep: #cf431f;
-  --color-accent-soft: #ffd6cb;
-  --border-dark: rgba(255, 255, 255, 0.14);
-  --border-light: rgba(18, 23, 35, 0.1);
-  --shadow-soft: 0 24px 80px rgba(18, 23, 35, 0.1);
+  --color-night: #030f26;
+  --color-night-soft: #0a1a36;
+  --color-paper: #f2f3f7;
+  --color-paper-strong: #e8ebf1;
+  --color-ink: #0f1421;
+  --color-muted: #505a6d;
+  --color-accent: #ff643d;
+  --color-accent-deep: #c83d1e;
+  --color-accent-soft: #ffd7cc;
+  --color-cyan: #33daff;
+  --border-dark: rgba(255, 255, 255, 0.16);
+  --border-light: rgba(15, 20, 33, 0.11);
+  --shadow-soft: 0 22px 72px rgba(12, 17, 31, 0.12);
   --radius-lg: 1.5rem;
   --radius-xl: 2rem;
   --radius-2xl: 2.5rem;
@@ -36,7 +37,10 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--color-paper);
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(51, 218, 255, 0.07), transparent 28%),
+    var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body), sans-serif;
   line-height: 1.5;
