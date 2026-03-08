@@ -122,10 +122,6 @@ export default function HomePage({ content }: HomePageProps) {
           aria-label="Basenote Solutions home"
         >
           <BasenoteSymbol className={styles.headerSymbol} data-logo-symbol="" />
-          <span className={styles.headerWordmark} aria-hidden="true">
-            <span className={styles.headerWordmarkPrimary}>Basenote</span>
-            <span className={styles.headerWordmarkSecondary}>Solutions</span>
-          </span>
         </a>
 
         <button

@@ -5,7 +5,7 @@ type BasenoteSymbolProps = ComponentProps<"svg">;
 export default function BasenoteSymbol(props: BasenoteSymbolProps) {
   return (
     <svg
-      viewBox="0 0 100 100"
+      viewBox="0 0 3927 4492"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
@@ -13,13 +13,7 @@ export default function BasenoteSymbol(props: BasenoteSymbolProps) {
       {...props}
     >
       <path
-        d="M50 9L85 56L67.5 51.2L50 28.3L32.5 51.2L15 56L50 9Z"
-        fill="currentColor"
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M50 59L84 78L50 99L16 78L50 59ZM50 72L64.5 79.2L50 87.5L35.5 79.2L50 72Z"
+        d="M3709.28 2970.33L1963.19 0L0 3335.31L1963.19 4492L3926.37 3335.31L1963.19 2178.62L829.067 2846.81L1963.19 889.042M881.469 3335.31L1961.31 2655.9L3041.16 3335.31L1961.31 4014.73L881.469 3335.31Z"
         fill="currentColor"
       />
     </svg>

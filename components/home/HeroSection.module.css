@@ -54,8 +54,14 @@
   overflow: hidden;
 }
 
-.heroTitleLine>span {
+.heroTitleLine>span,
+.heroTitleLine>img {
   display: inline-block;
+}
+
+.heroLogoText {
+  width: clamp(20rem, 60vw, 60rem);
+  height: auto;
 }
 
 .heroBottomRow {

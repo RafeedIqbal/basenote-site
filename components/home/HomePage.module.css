@@ -38,48 +38,13 @@
 .brandMark {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  min-height: 3.25rem;
-  padding: 0.45rem 0.7rem 0.45rem 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(14px);
-}
-
-.siteHeader[data-menu-open="true"] .brandMark {
-  border-color: var(--border-light);
-  background: rgba(242, 243, 247, 0.9);
 }
 
 .headerSymbol {
-  width: 1.7rem;
-  height: 1.7rem;
+  width: 2.8rem;
+  height: 2.8rem;
   flex-shrink: 0;
   transform-origin: center center;
-}
-
-.headerWordmark {
-  display: grid;
-  gap: 0.02rem;
-  line-height: 1;
-}
-
-.headerWordmarkPrimary,
-.headerWordmarkSecondary {
-  font-family: var(--font-display), sans-serif;
-  text-transform: uppercase;
-}
-
-.headerWordmarkPrimary {
-  font-size: 0.95rem;
-  letter-spacing: 0.04em;
-}
-
-.headerWordmarkSecondary {
-  font-size: 0.56rem;
-  letter-spacing: 0.14em;
-  opacity: 0.82;
 }
 
 .menuButton {
@@ -87,22 +52,14 @@
   align-items: center;
   justify-content: center;
   min-width: 6.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: none;
   border-radius: 999px;
   padding: 0.7rem 1.1rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: transparent;
   color: inherit;
-  backdrop-filter: blur(16px);
   cursor: pointer;
   transition:
-    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.siteHeader[data-menu-open="true"] .menuButton {
-  border-color: var(--border-light);
-  background: rgba(242, 243, 247, 0.85);
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .menuButtonLabel,
@@ -1055,14 +1012,6 @@
     padding: 0.85rem 1rem;
   }
 
-  .headerWordmarkPrimary {
-    font-size: 0.84rem;
-  }
-
-  .headerWordmarkSecondary {
-    font-size: 0.5rem;
-  }
-
   .menuPanel {
     inset: 0.7rem;
     grid-template-columns: 1fr;
@@ -1143,10 +1092,6 @@
     min-width: 3rem;
     justify-content: center;
     padding-right: 0.5rem;
-  }
-
-  .headerWordmark {
-    display: none;
   }
 
   .heroGrid {

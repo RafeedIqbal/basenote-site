@@ -54,11 +54,14 @@ export default function HeroSection({ content }: HeroSectionProps) {
                 <div className={styles.kickerAndTitle}>
                     <p className={styles.heroKicker}>{content.hero.kicker}</p>
                     <h1 className={styles.heroTitle}>
-                        {content.hero.brandLines.map((line) => (
-                            <span key={line} className={styles.heroTitleLine}>
-                                <span data-hero-word="">{line}</span>
-                            </span>
-                        ))}
+                        <span className={styles.heroTitleLine}>
+                            <img
+                                src="/assets/logo-text.svg"
+                                alt="Basenote Solutions"
+                                data-hero-word=""
+                                className={styles.heroLogoText}
+                            />
+                        </span>
                     </h1>
                 </div>
 
