@@ -22,6 +22,8 @@ type HomePageProps = {
 
 export default function HomePage({ content }: HomePageProps) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  const menuOverlayRef = useRef<HTMLDivElement>(null);
   const firstMenuLinkRef = useRef<HTMLAnchorElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -37,6 +39,26 @@ export default function HomePage({ content }: HomePageProps) {
     }
     return () => {
       document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    const mainElement = mainRef.current;
+    if (!mainElement) {
+      return;
+    }
+
+    if (menuOpen) {
+      mainElement.setAttribute("inert", "");
+      mainElement.setAttribute("aria-hidden", "true");
+    } else {
+      mainElement.removeAttribute("inert");
+      mainElement.removeAttribute("aria-hidden");
+    }
+
+    return () => {
+      mainElement.removeAttribute("inert");
+      mainElement.removeAttribute("aria-hidden");
     };
   }, [menuOpen]);
 
@@ -64,16 +86,71 @@ export default function HomePage({ content }: HomePageProps) {
       return;
     }
 
-    const handleEscape = (event: KeyboardEvent) => {
+    const getFocusableElements = () => {
+      const menuOverlay = menuOverlayRef.current;
+      if (!menuOverlay) {
+        return [];
+      }
+
+      return Array.from(
+        menuOverlay.querySelectorAll<HTMLElement>(
+          [
+            "a[href]",
+            "button:not([disabled]):not([tabindex='-1'])",
+            "input:not([disabled]):not([tabindex='-1'])",
+            "select:not([disabled]):not([tabindex='-1'])",
+            "textarea:not([disabled]):not([tabindex='-1'])",
+            "[tabindex]:not([tabindex='-1'])"
+          ].join(", ")
+        )
+      ).filter((element) => {
+        const styles = window.getComputedStyle(element);
+        return styles.visibility !== "hidden" && styles.display !== "none";
+      });
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        event.preventDefault();
         setMenuOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusableElements = getFocusableElements();
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement as HTMLElement | null;
+      const activeInsideMenu = activeElement
+        ? focusableElements.includes(activeElement)
+        : false;
+
+      if (event.shiftKey) {
+        if (!activeInsideMenu || activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
+        }
+        return;
+      }
+
+      if (!activeInsideMenu || activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
       }
     };
 
-    window.addEventListener("keydown", handleEscape);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleEscape);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [menuOpen]);
 
@@ -116,19 +193,19 @@ export default function HomePage({ content }: HomePageProps) {
   return (
     <div ref={rootRef} className={styles.page}>
       <BasenoteSymbol className={styles.backgroundSymbol} data-logo-symbol="" />
+      <a href="#home" className={styles.visuallyHiddenHomeLink}>
+        Basenote Solutions home
+      </a>
       <header className={styles.siteHeader} data-menu-open={menuOpen}>
-        <a
-          className={styles.brandMark}
-          href="#home"
-          aria-label="Basenote Solutions home"
-        >
+        <div className={styles.brandMark} aria-hidden="true">
           <BasenoteSymbol className={styles.headerSymbol} />
-        </a>
+        </div>
 
         <button
           ref={menuButtonRef}
           type="button"
           className={styles.menuButton}
+          aria-haspopup="dialog"
           aria-expanded={menuOpen}
           aria-controls="site-menu"
           onClick={() => setMenuOpen((current) => !current)}
@@ -140,10 +217,12 @@ export default function HomePage({ content }: HomePageProps) {
       </header>
 
       <div
+        ref={menuOverlayRef}
         id="site-menu"
         className={styles.menuOverlay}
         data-open={menuOpen}
         role="dialog"
+        aria-label="Site navigation"
         aria-modal="true"
         aria-hidden={!menuOpen}
       >
@@ -152,6 +231,7 @@ export default function HomePage({ content }: HomePageProps) {
           className={styles.menuBackdrop}
           onClick={() => setMenuOpen(false)}
           aria-label="Close navigation overlay"
+          tabIndex={-1}
         />
         <div className={styles.menuPanel}>
           <div className={styles.menuColumn}>
@@ -196,7 +276,7 @@ export default function HomePage({ content }: HomePageProps) {
         </div>
       </div>
 
-      <main>
+      <main ref={mainRef}>
         <div className={styles.heroOpportunityWrapper}>
           <div className={styles.videoBackground} aria-hidden="true">
             <video

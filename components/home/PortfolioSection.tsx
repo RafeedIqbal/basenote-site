@@ -24,11 +24,11 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                 gsap.fromTo(
                     element,
                     {
-                        autoAlpha: 0,
+                        opacity: 0,
                         y: reduceMotion ? 0 : 30
                     },
                     {
-                        autoAlpha: 1,
+                        opacity: 1,
                         y: 0,
                         duration: 0.78,
                         ease: "power2.out",
@@ -50,17 +50,16 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                     gsap.fromTo(
                         card,
                         {
-                            autoAlpha: reduceMotion ? 1 : 0.9,
                             y: reduceMotion ? 0 : 18
                         },
                         {
-                            autoAlpha: 1,
                             y: 0,
                             ease: "power2.out",
                             duration: 0.65,
                             scrollTrigger: {
                                 trigger: card,
                                 start: "top 92%",
+                                fastScrollEnd: true,
                                 toggleActions: "play none none reverse"
                             }
                         }
@@ -71,16 +70,23 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                         return;
                     }
 
-                    gsap.to(card, {
-                        autoAlpha: 0,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: nextCard,
-                            start: "top 82%",
-                            end: "top 50%",
-                            scrub: true
+                    gsap.fromTo(
+                        card,
+                        { autoAlpha: 1 },
+                        {
+                            autoAlpha: 0,
+                            ease: "none",
+                            immediateRender: false,
+                            scrollTrigger: {
+                                trigger: nextCard,
+                                start: "top 86%",
+                                end: "top 50%",
+                                scrub: true,
+                                fastScrollEnd: true,
+                                invalidateOnRefresh: true
+                            }
                         }
-                    });
+                    );
                 });
             });
 

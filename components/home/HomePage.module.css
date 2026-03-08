@@ -51,13 +51,43 @@
 .brandMark {
   display: inline-flex;
   align-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
   visibility: hidden;
+  pointer-events: none;
 }
 
 .headerSymbol {
   width: 4.5rem;
   height: 4.5rem;
   flex-shrink: 0;
+}
+
+.visuallyHiddenHomeLink {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.visuallyHiddenHomeLink:focus-visible {
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0.65rem 1rem;
+  top: 1rem;
+  left: 1rem;
+  z-index: 50;
+  clip: auto;
+  border-radius: 999px;
+  background: var(--color-paper);
+  color: var(--color-night);
+  font-size: 0.85rem;
 }
 
 .menuButton {
@@ -138,6 +168,9 @@
   box-shadow: var(--shadow-soft);
   transform: translateY(-1.5rem) scale(0.98);
   transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   will-change: transform;
 }
 
@@ -149,14 +182,15 @@
 .menuMeta {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 100%;
+  justify-content: flex-start;
+  gap: 1.75rem;
+  min-height: 0;
 }
 
 .menuNav {
   display: grid;
   gap: 0.9rem;
-  margin-top: 2rem;
+  margin-top: 0;
 }
 
 .menuLink {
@@ -196,7 +230,7 @@
 .menuContact {
   display: grid;
   gap: 1rem;
-  align-self: end;
+  align-self: flex-start;
 }
 
 .menuEmail {
@@ -212,6 +246,23 @@
   margin: 0;
   color: var(--color-muted);
   font-size: 0.72rem;
+}
+
+@media (min-width: 901px) {
+  .menuColumn,
+  .menuMeta {
+    justify-content: space-between;
+    gap: 1.25rem;
+    min-height: 100%;
+  }
+
+  .menuNav {
+    margin-top: 2rem;
+  }
+
+  .menuContact {
+    align-self: flex-end;
+  }
 }
 
 .heroSection {
@@ -1027,12 +1078,29 @@
   }
 
   .menuPanel {
+    display: flex;
+    flex-direction: column;
     inset: 0.7rem;
-    grid-template-columns: 1fr;
+    max-height: calc(100dvh - 1.4rem);
+    gap: 1.4rem;
   }
 
   .menuText {
     font-size: clamp(2.1rem, 11vw, 3.75rem);
+  }
+
+  .menuColumn,
+  .menuMeta {
+    flex-shrink: 0;
+  }
+
+  .menuMeta {
+    border-top: 1px solid var(--border-light);
+    padding-top: 1rem;
+  }
+
+  .menuContact {
+    align-self: stretch;
   }
 
   .heroGrid,

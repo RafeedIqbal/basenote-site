@@ -204,7 +204,7 @@
 }
 
 .portfolioImpact {
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.62);
     font-family: var(--font-mono, monospace);
     font-size: 0.875rem;
     text-align: right;

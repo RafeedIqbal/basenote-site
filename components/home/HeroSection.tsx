@@ -17,23 +17,32 @@ export default function HeroSection({ content }: HeroSectionProps) {
             const reduceMotion = window.matchMedia(
                 "(prefers-reduced-motion: reduce)"
             ).matches;
+            const smallViewport = window.matchMedia("(max-width: 900px)").matches;
+            const shouldAnimateHeroWord = !reduceMotion && !smallViewport;
             const q = gsap.utils.selector(rootRef);
+            const heroWord = q("[data-hero-word]");
 
-            gsap
-                .timeline({ defaults: { ease: "power3.out" } })
-                .from(q("[data-hero-word]"), {
+            const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+            if (shouldAnimateHeroWord) {
+                timeline.from(heroWord, {
                     yPercent: 106,
-                    duration: reduceMotion ? 0.7 : 1,
-                    stagger: reduceMotion ? 0.05 : 0.085
-                })
+                    duration: 1,
+                    stagger: 0.085
+                });
+            } else {
+                gsap.set(heroWord, { yPercent: 0 });
+            }
+
+            timeline
                 .from(
                     q("[data-hero-copy]"),
                     {
                         autoAlpha: 0,
-                        y: 24,
+                        y: reduceMotion ? 0 : 24,
                         duration: reduceMotion ? 0.55 : 0.75
                     },
-                    "-=0.58"
+                    shouldAnimateHeroWord ? "-=0.58" : 0
                 )
                 .from(
                     q("[data-hero-actions] > *"),
@@ -61,6 +70,8 @@ export default function HeroSection({ content }: HeroSectionProps) {
                                 alt="Basenote Solutions"
                                 width={9117}
                                 height={5849}
+                                priority
+                                fetchPriority="high"
                                 data-hero-word=""
                                 className={styles.heroLogoText}
                             />
