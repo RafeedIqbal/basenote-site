@@ -43,29 +43,45 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
             });
 
             media.add("(min-width: 901px)", () => {
-                gsap.utils
-                    .toArray<HTMLElement>("[data-portfolio-card]")
-                    .forEach((card) => {
-                        gsap.fromTo(
-                            card,
-                            {
-                                autoAlpha: reduceMotion ? 1 : 0.72,
-                                y: reduceMotion ? 0 : 24
-                            },
-                            {
-                                autoAlpha: 1,
-                                y: 0,
-                                ease: "power2.out",
-                                duration: 0.8,
-                                scrollTrigger: {
-                                    trigger: card,
-                                    start: "top 92%",
-                                    end: reduceMotion ? "top 92%" : "top 62%",
-                                    scrub: reduceMotion ? false : 0.65
-                                }
+                const cards =
+                    gsap.utils.toArray<HTMLElement>("[data-portfolio-card]");
+
+                cards.forEach((card, index) => {
+                    gsap.fromTo(
+                        card,
+                        {
+                            autoAlpha: reduceMotion ? 1 : 0.9,
+                            y: reduceMotion ? 0 : 18
+                        },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            ease: "power2.out",
+                            duration: 0.65,
+                            scrollTrigger: {
+                                trigger: card,
+                                start: "top 92%",
+                                toggleActions: "play none none reverse"
                             }
-                        );
+                        }
+                    );
+
+                    const nextCard = cards[index + 1];
+                    if (!nextCard || reduceMotion) {
+                        return;
+                    }
+
+                    gsap.to(card, {
+                        autoAlpha: 0,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: nextCard,
+                            start: "top 82%",
+                            end: "top 50%",
+                            scrub: true
+                        }
                     });
+                });
             });
 
             media.add("(max-width: 900px)", () => {
@@ -142,7 +158,12 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                             key={project.id}
                             className={styles.portfolioCard}
                             data-portfolio-card=""
-                            style={{ "--card-order": index } as CSSProperties}
+                            style={
+                                {
+                                    "--card-order": index,
+                                    zIndex: index + 1
+                                } as CSSProperties
+                            }
                         >
                             <div className={styles.cardHeader}>
                                 <div className={styles.cardHeaderLeft}>
