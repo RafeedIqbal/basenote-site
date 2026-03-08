@@ -36,21 +36,15 @@ export const metadata: Metadata = {
     title: "Basenote Solutions",
     description:
       "Designing and launching fragrance brands through scent, craft, and strategy.",
-    images: [
-      {
-        url: "/assets/logo-full.svg",
-        width: 13378,
-        height: 5849,
-        alt: "Basenote Solutions logo"
-      }
-    ]
+    siteName: "Basenote Solutions",
+    locale: "en_US",
+    type: "website"
   },
   twitter: {
     card: "summary_large_image",
     title: "Basenote Solutions",
     description:
-      "Designing and launching fragrance brands through scent, craft, and strategy.",
-    images: ["/assets/logo-full.svg"]
+      "Designing and launching fragrance brands through scent, craft, and strategy."
   }
 };
 
