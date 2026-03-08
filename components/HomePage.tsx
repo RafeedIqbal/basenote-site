@@ -83,8 +83,8 @@ export default function HomePage({ content }: HomePageProps) {
       const logoSymbol = q("[data-logo-symbol]");
 
       gsap.set(logoSymbol, {
-        autoAlpha: 0.08,
-        scale: 0.92,
+        autoAlpha: 0.5,
+        scale: 1,
         transformOrigin: "center center",
         force3D: true
       });
@@ -115,13 +115,14 @@ export default function HomePage({ content }: HomePageProps) {
 
   return (
     <div ref={rootRef} className={styles.page}>
+      <BasenoteSymbol className={styles.backgroundSymbol} data-logo-symbol="" />
       <header className={styles.siteHeader} data-menu-open={menuOpen}>
         <a
           className={styles.brandMark}
           href="#home"
           aria-label="Basenote Solutions home"
         >
-          <BasenoteSymbol className={styles.headerSymbol} data-logo-symbol="" />
+          <BasenoteSymbol className={styles.headerSymbol} />
         </a>
 
         <button

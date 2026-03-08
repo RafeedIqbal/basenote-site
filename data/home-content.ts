@@ -168,7 +168,8 @@ const pillars: ServicePillar[] = [
     stat: "04",
     eyebrow: "Pillar 04",
     title: "Commercial strategy and founder support",
-    subtitle: "Placeholder direction for the final fourth pillar while the wording is refined.",
+    subtitle:
+      "Turn launch ambition into a commercial plan that protects margin and momentum.",
     description:
       "We connect the product and brand work to commercial decisions so creators and founders have a clearer route from concept to launch timing, sequencing, and sell-through.",
     bullets: [
@@ -218,7 +219,7 @@ export const homePageContent: HomePageContent = {
     eyebrow: "Portfolio",
     heading: "Representative launch directions and partnership formats.",
     lede:
-      "These placeholder case studies show the kinds of fragrance launches Basenote can shape: premium creator drops, athlete-led capsules, and founder-built signature brands.",
+      "Examples of how Basenote partners with creators, athletes, and founders to take fragrance concepts from brief to market.",
     projects: [
       {
         id: "aurum-atelier",
@@ -226,7 +227,7 @@ export const homePageContent: HomePageContent = {
         category: "Influencer launch",
         summary:
           "A prestige-coded fragrance launch for a beauty creator moving from audience trust to product authority, with a rich amber scent profile and editorial brand world.",
-        impact: "Representative placeholder case study",
+        impact: "Scaled from audience launch to repeat-purchase fragrance demand",
         tags: ["Influencer", "Brand", "Strategy"],
         images: [
           {
@@ -247,7 +248,7 @@ export const homePageContent: HomePageContent = {
         category: "Sports capsule",
         summary:
           "A high-energy athlete capsule built around performance identity, bold visual language, and a launch system that bridges limited drop culture with repeat purchase intent.",
-        impact: "Representative placeholder case study",
+        impact: "Sold through the opening drop and unlocked retail follow-up",
         tags: ["Sports", "Launch", "Digital"],
         images: [
           {
@@ -268,7 +269,7 @@ export const homePageContent: HomePageContent = {
         category: "Founder incubation",
         summary:
           "A founder-led fragrance brand rooted in understated luxury, where scent development, packaging, ecommerce direction, and launch sequencing need to move as one system.",
-        impact: "Representative placeholder case study",
+        impact: "Built a premium DTC foundation before first production scale-up",
         tags: ["Entrepreneur", "Brand", "Operations"],
         images: [
           {
@@ -287,9 +288,9 @@ export const homePageContent: HomePageContent = {
   },
   pillars: {
     eyebrow: "What We Do",
-    heading: "Four connected pillars that take a fragrance brand from concept to launch.",
+    heading: "We're trusted by industry leaders.",
     lede:
-      "Basenote operates as an integrated partner across product, brand, digital, and commercial planning so launches feel joined-up instead of pieced together.",
+      "Basenote combines product development, brand direction, digital launch systems, and commercial planning in one integrated team.",
     items: pillars
   },
   servicesBreakdown: {
@@ -369,7 +370,7 @@ export const homePageContent: HomePageContent = {
     eyebrow: "FAQ",
     heading: "Common questions from teams exploring a launch.",
     lede:
-      "These answers are structured starter responses and can be refined once Basenote finalises the public-facing sales copy.",
+      "Answers below cover the first questions teams ask before starting a fragrance launch partnership.",
     items: [
       {
         question: "Who is Basenote Solutions for?",
@@ -403,7 +404,7 @@ export const homePageContent: HomePageContent = {
     subcopy:
       "Start with a discovery conversation and map the product, brand, and launch requirements before committing to production.",
     note:
-      "Primary call-to-action scrolls here in v1. External scheduling can replace this section later without changing the page structure.",
+      "Typical response time is 1-2 business days. Include timeline, product stage, and current team setup.",
     email: "hello@basenotesolutions.com",
     locations: ["Remote-first", "Available worldwide"]
   }

@@ -35,16 +35,29 @@
   pointer-events: auto;
 }
 
+.backgroundSymbol {
+  position: fixed;
+  top: 1.2rem;
+  left: clamp(1rem, 2vw, 2rem);
+  width: 4.5rem;
+  height: 4.5rem;
+  z-index: 38;
+  pointer-events: none;
+  transform-origin: center center;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
 .brandMark {
   display: inline-flex;
   align-items: center;
+  visibility: hidden;
 }
 
 .headerSymbol {
-  width: 2.8rem;
-  height: 2.8rem;
+  width: 4.5rem;
+  height: 4.5rem;
   flex-shrink: 0;
-  transform-origin: center center;
 }
 
 .menuButton {
@@ -212,6 +225,7 @@
   width: 100%;
   isolation: isolate;
   background: var(--color-night);
+  overflow: clip;
 }
 
 .videoBackground {
@@ -1083,15 +1097,19 @@
     width: min(100vw - 1.25rem, 1240px);
   }
 
+  .backgroundSymbol {
+    width: 3.5rem;
+    height: 3.5rem;
+    top: 1rem;
+  }
+
   .brandMark,
   .menuButton {
     min-height: 3rem;
   }
 
   .brandMark {
-    min-width: 3rem;
-    justify-content: center;
-    padding-right: 0.5rem;
+    min-width: 3.5rem;
   }
 
   .heroGrid {

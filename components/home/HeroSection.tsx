@@ -1,4 +1,5 @@
 import type { HomePageContent } from "@/data/home-content";
+import Image from "next/image";
 import defaultStyles from "./HomePage.module.css";
 import styles from "./HeroSection.module.css";
 import { useRef } from "react";
@@ -55,9 +56,11 @@ export default function HeroSection({ content }: HeroSectionProps) {
                     <p className={styles.heroKicker}>{content.hero.kicker}</p>
                     <h1 className={styles.heroTitle}>
                         <span className={styles.heroTitleLine}>
-                            <img
+                            <Image
                                 src="/assets/logo-text.svg"
                                 alt="Basenote Solutions"
+                                width={9117}
+                                height={5849}
                                 data-hero-word=""
                                 className={styles.heroLogoText}
                             />
