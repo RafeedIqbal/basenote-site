@@ -21,6 +21,14 @@
     text-align: center;
 }
 
+.sectionIntroBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 .eyebrow {
     font-family: var(--font-mono, monospace);
     font-size: 0.875rem;

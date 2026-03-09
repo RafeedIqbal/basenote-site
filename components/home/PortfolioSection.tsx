@@ -67,56 +67,6 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                 });
             });
 
-            media.add("(max-width: 1280px)", () => {
-                gsap.utils
-                    .toArray<HTMLElement>("[data-mobile-card]")
-                    .forEach((card) => {
-                        const primary = card.querySelector<HTMLElement>("[data-mobile-primary]");
-                        const secondary = card.querySelector<HTMLElement>(
-                            "[data-mobile-secondary]"
-                        );
-
-                        if (!primary || !secondary) return;
-
-                        if (reduceMotion) {
-                            gsap.to(secondary, {
-                                autoAlpha: 1,
-                                duration: 0.45,
-                                ease: "power2.out",
-                                scrollTrigger: {
-                                    trigger: card,
-                                    start: "top 78%",
-                                    toggleActions: "play none none reverse"
-                                }
-                            });
-
-                            gsap.to(primary, {
-                                autoAlpha: 0.18,
-                                duration: 0.45,
-                                ease: "power2.out",
-                                scrollTrigger: {
-                                    trigger: card,
-                                    start: "top 78%",
-                                    toggleActions: "play none none reverse"
-                                }
-                            });
-                            return;
-                        }
-
-                        gsap
-                            .timeline({
-                                scrollTrigger: {
-                                    trigger: card,
-                                    start: "top 82%",
-                                    end: "bottom 38%",
-                                    scrub: 0.9
-                                }
-                            })
-                            .to(primary, { autoAlpha: 0.2, scale: 1.02, ease: "none" }, 0)
-                            .to(secondary, { autoAlpha: 1, scale: 1, ease: "none" }, 0);
-                    });
-            });
-
             return () => {
                 media.revert();
             };

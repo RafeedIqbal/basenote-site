@@ -62,16 +62,11 @@ export type HomePageContent = {
     lede: string;
   };
   hero: {
-    brandLines: string[];
-    kicker: string;
     supporting: string;
     summary: string;
   };
   nav: NavItem[];
   opportunity: {
-    eyebrow: string;
-    heading: string;
-    lede: string;
     lines: string[];
   };
   pillars: {
@@ -96,11 +91,6 @@ export type HomePageContent = {
     eyebrow: string;
     heading: string;
     items: ReasonCard[];
-    lede: string;
-  };
-  servicesBreakdown: {
-    eyebrow: string;
-    heading: string;
     lede: string;
   };
 };
@@ -198,18 +188,12 @@ export const homePageContent: HomePageContent = {
     { number: "09", label: "Contact", href: "#contact" }
   ],
   hero: {
-    kicker: "End-to-end fragrance incubation",
-    brandLines: ["Basenote", "Solutions"],
     summary:
       "Designing and launching fragrance brands through scent, craft, and strategy.",
     supporting:
       "From formulation and packaging to creative direction and launch infrastructure, Basenote helps creators, athletes, founders, and operators turn an idea into a fragrance brand with momentum."
   },
   opportunity: {
-    eyebrow: "The Opportunity",
-    heading: "The fragrance category is moving toward founder-led launches.",
-    lede:
-      "New brands are being built by creators and entrepreneurs who need product development, brand direction, and launch systems stitched together instead of split across multiple suppliers.",
     lines: [
       "The fragrance industry is evolving.",
       "Creators and entrepreneurs are launching their own perfume brands."
@@ -292,12 +276,6 @@ export const homePageContent: HomePageContent = {
     lede:
       "Basenote combines product development, brand direction, digital launch systems, and commercial planning in one integrated team.",
     items: pillars
-  },
-  servicesBreakdown: {
-    eyebrow: "Services Breakdown",
-    heading: "Concrete deliverables behind each pillar.",
-    lede:
-      "The work spans fragrance creation, brand systems, launch infrastructure, and strategic support, with each area designed to reduce launch friction."
   },
   process: {
     eyebrow: "The Process",

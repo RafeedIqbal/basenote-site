@@ -10,6 +10,8 @@ type ContactFooterProps = {
 
 export default function ContactFooter({ content }: ContactFooterProps) {
     const rootRef = useRef<HTMLElement>(null);
+    const contactNavLabel =
+        content.nav.find((item) => item.href === "#contact")?.label ?? "Contact";
 
     useGSAP(
         () => {
@@ -48,7 +50,7 @@ export default function ContactFooter({ content }: ContactFooterProps) {
             <div className={styles.container}>
                 <article className={styles.contactCard} data-reveal="">
                     <div className={styles.contactContent}>
-                        <span className={styles.eyebrow}>{content.nav[8]?.label ?? "Contact"}</span>
+                        <span className={styles.eyebrow}>{contactNavLabel}</span>
                         <h2 className={styles.contactHeading}>{content.contact.heading}</h2>
                         <p className={styles.contactCopy}>{content.contact.subcopy}</p>
                         <div className={styles.contactActions}>

@@ -418,7 +418,9 @@
     }
 
     .cardFrame {
-        min-height: var(--card-frame-height, clamp(35rem, 62vh, 46rem));
+        min-height: calc(
+            var(--card-frame-height, clamp(35rem, 62vh, 46rem)) + 1.75rem
+        );
     }
 
     .card {
