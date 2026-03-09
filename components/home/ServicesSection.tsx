@@ -67,9 +67,11 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
             const reduceMotion = window.matchMedia(
                 "(prefers-reduced-motion: reduce)"
             ).matches;
-            const isMobile = window.matchMedia("(max-width: 1023px)").matches;
+            const isCompactOrSmaller = window.matchMedia(
+                "(max-width: 1280px)"
+            ).matches;
 
-            if (reduceMotion || isMobile) {
+            if (reduceMotion || isCompactOrSmaller) {
                 gsap.killTweensOf([activeCardRef.current, exitingCardRef.current]);
                 transitionTokenRef.current += 1;
                 setExitingIndex(null);

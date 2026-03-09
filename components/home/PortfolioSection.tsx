@@ -42,7 +42,7 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                 );
             });
 
-            media.add("(min-width: 901px)", () => {
+            media.add("(min-width: 1281px)", () => {
                 const cards =
                     gsap.utils.toArray<HTMLElement>("[data-portfolio-card]");
 
@@ -90,7 +90,7 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                 });
             });
 
-            media.add("(max-width: 900px)", () => {
+            media.add("(max-width: 1280px)", () => {
                 gsap.utils
                     .toArray<HTMLElement>("[data-mobile-card]")
                     .forEach((card) => {
@@ -192,7 +192,7 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                                             src={image.src}
                                             alt={image.alt}
                                             fill
-                                            sizes="(max-width: 900px) 100vw, 50vw"
+                                            sizes="(max-width: 767px) 100vw, 50vw"
                                             className={styles.portfolioMedia}
                                         />
                                         <span className={styles.portfolioMediaCaption}>

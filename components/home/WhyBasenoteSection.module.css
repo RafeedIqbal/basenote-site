@@ -101,3 +101,35 @@
     color: rgba(255, 255, 255, 0.6);
     line-height: 1.6;
 }
+
+@media (min-width: 901px) and (max-width: 1280px) {
+    .whyBasenoteSection {
+        padding: 6rem 1.5rem;
+    }
+
+    .container {
+        gap: 4.5rem;
+    }
+
+    .sectionIntro {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .sectionHeading {
+        font-size: clamp(1.9rem, 3.5vw, 3rem);
+    }
+
+    .sectionLede {
+        font-size: 1.05rem;
+    }
+
+    .reasonGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .reasonCard {
+        gap: 3rem;
+        padding-top: 1.5rem;
+    }
+}

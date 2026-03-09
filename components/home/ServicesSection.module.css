@@ -288,7 +288,7 @@
     min-height: auto;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1281px) {
     .mainRow {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         min-height: clamp(34rem, 78vh, 48rem);
@@ -308,7 +308,7 @@
     }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1280px) {
     .layout {
         min-height: auto;
     }
@@ -323,8 +323,8 @@
     }
 
     .cardFrame {
-        height: auto;
-        min-height: auto;
+        height: var(--card-frame-height, auto);
+        min-height: var(--card-frame-height, clamp(35rem, 62vh, 46rem));
     }
 
     .cardActive,
@@ -342,16 +342,73 @@
         display: none;
     }
 
-    .sizerWrap {
-        display: none;
-    }
-
     .heading {
         max-width: none;
     }
 
     .headingLineNoWrap {
         white-space: normal;
+    }
+}
+
+@media (min-width: 901px) and (max-width: 1280px) {
+    .left,
+    .right {
+        padding: clamp(1.75rem, 3vw, 2.8rem) clamp(1rem, 2.4vw, 2rem);
+    }
+
+    .intro {
+        gap: 1.1rem;
+    }
+
+    .heading {
+        font-size: clamp(2.2rem, 4.1vw, 3.6rem);
+    }
+
+    .cardFrame {
+        max-width: none;
+    }
+
+    .card {
+        gap: 1.25rem;
+    }
+
+    .cardTitle {
+        font-size: clamp(2rem, 3.5vw, 3.1rem);
+    }
+
+    .cardDescription {
+        font-size: 1rem;
+        line-height: 1.48;
+    }
+
+    .cardLists {
+        margin-top: 0;
+        padding-top: 1rem;
+        gap: 1rem;
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        overflow: visible;
+    }
+
+    .tab {
+        flex: 0 0 auto;
+        min-width: 0;
+        min-height: 4.9rem;
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .tab:nth-child(2n) {
+        border-right: 0;
+    }
+
+    .tab:nth-last-child(-n + 2) {
+        border-bottom: 0;
     }
 }
 
@@ -363,12 +420,15 @@
     }
 
     .cardFrame {
-        min-height: auto;
+        min-height: var(--card-frame-height, clamp(35rem, 62vh, 46rem));
     }
 
     .card {
-        height: auto;
-        grid-template-rows: auto auto auto;
+        height: 100%;
+        grid-template-rows:
+            minmax(var(--card-top-height, auto), auto)
+            minmax(var(--card-description-height, auto), auto)
+            1fr;
         gap: 1rem;
     }
 

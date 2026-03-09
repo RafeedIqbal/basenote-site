@@ -108,3 +108,26 @@
     color: rgba(0, 0, 0, 0.7);
     line-height: 1.6;
 }
+
+@media (min-width: 901px) and (max-width: 1280px) {
+    .faqSection {
+        padding: 6rem 1.5rem;
+    }
+
+    .container {
+        gap: 3rem;
+    }
+
+    .sectionHeading {
+        font-size: clamp(1.85rem, 3.3vw, 2.5rem);
+    }
+
+    .sectionLede {
+        font-size: 1.02rem;
+    }
+
+    .faqButton {
+        padding: 1.15rem 0;
+        font-size: 1.1rem;
+    }
+}

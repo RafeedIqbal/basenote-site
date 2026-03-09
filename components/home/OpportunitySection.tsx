@@ -36,7 +36,6 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
             ).matches;
             const q = gsap.utils.selector(rootRef);
             const opportunityCharacters = q("[data-opportunity-char]");
-            const sectionIntro = q("[data-reveal]");
 
             if (opportunityCharacters.length > 0 && rootRef.current) {
                 if (reduceMotion) {
@@ -72,28 +71,6 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
                         });
                 }
             }
-
-            sectionIntro.forEach((element, index) => {
-                gsap.fromTo(
-                    element,
-                    {
-                        autoAlpha: 0,
-                        y: reduceMotion ? 0 : 30
-                    },
-                    {
-                        autoAlpha: 1,
-                        y: 0,
-                        duration: 0.78,
-                        ease: "power2.out",
-                        delay: index === 0 ? 0.08 : 0,
-                        scrollTrigger: {
-                            trigger: element,
-                            start: "top 85%",
-                            once: true
-                        }
-                    }
-                );
-            });
         },
         { scope: rootRef }
     );
@@ -106,14 +83,6 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
             className={styles.opportunitySection}
         >
             <div className={styles.container}>
-                <div className={styles.sectionIntro} data-reveal="">
-                    <span className={styles.eyebrow}>{content.opportunity.eyebrow}</span>
-                    <div className={styles.sectionIntroBody}>
-                        <h2 className={styles.sectionHeading}>{content.opportunity.heading}</h2>
-                        <p className={styles.sectionLede}>{content.opportunity.lede}</p>
-                    </div>
-                </div>
-
                 <div className={styles.opportunityCopy}>
                     {content.opportunity.lines.map((line, index) => (
                         <p key={`${line}-${index}`} className={styles.opportunityLine}>

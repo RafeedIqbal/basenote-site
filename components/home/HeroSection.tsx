@@ -17,8 +17,11 @@ export default function HeroSection({ content }: HeroSectionProps) {
             const reduceMotion = window.matchMedia(
                 "(prefers-reduced-motion: reduce)"
             ).matches;
-            const smallViewport = window.matchMedia("(max-width: 900px)").matches;
-            const shouldAnimateHeroWord = !reduceMotion && !smallViewport;
+            const compactOrSmallerViewport = window.matchMedia(
+                "(max-width: 1280px)"
+            ).matches;
+            const shouldAnimateHeroWord =
+                !reduceMotion && !compactOrSmallerViewport;
             const q = gsap.utils.selector(rootRef);
             const heroWord = q("[data-hero-word]");
 
@@ -61,30 +64,26 @@ export default function HeroSection({ content }: HeroSectionProps) {
     return (
         <section ref={rootRef} id="home" data-hero="" className={styles.heroSection}>
             <div className={styles.heroContent}>
-                <div className={styles.kickerAndTitle}>
-                    <p className={styles.heroKicker}>{content.hero.kicker}</p>
-                    <h1 className={styles.heroTitle}>
-                        <span className={styles.heroTitleLine}>
-                            <Image
-                                src="/assets/logo-text.svg"
-                                alt="Basenote Solutions"
-                                width={9117}
-                                height={5849}
-                                priority
-                                fetchPriority="high"
-                                data-hero-word=""
-                                className={styles.heroLogoText}
-                            />
-                        </span>
-                    </h1>
-                </div>
+                <h1 className={styles.heroTitle}>
+                    <span className={styles.heroTitleLine}>
+                        <Image
+                            src="/assets/logo-text.svg"
+                            alt="Basenote Solutions"
+                            width={9117}
+                            height={5849}
+                            priority
+                            fetchPriority="high"
+                            data-hero-word=""
+                            className={styles.heroLogoText}
+                        />
+                    </span>
+                </h1>
 
                 <div className={styles.heroBottomRow}>
                     <div className={styles.heroSummaryBlock}>
                         <p className={styles.heroSummary} data-hero-copy="">
                             {content.hero.summary}
                         </p>
-                        <p className={styles.heroSupporting}>{content.hero.supporting}</p>
                     </div>
                     <div className={styles.heroActions} data-hero-actions="">
                         <a href="#contact" className={defaultStyles.primaryButton}>

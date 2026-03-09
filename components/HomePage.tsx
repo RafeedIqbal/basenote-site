@@ -160,7 +160,7 @@ export default function HomePage({ content }: HomePageProps) {
       const logoSymbol = q("[data-logo-symbol]");
 
       gsap.set(logoSymbol, {
-        autoAlpha: 0.5,
+        autoAlpha: 0,
         scale: 1,
         transformOrigin: "center center",
         force3D: true
@@ -170,8 +170,28 @@ export default function HomePage({ content }: HomePageProps) {
         "(prefers-reduced-motion: reduce)"
       ).matches;
 
+      const heroSection = q("[data-hero]");
+      const opportunitySection = q("[data-opportunity]");
       const heroVideo = q("[data-hero-video]");
       const heroWrapper = q(`.${styles.heroOpportunityWrapper}`);
+
+      if (logoSymbol.length > 0) {
+        if (reduceMotion || heroSection.length === 0 || opportunitySection.length === 0) {
+          gsap.set(logoSymbol, { autoAlpha: 1 });
+        } else {
+          gsap.to(logoSymbol, {
+            autoAlpha: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: heroSection[0],
+              endTrigger: opportunitySection[0],
+              start: "top top",
+              end: "top top",
+              scrub: 0.85
+            }
+          });
+        }
+      }
 
       if (!reduceMotion && heroVideo.length > 0 && heroWrapper.length > 0) {
         gsap.to(heroVideo, {

@@ -70,7 +70,7 @@
     }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1281px) {
     .processGrid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -109,4 +109,40 @@
     font-size: 1rem;
     color: rgba(0, 0, 0, 0.7);
     line-height: 1.6;
+}
+
+@media (min-width: 901px) and (max-width: 1280px) {
+    .processSection {
+        padding: 6rem 1.5rem;
+    }
+
+    .container {
+        gap: 4.5rem;
+    }
+
+    .sectionIntro {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .sectionHeading {
+        font-size: clamp(2.15rem, 4.1vw, 3.3rem);
+    }
+
+    .sectionLede {
+        font-size: 1.05rem;
+    }
+
+    .processGrid {
+        gap: 2rem;
+    }
+
+    .processItem {
+        gap: 1.25rem;
+        padding-top: 1.5rem;
+    }
+
+    .processTitle {
+        font-size: 1.35rem;
+    }
 }

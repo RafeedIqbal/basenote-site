@@ -265,6 +265,74 @@
   }
 }
 
+@media (min-width: 901px) and (max-width: 1280px) {
+  .siteHeader {
+    padding: 0.85rem 1.25rem;
+  }
+
+  .backgroundSymbol,
+  .brandMark,
+  .headerSymbol {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .menuButton {
+    min-width: 5.75rem;
+    padding: 0.62rem 0.95rem;
+  }
+
+  .menuPanel {
+    inset: 0.8rem;
+    grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
+    gap: clamp(1rem, 2vw, 1.8rem);
+    padding: clamp(1.1rem, 2vw, 1.6rem);
+    max-height: calc(100dvh - 1.6rem);
+  }
+
+  .menuColumn,
+  .menuMeta {
+    justify-content: flex-start;
+    gap: 1rem;
+    min-height: 0;
+  }
+
+  .menuNav {
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .menuLink {
+    gap: 0.9rem;
+    padding: 0.65rem 0;
+  }
+
+  .menuText {
+    font-size: clamp(1.8rem, 3.4vw, 3rem);
+  }
+
+  .menuSummary {
+    max-width: 22rem;
+    margin-top: 0.45rem;
+    font-size: 0.95rem;
+  }
+
+  .menuContact {
+    align-self: flex-start;
+    gap: 0.7rem;
+  }
+
+  .menuEmail {
+    margin-top: 0.4rem;
+    font-size: clamp(1.3rem, 2.1vw, 1.85rem);
+  }
+
+  .menuFootnote {
+    max-width: 16rem;
+    font-size: 0.66rem;
+  }
+}
+
 .heroSection {
   position: relative;
   min-height: 100svh;
@@ -421,6 +489,7 @@
 }
 
 .primaryButton {
+  border: 1px solid transparent;
   background: var(--color-paper);
   color: var(--color-night);
 }
@@ -429,6 +498,19 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.11);
   color: var(--color-paper);
+}
+
+.primaryButton:hover,
+.primaryButton:focus-visible {
+  background: #ffffff;
+  box-shadow: 0 14px 34px rgba(2, 7, 18, 0.28);
+}
+
+.secondaryButton:hover,
+.secondaryButton:focus-visible {
+  border-color: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 14px 34px rgba(2, 7, 18, 0.22);
 }
 
 .opportunitySection {
