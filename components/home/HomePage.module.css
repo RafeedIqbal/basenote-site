@@ -495,21 +495,24 @@
 }
 
 .secondaryButton {
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.11);
-  color: var(--color-paper);
+  border: 1px solid #000000;
+  background: #000000;
+  color: #ffffff;
 }
 
 .primaryButton:hover,
 .primaryButton:focus-visible {
-  background: #ffffff;
+  border-color: var(--color-muted);
+  background: var(--color-muted);
+  color: #ffffff;
   box-shadow: 0 14px 34px rgba(2, 7, 18, 0.28);
 }
 
 .secondaryButton:hover,
 .secondaryButton:focus-visible {
-  border-color: rgba(255, 255, 255, 0.42);
-  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-muted);
+  background: var(--color-muted);
+  color: #ffffff;
   box-shadow: 0 14px 34px rgba(2, 7, 18, 0.22);
 }
 

@@ -46,7 +46,7 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                 const cards =
                     gsap.utils.toArray<HTMLElement>("[data-portfolio-card]");
 
-                cards.forEach((card, index) => {
+                cards.forEach((card) => {
                     gsap.fromTo(
                         card,
                         {
@@ -61,29 +61,6 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                                 start: "top 92%",
                                 fastScrollEnd: true,
                                 toggleActions: "play none none reverse"
-                            }
-                        }
-                    );
-
-                    const nextCard = cards[index + 1];
-                    if (!nextCard || reduceMotion) {
-                        return;
-                    }
-
-                    gsap.fromTo(
-                        card,
-                        { autoAlpha: 1 },
-                        {
-                            autoAlpha: 0,
-                            ease: "none",
-                            immediateRender: false,
-                            scrollTrigger: {
-                                trigger: nextCard,
-                                start: "top 86%",
-                                end: "top 50%",
-                                scrub: true,
-                                fastScrollEnd: true,
-                                invalidateOnRefresh: true
                             }
                         }
                     );
@@ -158,7 +135,14 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                     </div>
                 </div>
 
-                <div className={styles.portfolioGrid}>
+                <div
+                    className={styles.portfolioGrid}
+                    style={
+                        {
+                            "--card-count": content.portfolio.projects.length
+                        } as CSSProperties
+                    }
+                >
                     {content.portfolio.projects.map((project, index) => (
                         <article
                             key={project.id}
@@ -177,11 +161,14 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                                     <h3 className={styles.portfolioTitle}>{project.title}</h3>
                                 </div>
                                 <div className={styles.cardHeaderRight}>
-                                    {project.tags.map((tag) => (
-                                        <span key={tag} className={styles.tag}>
-                                            {tag}
-                                        </span>
-                                    ))}
+                                    <p className={styles.portfolioQuarter}>Q1 2026</p>
+                                    <div className={styles.cardTagList}>
+                                        {project.tags.map((tag) => (
+                                            <span key={tag} className={styles.tag}>
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 

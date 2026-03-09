@@ -56,6 +56,9 @@
 }
 
 .portfolioGrid {
+    --card-count: 1;
+    --portfolio-stack-top: clamp(0.5rem, 1.5vh, 1rem);
+    --portfolio-header-height: clamp(5.6rem, 7.2vh, 6.2rem);
     display: flex;
     flex-direction: column;
     gap: 8rem;
@@ -64,47 +67,69 @@
 .portfolioCard {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: clamp(1rem, 2.2vw, 1.35rem);
+    background-color: #f8f8f8;
 }
 
 @media (min-width: 1281px) {
     .portfolioGrid {
         gap: 0;
+        padding-bottom: calc(
+            (var(--card-count) - 1) * var(--portfolio-header-height)
+        );
+        position: relative;
     }
 
     .portfolioCard {
         position: sticky;
-        top: clamp(2.25rem, 5vh, 3.75rem);
+        top: calc(
+            var(--portfolio-stack-top) +
+                (var(--card-order) * var(--portfolio-header-height))
+        );
         padding: 0;
         border: 0;
         border-radius: 0;
-        background: transparent;
         box-shadow: none;
     }
 
     .portfolioCard+.portfolioCard {
-        margin-top: clamp(6rem, 12vh, 10rem);
+        margin-top: 0;
     }
 }
 
 .cardHeader {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    border-bottom: 2px solid #000;
-    padding-bottom: 1rem;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+    padding: 0.5rem 0;
+    background-color: #f8f8f8;
+    position: relative;
+    z-index: 2;
+}
+
+@media (min-width: 1281px) {
+    .cardHeader {
+        height: var(--portfolio-header-height);
+    }
+
+    .portfolioCard:first-child .cardHeader {
+        border-top: 1px solid rgba(0, 0, 0, 0.14);
+    }
 }
 
 .cardHeaderLeft {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    justify-content: flex-end;
+    gap: 0.22rem;
 }
 
 .portfolioCategory {
     font-family: var(--font-mono, monospace);
     font-size: 0.875rem;
     text-transform: uppercase;
+    margin: 0;
 }
 
 .portfolioTitle {
@@ -118,7 +143,26 @@
 
 .cardHeaderRight {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    min-height: 100%;
+}
+
+.portfolioQuarter {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.88rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.72);
+    margin: 0;
+}
+
+.cardTagList {
+    display: flex;
     gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .tag {
@@ -194,13 +238,14 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 2rem;
+    gap: 1.25rem;
 }
 
 .portfolioSummary {
     font-size: 1.25rem;
     line-height: 1.4;
     max-width: 600px;
+    margin: 0;
 }
 
 .portfolioImpact {
@@ -209,6 +254,7 @@
     font-size: 0.875rem;
     text-align: right;
     max-width: 300px;
+    margin: 0;
 }
 
 @media (min-width: 901px) and (max-width: 1280px) {
@@ -242,8 +288,7 @@
     }
 
     .cardHeaderRight {
-        flex-wrap: wrap;
-        justify-content: flex-end;
+        gap: 0.75rem;
     }
 
     .portfolioMediaRow {
@@ -273,7 +318,18 @@
     .cardHeader {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1rem;
+        gap: 0.5rem;
+    }
+
+    .cardHeaderRight {
+        width: 100%;
+        align-items: flex-start;
+        min-height: auto;
+        gap: 0.5rem;
+    }
+
+    .cardTagList {
+        justify-content: flex-start;
     }
 
     .cardFooter {
