@@ -40,6 +40,10 @@
   mix-blend-mode: difference;
 }
 
+.backgroundSymbol[data-menu-open="true"] {
+  z-index: 30;
+}
+
 .brandMark {
   display: inline-flex;
   align-items: center;

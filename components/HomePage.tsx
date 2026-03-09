@@ -212,7 +212,11 @@ export default function HomePage({ content }: HomePageProps) {
 
   return (
     <div ref={rootRef} className={styles.page}>
-      <BasenoteSymbol className={styles.backgroundSymbol} data-logo-symbol="" />
+      <BasenoteSymbol
+        className={styles.backgroundSymbol}
+        data-logo-symbol=""
+        data-menu-open={menuOpen}
+      />
       <a href="#home" className={styles.visuallyHiddenHomeLink}>
         Basenote Solutions home
       </a>
