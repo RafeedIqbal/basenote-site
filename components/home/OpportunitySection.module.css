@@ -48,7 +48,6 @@
     opacity: 0;
     transform: translateY(0.26em);
     color: #fff;
-    will-change: opacity, transform;
 }
 
 @media (min-width: 901px) and (max-width: 1280px) {

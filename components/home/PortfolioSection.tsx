@@ -60,7 +60,7 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                                 trigger: card,
                                 start: "top 92%",
                                 fastScrollEnd: true,
-                                toggleActions: "play none none reverse"
+                                once: true
                             }
                         }
                     );

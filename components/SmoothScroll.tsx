@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { ScrollTrigger } from "@/lib/gsap";
 
 export default function SmoothScroll() {
   useEffect(() => {
@@ -23,17 +23,19 @@ export default function SmoothScroll() {
       anchors: true
     });
 
-    lenis.on("scroll", ScrollTrigger.update);
+    const unsubscribeScroll = lenis.on("scroll", ScrollTrigger.update);
+    let frameId = 0;
 
     const update = (time: number) => {
-      lenis.raf(time * 1000);
+      lenis.raf(time);
+      frameId = window.requestAnimationFrame(update);
     };
 
-    gsap.ticker.add(update);
-    gsap.ticker.lagSmoothing(0);
+    frameId = window.requestAnimationFrame(update);
 
     return () => {
-      gsap.ticker.remove(update);
+      window.cancelAnimationFrame(frameId);
+      unsubscribeScroll();
       lenis.destroy();
     };
   }, []);
