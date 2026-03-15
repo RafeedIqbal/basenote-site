@@ -47,10 +47,6 @@ export default function ProcessSection({ content }: ProcessSectionProps) {
             <div className={styles.container}>
                 <div className={styles.sectionIntro} data-reveal="">
                     <span className={styles.eyebrow}>{content.process.eyebrow}</span>
-                    <div className={styles.sectionIntroBody}>
-                        <h2 className={styles.sectionHeading}>{content.process.heading}</h2>
-                        <p className={styles.sectionLede}>{content.process.lede}</p>
-                    </div>
                 </div>
 
                 <ol className={styles.processGrid}>

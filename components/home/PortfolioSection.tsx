@@ -19,30 +19,7 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
             const media = gsap.matchMedia();
             const q = gsap.utils.selector(rootRef);
 
-            // Section intro reveal
-            q("[data-reveal]").forEach((element, index) => {
-                gsap.fromTo(
-                    element,
-                    {
-                        opacity: 0,
-                        y: reduceMotion ? 0 : 30
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.78,
-                        ease: "power2.out",
-                        delay: index === 0 ? 0.08 : 0,
-                        scrollTrigger: {
-                            trigger: element,
-                            start: "top 85%",
-                            once: true
-                        }
-                    }
-                );
-            });
-
-            media.add("(min-width: 1281px)", () => {
+media.add("(min-width: 1281px)", () => {
                 const cards =
                     gsap.utils.toArray<HTMLElement>("[data-portfolio-card]");
 
@@ -77,13 +54,7 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
     return (
         <section ref={rootRef} id="portfolio" className={styles.portfolioSection}>
             <div className={styles.container}>
-                <div className={styles.sectionIntro} data-reveal="">
-                    <span className={styles.eyebrow}>{content.portfolio.eyebrow}</span>
-                    <div className={styles.sectionIntroBody}>
-                        <h2 className={styles.sectionHeading}>{content.portfolio.heading}</h2>
-                        <p className={styles.sectionLede}>{content.portfolio.lede}</p>
-                    </div>
-                </div>
+                <span className={styles.eyebrow}>{content.portfolio.eyebrow}</span>
 
                 <div
                     className={styles.portfolioGrid}

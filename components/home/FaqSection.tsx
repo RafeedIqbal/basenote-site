@@ -75,10 +75,13 @@ export default function FaqSection({ content }: FaqSectionProps) {
                                 </button>
                                 <div
                                     id={panelId}
+                                    role="region"
                                     className={`${styles.faqPanel} ${isOpen ? styles.faqPanelOpen : ""}`}
-                                    hidden={!isOpen}
+                                    aria-hidden={!isOpen}
                                 >
-                                    <p className={styles.faqAnswer}>{item.answer}</p>
+                                    <div className={styles.faqPanelInner}>
+                                        <p className={styles.faqAnswer}>{item.answer}</p>
+                                    </div>
                                 </div>
                             </article>
                         );

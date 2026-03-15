@@ -18,7 +18,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    text-align: center;
+    text-align: left;
 }
 
 .sectionIntroBody {
@@ -26,7 +26,6 @@
     flex-direction: column;
     gap: 1.5rem;
     max-width: 800px;
-    margin: 0 auto;
 }
 
 .eyebrow {
@@ -97,24 +96,27 @@
 }
 
 .faqPanel {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    display: grid;
+    grid-template-rows: 0fr;
     opacity: 0;
-    padding-bottom: 0;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.35s ease;
 }
 
 .faqPanelOpen {
-    max-height: 500px;
-    /* Safe upper limit for transition */
+    grid-template-rows: 1fr;
     opacity: 1;
-    padding-bottom: 1.5rem;
+}
+
+.faqPanelInner {
+    overflow: hidden;
 }
 
 .faqAnswer {
     font-size: 1rem;
     color: rgba(0, 0, 0, 0.7);
     line-height: 1.6;
+    padding-bottom: 1.5rem;
 }
 
 @media (min-width: 901px) and (max-width: 1280px) {

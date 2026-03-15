@@ -116,6 +116,7 @@
 .cardTop {
     display: grid;
     gap: 0.86rem;
+    min-height: var(--card-top-height);
 }
 
 .cardEyebrowRow {
@@ -163,6 +164,7 @@
     font-size: 1.02rem;
     line-height: 1.5;
     color: rgba(0, 0, 0, 0.72);
+    min-height: var(--card-description-height);
 }
 
 .cardLists {
