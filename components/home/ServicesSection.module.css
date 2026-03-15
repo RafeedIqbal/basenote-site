@@ -89,8 +89,8 @@
 
 .card {
     height: 100%;
-    display: grid;
-    grid-template-rows: auto auto auto;
+    display: flex;
+    flex-direction: column;
     gap: clamp(1.1rem, 1.95vw, 1.85rem);
 }
 
@@ -114,7 +114,8 @@
 }
 
 .cardTop {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 0.86rem;
     min-height: var(--card-top-height);
 }
@@ -145,7 +146,7 @@
     font-family: var(--font-display, sans-serif);
     font-size: clamp(2.3rem, 4.6vw, 4.4rem);
     font-weight: 500;
-    line-height: 0.98;
+    line-height: 1.02;
     letter-spacing: -0.04em;
     max-width: 24ch;
 }

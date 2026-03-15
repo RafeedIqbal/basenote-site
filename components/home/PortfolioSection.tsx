@@ -17,9 +17,8 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                 "(prefers-reduced-motion: reduce)"
             ).matches;
             const media = gsap.matchMedia();
-            const q = gsap.utils.selector(rootRef);
 
-media.add("(min-width: 1281px)", () => {
+            media.add("(min-width: 1281px)", () => {
                 const cards =
                     gsap.utils.toArray<HTMLElement>("[data-portfolio-card]");
 

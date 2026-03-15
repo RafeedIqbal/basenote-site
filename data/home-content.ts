@@ -159,7 +159,7 @@ const pillars: ServicePillar[] = [
     eyebrow: "Pillar 04",
     title: "Commercial strategy and founder support",
     subtitle:
-      "Turn launch ambition into a commercial plan that protects margin and momentum.",
+      "Turn launch ambition into a commercial plan.",
     description:
       "We connect the product and brand work to commercial decisions so creators and founders have a clearer route from concept to launch timing, sequencing, and sell-through.",
     bullets: [
