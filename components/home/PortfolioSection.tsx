@@ -43,6 +43,31 @@ export default function PortfolioSection({ content }: PortfolioSectionProps) {
                 });
             });
 
+            media.add("(max-width: 768px)", () => {
+                const cards =
+                    gsap.utils.toArray<HTMLElement>("[data-portfolio-card]");
+
+                cards.forEach((card) => {
+                    gsap.fromTo(
+                        card,
+                        {
+                            y: reduceMotion ? 0 : 12
+                        },
+                        {
+                            y: 0,
+                            ease: "power2.out",
+                            duration: 0.55,
+                            scrollTrigger: {
+                                trigger: card,
+                                start: "top 95%",
+                                fastScrollEnd: true,
+                                once: true
+                            }
+                        }
+                    );
+                });
+            });
+
             return () => {
                 media.revert();
             };
