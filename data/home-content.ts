@@ -49,7 +49,6 @@ type ReasonCard = {
 
 export type HomePageContent = {
   contact: {
-    email: string;
     heading: string;
     locations: string[];
     note: string;
@@ -383,7 +382,6 @@ export const homePageContent: HomePageContent = {
       "Start with a discovery conversation and map the product, brand, and launch requirements before committing to production.",
     note:
       "Typical response time is 1-2 business days. Include timeline, product stage, and current team setup.",
-    email: "hello@basenotesolutions.com",
     locations: ["Remote-first", "Available worldwide"]
   }
 };

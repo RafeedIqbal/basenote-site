@@ -54,12 +54,6 @@ export default function ContactFooter({ content }: ContactFooterProps) {
                         <h2 className={styles.contactHeading}>{content.contact.heading}</h2>
                         <p className={styles.contactCopy}>{content.contact.subcopy}</p>
                         <div className={styles.contactActions}>
-                            <a
-                                href={`mailto:${content.contact.email}`}
-                                className={defaultStyles.primaryButton}
-                            >
-                                Email Basenote
-                            </a>
                             <a href="#home" className={defaultStyles.secondaryButton}>
                                 Back to top
                             </a>
@@ -67,16 +61,6 @@ export default function ContactFooter({ content }: ContactFooterProps) {
                     </div>
 
                     <div className={styles.contactMeta}>
-                        <div className={styles.contactMetaBlock}>
-                            <span className={styles.contactLabel}>Email</span>
-                            <a
-                                href={`mailto:${content.contact.email}`}
-                                className={styles.contactValue}
-                            >
-                                {content.contact.email}
-                            </a>
-                        </div>
-
                         <div className={styles.contactMetaBlock}>
                             <span className={styles.contactLabel}>Availability</span>
                             <ul className={styles.locationList}>

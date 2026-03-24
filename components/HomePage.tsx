@@ -283,19 +283,6 @@ export default function HomePage({ content }: HomePageProps) {
               <p className={styles.menuSummary}>{content.hero.supporting}</p>
             </div>
 
-            <div className={styles.menuContact}>
-              <div>
-                <span className={styles.eyebrow}>Contact</span>
-                <a
-                  href={`mailto:${content.contact.email}`}
-                  className={styles.menuEmail}
-                  tabIndex={menuOpen ? 0 : -1}
-                >
-                  {content.contact.email}
-                </a>
-              </div>
-              <p className={styles.menuFootnote}>{content.contact.note}</p>
-            </div>
           </div>
         </div>
       </div>

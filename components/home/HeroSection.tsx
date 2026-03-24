@@ -87,10 +87,10 @@ export default function HeroSection({ content }: HeroSectionProps) {
                     </div>
                     <div className={styles.heroActions} data-hero-actions="">
                         <a href="#contact" className={defaultStyles.primaryButton}>
-                            Book a call
+                            Contact us
                         </a>
                         <a href="#portfolio" className={defaultStyles.secondaryButton}>
-                            Browse portfolio
+                            View our work
                         </a>
                     </div>
                 </div>

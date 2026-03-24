@@ -11,3 +11,6 @@ pnpm-debug.log*
 # Deformo
 # Website Design
 .vercel
+.agent
+.claude
+.env    
