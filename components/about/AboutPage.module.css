@@ -1,0 +1,118 @@
+.main {
+    padding-top: 6rem;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--max-width, 1400px);
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 1.5rem;
+}
+
+.heroSection {
+    padding: 6rem 0 4rem;
+}
+
+.heading {
+    font-family: var(--font-display, sans-serif);
+    font-size: clamp(3rem, 6vw, 6rem);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin: 0;
+    max-width: 800px;
+}
+
+.storySection {
+    padding: 0 0 6rem;
+}
+
+.storyContent {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.storyParagraph {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: rgba(0, 0, 0, 0.75);
+    margin: 0;
+}
+
+.teamSection {
+    padding: 4rem 0 8rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.teamGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .teamGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1281px) {
+    .teamGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.teamCard {
+    border-top: 2px solid #000;
+    padding-top: 2rem;
+}
+
+.teamCardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.teamName {
+    font-family: var(--font-sans, sans-serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.teamRole {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #00ccff;
+}
+
+.teamDescription {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.65);
+    line-height: 1.6;
+    margin: 0.5rem 0 0;
+}
+
+@media (min-width: 901px) and (max-width: 1280px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+
+    .heading {
+        font-size: clamp(2.5rem, 5vw, 4.5rem);
+    }
+}

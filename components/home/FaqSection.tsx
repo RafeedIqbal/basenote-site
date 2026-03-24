@@ -48,10 +48,7 @@ export default function FaqSection({ content }: FaqSectionProps) {
             <div className={styles.container}>
                 <div className={styles.sectionIntro} data-reveal="">
                     <span className={styles.eyebrow}>{content.faq.eyebrow}</span>
-                    <div className={styles.sectionIntroBody}>
-                        <h2 className={styles.sectionHeading}>{content.faq.heading}</h2>
-                        <p className={styles.sectionLede}>{content.faq.lede}</p>
-                    </div>
+                    <h2 className={styles.sectionHeading}>{content.faq.heading}</h2>
                 </div>
 
                 <div className={styles.faqList}>

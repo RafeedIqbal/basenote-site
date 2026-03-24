@@ -1,13 +1,13 @@
 import type { HomePageContent } from "@/data/home-content";
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
-import styles from "./WhyBasenoteSection.module.css";
+import styles from "./TechProductsSection.module.css";
 
-type WhyBasenoteSectionProps = {
+type TechProductsSectionProps = {
     content: HomePageContent;
 };
 
-export default function WhyBasenoteSection({ content }: WhyBasenoteSectionProps) {
+export default function TechProductsSection({ content }: TechProductsSectionProps) {
     const rootRef = useRef<HTMLElement>(null);
 
     useGSAP(
@@ -43,20 +43,27 @@ export default function WhyBasenoteSection({ content }: WhyBasenoteSectionProps)
     );
 
     return (
-        <section ref={rootRef} id="why-basenote" className={styles.whyBasenoteSection}>
+        <section ref={rootRef} id="tech-ai" className={styles.section}>
             <div className={styles.container}>
                 <div className={styles.sectionIntro} data-reveal="">
-                    <span className={styles.eyebrow}>{content.reasons.eyebrow}</span>
-                    <h2 className={styles.sectionHeading}>{content.reasons.heading}</h2>
+                    <span className={styles.eyebrow}>{content.techProducts.eyebrow}</span>
+                    <div className={styles.sectionIntroBody}>
+                        <h2 className={styles.sectionHeading}>{content.techProducts.heading}</h2>
+                        <p className={styles.sectionLede}>{content.techProducts.lede}</p>
+                    </div>
                 </div>
 
-                <div className={styles.reasonGrid}>
-                    {content.reasons.items.map((item, index) => (
-                        <article key={item.title} className={styles.reasonCard} data-reveal="">
-                            <span className={styles.reasonIndex}>{`0${index + 1}`}</span>
-                            <div className={styles.reasonContent}>
-                                <h3 className={styles.reasonTitle}>{item.title}</h3>
-                                <p className={styles.reasonCopy}>{item.description}</p>
+                <div className={styles.productGrid}>
+                    {content.techProducts.items.map((product, index) => (
+                        <article key={product.id} className={styles.productCard} data-reveal="">
+                            <span className={styles.productIndex}>{`0${index + 1}`}</span>
+                            <div className={styles.productContent}>
+                                <h3 className={styles.productTitle}>{product.title}</h3>
+                                <p className={styles.productTagline}>{product.tagline}</p>
+                                <p className={styles.productDescription}>{product.description}</p>
+                                <a href="/contact" className={styles.productCta}>
+                                    {product.ctaLabel}
+                                </a>
                             </div>
                         </article>
                     ))}

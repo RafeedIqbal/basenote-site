@@ -1,0 +1,47 @@
+.section {
+    background-color: #000;
+    color: #fff;
+    padding: 8rem 2rem;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--max-width, 1400px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+}
+
+.heading {
+    font-family: var(--font-sans, sans-serif);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin: 0;
+}
+
+.subheading {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+    max-width: 500px;
+    margin: 0 0 1rem;
+}
+
+@media (min-width: 901px) and (max-width: 1280px) {
+    .section {
+        padding: 6rem 1.5rem;
+    }
+
+    .heading {
+        font-size: clamp(2.15rem, 4.1vw, 3.5rem);
+    }
+
+    .subheading {
+        font-size: 1.1rem;
+    }
+}

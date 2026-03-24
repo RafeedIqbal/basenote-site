@@ -3,15 +3,15 @@ import styles from "./OpportunitySection.module.css";
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-function splitIntoTypewriterCharacters(text: string, lineIndex: number) {
+function splitIntoTypewriterCharacters(text: string) {
     return text.trim().split(/\s+/).map((word, wordIndex) => (
         <span
-            key={`${lineIndex}-${word}-${wordIndex}`}
+            key={`${word}-${wordIndex}`}
             className={styles.opportunityWordWrap}
         >
             {Array.from(word).map((character, characterIndex) => (
                 <span
-                    key={`${lineIndex}-${wordIndex}-${character}-${characterIndex}`}
+                    key={`${wordIndex}-${character}-${characterIndex}`}
                     className={styles.opportunityChar}
                     data-opportunity-char=""
                 >
@@ -36,6 +36,7 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
             ).matches;
             const q = gsap.utils.selector(rootRef);
             const opportunityCharacters = q("[data-opportunity-char]");
+            const paragraphs = q("[data-opportunity-paragraph]");
 
             if (opportunityCharacters.length > 0 && rootRef.current) {
                 if (reduceMotion) {
@@ -68,8 +69,38 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
                             y: 0,
                             ease: "none",
                             stagger: 0.014
-                        });
+                        })
+                        .fromTo(
+                            paragraphs,
+                            { autoAlpha: 0, y: 20 },
+                            {
+                                autoAlpha: 1,
+                                y: 0,
+                                ease: "power2.out",
+                                stagger: 0.06,
+                                duration: 0.3
+                            },
+                            "-=0.15"
+                        );
                 }
+            }
+
+            if (reduceMotion && paragraphs.length > 0) {
+                gsap.fromTo(
+                    paragraphs,
+                    { autoAlpha: 0, y: 0 },
+                    {
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.8,
+                        stagger: 0.08,
+                        scrollTrigger: {
+                            trigger: rootRef.current,
+                            start: "top 60%",
+                            once: true
+                        }
+                    }
+                );
             }
         },
         { scope: rootRef }
@@ -84,11 +115,20 @@ export default function OpportunitySection({ content }: OpportunitySectionProps)
         >
             <div className={styles.container}>
                 <div className={styles.opportunityCopy}>
-                    {content.opportunity.lines.map((line, index) => (
-                        <p key={`${line}-${index}`} className={styles.opportunityLine}>
-                            {splitIntoTypewriterCharacters(line, index)}
-                        </p>
-                    ))}
+                    <p className={styles.opportunityLine}>
+                        {splitIntoTypewriterCharacters(content.opportunity.headline)}
+                    </p>
+                    <div className={styles.opportunityParagraphs}>
+                        {content.opportunity.paragraphs.map((paragraph, index) => (
+                            <p
+                                key={index}
+                                className={styles.opportunityParagraph}
+                                data-opportunity-paragraph=""
+                            >
+                                {paragraph}
+                            </p>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

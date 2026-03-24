@@ -34,18 +34,19 @@ export const metadata: Metadata = {
     template: "%s | Basenote Solutions"
   },
   description:
-    "Designing and launching fragrance brands through scent, craft, and strategy.",
+    "Private label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts.",
   keywords: [
+    "private label perfume",
     "fragrance brand consultancy",
+    "AI fragrance technology",
+    "wholesale fragrance oils",
     "perfume brand development",
-    "scent strategy",
-    "fragrance launch",
     "Basenote Solutions"
   ],
   openGraph: {
     title: "Basenote Solutions — Fragrance Brand Consultancy",
     description:
-      "Designing and launching fragrance brands through scent, craft, and strategy.",
+      "Private label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts.",
     url: "/",
     siteName: "Basenote Solutions",
     locale: "en_US",
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Basenote Solutions — Fragrance Brand Consultancy",
     description:
-      "Designing and launching fragrance brands through scent, craft, and strategy."
+      "Private label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts."
   }
 };
 

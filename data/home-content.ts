@@ -1,7 +1,7 @@
 export type NavItem = {
   href: string;
+  isCta?: boolean;
   label: string;
-  number: string;
 };
 
 export type PortfolioImage = {
@@ -20,14 +20,24 @@ export type PortfolioProject = {
   title: string;
 };
 
-export type ServicePillar = {
-  bullets: string[];
-  deliverables: string[];
+export type ServiceItem = {
   description: string;
-  eyebrow: string;
   id: string;
-  stat: string;
   subtitle: string;
+  title: string;
+};
+
+export type TechProduct = {
+  ctaLabel: string;
+  description: string;
+  id: string;
+  tagline: string;
+  title: string;
+};
+
+export type AudienceSegment = {
+  description: string;
+  id: string;
   title: string;
 };
 
@@ -42,346 +52,400 @@ export type FaqItem = {
   question: string;
 };
 
-type ReasonCard = {
+export type ReasonCard = {
   description: string;
   title: string;
 };
 
+export type FooterLink = {
+  href: string;
+  label: string;
+};
+
 export type HomePageContent = {
-  contact: {
+  audiences: {
+    eyebrow: string;
     heading: string;
-    locations: string[];
-    note: string;
-    subcopy: string;
+    items: AudienceSegment[];
+    lede: string;
+  };
+  ctaBanner: {
+    ctaLabel: string;
+    heading: string;
+    subheading: string;
   };
   faq: {
     eyebrow: string;
     heading: string;
     items: FaqItem[];
-    lede: string;
+  };
+  footer: {
+    company: FooterLink[];
+    services: FooterLink[];
+    tagline: string;
+    technology: FooterLink[];
   };
   hero: {
-    supporting: string;
+    ctaLabel: string;
+    headline: string;
+    secondaryCtaLabel: string;
     summary: string;
   };
   nav: NavItem[];
   opportunity: {
-    lines: string[];
+    headline: string;
+    paragraphs: string[];
   };
   pillars: {
     eyebrow: string;
     heading: string;
-    items: ServicePillar[];
+    items: ServiceItem[];
     lede: string;
   };
   portfolio: {
+    description: string;
     eyebrow: string;
     heading: string;
-    lede: string;
+    placeholder: string;
     projects: PortfolioProject[];
+    subheading: string;
   };
   process: {
     eyebrow: string;
     heading: string;
-    lede: string;
     steps: ProcessStep[];
   };
   reasons: {
     eyebrow: string;
     heading: string;
     items: ReasonCard[];
+  };
+  techProducts: {
+    eyebrow: string;
+    heading: string;
+    items: TechProduct[];
     lede: string;
   };
 };
 
-const pillars: ServicePillar[] = [
-  {
-    id: "fragrance-development",
-    stat: "01",
-    eyebrow: "Pillar 01",
-    title: "Fragrance development and manufacturing",
-    subtitle: "Translate a concept into a fragrance people remember and reorder.",
-    description:
-      "We shape the scent brief, sampling pathway, packaging decisions, and production planning so the fragrance feels premium before it ever meets the market.",
-    bullets: [
-      "Creative scent briefing and olfactive positioning",
-      "Sampling, refinement, and approval management",
-      "Packaging coordination, compliance, and production support"
-    ],
-    deliverables: [
-      "Fragrance brief and positioning narrative",
-      "Sampling rounds with decision checkpoints",
-      "Packaging and manufacturing coordination"
-    ]
-  },
-  {
-    id: "brand-creation",
-    stat: "02",
-    eyebrow: "Pillar 02",
-    title: "Brand creation and marketing",
-    subtitle: "Build a brand world that sells the scent before the first spray.",
-    description:
-      "From naming directions to launch storytelling, we develop the identity system, campaign language, and content guardrails that make a fragrance brand feel coherent and desirable.",
-    bullets: [
-      "Naming, verbal identity, and packaging direction",
-      "Launch campaign concepts and channel planning",
-      "Messaging systems for creators, founders, and teams"
-    ],
-    deliverables: [
-      "Brand narrative and creative territory",
-      "Launch messaging toolkit",
-      "Campaign and content direction"
-    ]
-  },
-  {
-    id: "digital-infrastructure",
-    stat: "03",
-    eyebrow: "Pillar 03",
-    title: "Digital infrastructure and launch systems",
-    subtitle: "Create the storefront, funnel, and operating layer behind the launch.",
-    description:
-      "We design the digital touchpoints that support launch momentum, from landing pages and product storytelling to CRM capture and conversion-ready site structure.",
-    bullets: [
-      "Launch pages and ecommerce-ready architecture",
-      "Lead capture, CRM hooks, and performance basics",
-      "Digital systems that keep launch assets organised"
-    ],
-    deliverables: [
-      "Launch landing page or storefront direction",
-      "Email capture and audience flow planning",
-      "Asset system for launch operations"
-    ]
-  },
-  {
-    id: "founder-strategy",
-    stat: "04",
-    eyebrow: "Pillar 04",
-    title: "Commercial strategy and founder support",
-    subtitle:
-      "Turn launch ambition into a commercial plan.",
-    description:
-      "We connect the product and brand work to commercial decisions so creators and founders have a clearer route from concept to launch timing, sequencing, and sell-through.",
-    bullets: [
-      "Offer design, launch sequencing, and channel priorities",
-      "Founder decision support across pricing and packaging choices",
-      "Launch roadmap alignment across product, brand, and digital"
-    ],
-    deliverables: [
-      "Commercial launch roadmap",
-      "Priority decisions and milestone planning",
-      "Cross-functional launch support"
-    ]
-  }
-];
-
 export const homePageContent: HomePageContent = {
   nav: [
-    { number: "01", label: "Home", href: "#home" },
-    { number: "02", label: "Opportunity", href: "#opportunity" },
-    { number: "03", label: "Portfolio", href: "#portfolio" },
-    { number: "04", label: "What We Do", href: "#what-we-do" },
-    { number: "05", label: "Services", href: "#services" },
-    { number: "06", label: "Process", href: "#process" },
-    { number: "07", label: "Why Basenote", href: "#why-basenote" },
-    { number: "08", label: "FAQ", href: "#faq" },
-    { number: "09", label: "Contact", href: "#contact" }
+    { label: "What We Do", href: "#what-we-do" },
+    { label: "Tech & AI", href: "#tech-ai" },
+    { label: "Who We Work With", href: "#who-we-work-with" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
+    { label: "Get in Touch", href: "/contact", isCta: true }
   ],
   hero: {
+    headline: "Where Fragrance Meets Business",
     summary:
-      "Designing and launching fragrance brands through scent, craft, and strategy.",
-    supporting:
-      "From formulation and packaging to creative direction and launch infrastructure, Basenote helps creators, athletes, founders, and operators turn an idea into a fragrance brand with momentum."
+      "Private label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts.",
+    ctaLabel: "Get Started",
+    secondaryCtaLabel: "Explore What We Do"
   },
   opportunity: {
-    lines: [
-      "The fragrance industry is evolving.",
-      "Creators and entrepreneurs are launching their own perfume brands."
-    ]
-  },
-  portfolio: {
-    eyebrow: "Portfolio",
-    heading: "Representative launch directions and partnership formats.",
-    lede:
-      "Examples of how Basenote partners with creators, athletes, and founders to take fragrance concepts from brief to market.",
-    projects: [
-      {
-        id: "aurum-atelier",
-        title: "Aurum Atelier",
-        category: "Influencer launch",
-        summary:
-          "A prestige-coded fragrance launch for a beauty creator moving from audience trust to product authority, with a rich amber scent profile and editorial brand world.",
-        impact: "Scaled from audience launch to repeat-purchase fragrance demand",
-        tags: ["Influencer", "Brand", "Strategy"],
-        images: [
-          {
-            src: "/portfolio/aurum-bottle.svg",
-            alt: "Amber fragrance bottle illustration for Aurum Atelier",
-            caption: "Product view"
-          },
-          {
-            src: "/portfolio/aurum-creator.svg",
-            alt: "Creator portrait illustration for Aurum Atelier",
-            caption: "Creator view"
-          }
-        ]
-      },
-      {
-        id: "velocity-club",
-        title: "Velocity Club",
-        category: "Sports capsule",
-        summary:
-          "A high-energy athlete capsule built around performance identity, bold visual language, and a launch system that bridges limited drop culture with repeat purchase intent.",
-        impact: "Sold through the opening drop and unlocked retail follow-up",
-        tags: ["Sports", "Launch", "Digital"],
-        images: [
-          {
-            src: "/portfolio/velocity-bottle.svg",
-            alt: "Electric blue fragrance bottle illustration for Velocity Club",
-            caption: "Product view"
-          },
-          {
-            src: "/portfolio/velocity-athlete.svg",
-            alt: "Athlete portrait illustration for Velocity Club",
-            caption: "Athlete view"
-          }
-        ]
-      },
-      {
-        id: "studio-reserve",
-        title: "Studio Reserve",
-        category: "Founder incubation",
-        summary:
-          "A founder-led fragrance brand rooted in understated luxury, where scent development, packaging, ecommerce direction, and launch sequencing need to move as one system.",
-        impact: "Built a premium DTC foundation before first production scale-up",
-        tags: ["Entrepreneur", "Brand", "Operations"],
-        images: [
-          {
-            src: "/portfolio/studio-bottle.svg",
-            alt: "Minimal fragrance bottle illustration for Studio Reserve",
-            caption: "Product view"
-          },
-          {
-            src: "/portfolio/studio-founder.svg",
-            alt: "Founder portrait illustration for Studio Reserve",
-            caption: "Founder view"
-          }
-        ]
-      }
+    headline: "The Fragrance Industry Is Wide Open",
+    paragraphs: [
+      "The global fragrance market is worth over $50 billion — and it's still growing. But breaking in has always required connections, capital, and manufacturing access most people don't have.",
+      "Base Note changes that.",
+      "We combine direct access to a UAE-based manufacturing facility, in-house brand and tech capabilities, and AI tools that didn't exist five years ago. The result: a faster, smarter path from idea to shelf."
     ]
   },
   pillars: {
     eyebrow: "What We Do",
-    heading: "We're trusted by industry leaders.",
-    lede:
-      "Basenote combines product development, brand direction, digital launch systems, and commercial planning in one integrated team.",
-    items: pillars
+    heading: "Everything You Need to Build a Fragrance Brand",
+    lede: "From your first product to a full brand rollout — we handle the parts that slow most people down.",
+    items: [
+      {
+        id: "private-label",
+        title: "Private Label",
+        subtitle: "Create Your Product",
+        description:
+          "Choose from an extensive catalogue of bottles, caps, and packaging. We work with our manufacturing partner in the UAE to produce your bespoke fragrance — to your brief, at your volume."
+      },
+      {
+        id: "branding",
+        title: "Branding & Identity",
+        subtitle: "Build Your Brand",
+        description:
+          "Logo, brand identity, website, and social setup. Whether you're starting from scratch or refreshing an existing brand, we build the visual and digital presence to match your product."
+      },
+      {
+        id: "fragrance-oils",
+        title: "Fragrance Oils",
+        subtitle: "Source Direct",
+        description:
+          "Wholesale fragrance oils sold directly. High quality, competitive pricing, flexible volumes. Ideal for brands, manufacturers, and retailers."
+      },
+      {
+        id: "consultancy",
+        title: "Consultancy",
+        subtitle: "Get Expert Advice",
+        description:
+          "Compliance, market entry, business setup, and expansion strategy. Fast, practical, and informed by real industry experience."
+      }
+    ]
   },
-  process: {
-    eyebrow: "The Process",
-    heading: "A launch pathway built for speed, alignment, and decision clarity.",
-    lede:
-      "The process keeps creative and commercial decisions moving together, from discovery through development and launch readiness.",
-    steps: [
+  techProducts: {
+    eyebrow: "Tech & AI",
+    heading: "Fragrance Technology for the Next Generation",
+    lede: "We're building the tools the fragrance industry has always needed — and licensing them to those ready to use them.",
+    items: [
       {
-        step: "01",
-        title: "Discovery call",
+        id: "blend-engine",
+        title: "Blend Engine",
+        tagline: "Create. Blend. License.",
         description:
-          "Define the launch ambition, audience, category angle, and commercial constraints before any product or design work begins."
+          "Our AI blending platform lets users combine fragrance oils to create unique, market-ready perfumes. License the technology as a monthly subscription and commit to quarterly oil purchases. Ideal for fragrance labs, retailers, and studios looking to offer a hands-on creation experience.",
+        ctaLabel: "Enquire About Licensing"
       },
       {
-        step: "02",
-        title: "Scent development",
+        id: "alchemy-engine",
+        title: "Alchemy Engine",
+        tagline: "The World's First Fragrance Formulation AI",
         description:
-          "Shape the fragrance brief, sampling direction, and refinement criteria until the scent profile feels ownable and market-ready."
+          "Built on proprietary formulation data logged by our in-house chemist, Alchemy Engine is an AI model trained on the chemistry behind fragrance creation. Designed for chemists and fragrance houses — it will accelerate formulation, reduce trial and error, and deepen understanding of how ingredients interact at a molecular level. Alchemy Engine is currently in development. We're logging formulations, building the dataset, and preparing for early licensing partnerships.",
+        ctaLabel: "Register Your Interest"
       },
       {
-        step: "03",
-        title: "Brand discovery and creation",
+        id: "websites-erp",
+        title: "Websites & ERP Software",
+        tagline: "Built for Fragrance Operations",
         description:
-          "Develop naming, narrative, visual references, and a creative system that positions the brand with clarity."
+          "Custom websites and inventory/ERP software built specifically for fragrance factories and warehouses. Developed by our tech team at Arizmi Labs.",
+        ctaLabel: "Talk to Us"
+      }
+    ]
+  },
+  audiences: {
+    eyebrow: "Who We Work With",
+    heading: "Built for Founders, Brands, and Businesses",
+    lede: "We work across the full spectrum — from first-time founders to established brands and corporate clients.",
+    items: [
+      {
+        id: "startups",
+        title: "Start-Ups & New Brands",
+        description:
+          "You have an idea. We help you make it real — from product to brand to market. Private label is the fastest way in, and we can take you all the way to a full brand launch."
       },
       {
-        step: "04",
-        title: "Manufacturing alignment",
+        id: "established",
+        title: "Established Perfume & Lifestyle Brands",
         description:
-          "Coordinate packaging direction, production decisions, compliance requirements, and timing expectations around the product."
+          "You already have a customer base. What you need is a reliable manufacturing and tech partner who understands how fragrance businesses work and won't disrupt what you've built."
       },
       {
-        step: "05",
-        title: "Digital setup",
+        id: "influencers",
+        title: "Influencers & Personal Brands",
         description:
-          "Build the launch pages, audience capture flow, and key customer touchpoints that support conversion from day one."
+          "Your audience already trusts you. A signature fragrance is one of the most personal and profitable ways to turn that into a product. We handle everything from creation to packaging."
       },
       {
-        step: "06",
-        title: "Launch",
+        id: "corporate",
+        title: "Corporate Clients",
         description:
-          "Move into release mode with messaging, rollout sequencing, and support for the first wave of demand and feedback."
+          "Bespoke branded perfume as a corporate gift — more distinctive than standard merchandise, often tax-deductible, and genuinely memorable."
+      },
+      {
+        id: "weddings",
+        title: "Weddings & Events",
+        description:
+          "Custom perfume favours, paired with bespoke packaging and invitation card integration. A keepsake your guests will actually keep."
       }
     ]
   },
   reasons: {
-    eyebrow: "Why Basenote",
-    heading: "A tighter operating model for fragrance founders.",
-    lede:
-      "Basenote is designed for teams that need one partner to connect the product, brand, and launch stack instead of managing multiple fragmented vendors.",
+    eyebrow: "Why Base Note",
+    heading: "Why Work With Us",
     items: [
       {
-        title: "End-to-end service",
+        title: "Direct Manufacturing Access",
         description:
-          "Product development, brand creation, and launch systems are planned together so the customer experience feels coherent."
+          "We work directly with TAC Perfumes, a UAE-based fragrance factory. No middlemen. Better pricing, faster timelines, full quality control."
       },
       {
-        title: "Industry expertise",
+        title: "End-to-End Capability",
         description:
-          "The work stays grounded in the realities of fragrance development, packaging, storytelling, and go-to-market timing."
+          "Product, brand, website, tech. Most fragrance suppliers stop at the product. We don't."
       },
       {
-        title: "Brand plus product support",
+        title: "AI Built In-House",
         description:
-          "Basenote helps shape not just the fragrance itself, but the brand and infrastructure required to sell it with conviction."
+          "Our AI products are developed from real formulation data by real chemists — not generic tools dressed up in fragrance language."
+      },
+      {
+        title: "A Team That Moves Fast",
+        description:
+          "We're founders, developers, and fragrance professionals. We operate lean and we move at pace."
+      }
+    ]
+  },
+  process: {
+    eyebrow: "How It Works",
+    heading: "From Enquiry to Launch",
+    steps: [
+      {
+        step: "01",
+        title: "Get in Touch",
+        description:
+          "Tell us what you're building — product, brand, or both. We'll ask the right questions."
+      },
+      {
+        step: "02",
+        title: "We Scope It Together",
+        description:
+          "We map out your requirements, timeline, and budget. No guesswork, no generic packages."
+      },
+      {
+        step: "03",
+        title: "We Build It",
+        description:
+          "Manufacturing, branding, tech — or all three. Our team and manufacturing partners deliver."
+      },
+      {
+        step: "04",
+        title: "You Launch",
+        description:
+          "With a product you own, a brand that works, and support for whatever comes next."
+      }
+    ]
+  },
+  portfolio: {
+    eyebrow: "Portfolio",
+    heading: "What We've Built",
+    subheading: "In Association with TAC Perfumes",
+    description:
+      "Our work spans private label products, brand launches, and fragrance solutions across global markets — delivered in partnership with TAC Perfumes, our UAE-based manufacturing partner.",
+    placeholder: "Client case study cards to be added.",
+    projects: [
+      {
+        id: "private-label-launch",
+        title: "Private Label Launch",
+        category: "Product development",
+        summary:
+          "End-to-end private label fragrance created for a UK-based lifestyle brand — from scent brief to finished product, packaging, and delivery.",
+        impact: "First production run delivered on schedule",
+        tags: ["Private Label", "Packaging", "UAE"],
+        images: [
+          {
+            src: "/portfolio/placeholder-1a.svg",
+            alt: "Placeholder product image",
+            caption: "Product view"
+          },
+          {
+            src: "/portfolio/placeholder-1b.svg",
+            alt: "Placeholder packaging image",
+            caption: "Packaging view"
+          }
+        ]
+      },
+      {
+        id: "brand-identity-build",
+        title: "Brand Identity Build",
+        category: "Branding & digital",
+        summary:
+          "Full brand identity, website, and social presence built for a new fragrance house entering the DTC market.",
+        impact: "Brand launched with a cohesive digital presence from day one",
+        tags: ["Branding", "Website", "Launch"],
+        images: [
+          {
+            src: "/portfolio/placeholder-2a.svg",
+            alt: "Placeholder brand identity image",
+            caption: "Brand view"
+          },
+          {
+            src: "/portfolio/placeholder-2b.svg",
+            alt: "Placeholder website image",
+            caption: "Digital view"
+          }
+        ]
+      },
+      {
+        id: "wholesale-partnership",
+        title: "Wholesale Oil Partnership",
+        category: "Fragrance oils",
+        summary:
+          "Ongoing wholesale fragrance oil supply for a mid-size retailer — competitive pricing, flexible volumes, and reliable logistics from our UAE facility.",
+        impact: "Recurring quarterly orders established",
+        tags: ["Wholesale", "Oils", "Supply"],
+        images: [
+          {
+            src: "/portfolio/placeholder-3a.svg",
+            alt: "Placeholder oil bottles image",
+            caption: "Product view"
+          },
+          {
+            src: "/portfolio/placeholder-3b.svg",
+            alt: "Placeholder warehouse image",
+            caption: "Operations view"
+          }
+        ]
       }
     ]
   },
   faq: {
     eyebrow: "FAQ",
-    heading: "Common questions from teams exploring a launch.",
-    lede:
-      "Answers below cover the first questions teams ask before starting a fragrance launch partnership.",
+    heading: "Common Questions",
     items: [
       {
-        question: "Who is Basenote Solutions for?",
+        question: "What is the minimum order quantity for private label?",
         answer:
-          "Basenote is positioned for creators, entrepreneurs, athletes, and emerging operators who want to launch a fragrance brand with joined-up support across product, brand, and launch execution."
+          "MOQs vary depending on the product and packaging selected. Get in touch and we'll confirm based on your brief."
       },
       {
-        question: "Can you help before the scent is finalised?",
+        question: "Do you work with clients outside the UK?",
         answer:
-          "Yes. Discovery, scent briefing, brand positioning, and launch planning are designed to start early so the fragrance and commercial direction can evolve together."
+          "Yes. We work with clients globally. Our manufacturing is based in the UAE and we have experience shipping to multiple markets."
       },
       {
-        question: "Do you only work on product development?",
+        question:
+          "Can I just order fragrance oils without a full private label order?",
         answer:
-          "No. The model is intentionally broader than formulation. Basenote can support brand systems, launch storytelling, digital setup, and founder decision-making alongside the fragrance itself."
+          "Yes. Wholesale fragrance oils are available independently. Contact us for pricing and volume options."
       },
       {
-        question: "What does a first engagement usually include?",
+        question: "How long does a private label order take?",
         answer:
-          "A first engagement typically begins with discovery, launch goals, scent direction, and a clear scope across the pillars that matter most for the project."
+          "Timelines depend on order complexity, volume, and current production schedules. We'll give you an accurate lead time at the scoping stage."
       },
       {
-        question: "Can the support scale with different launch sizes?",
+        question:
+          "What's the difference between Blend Engine and Alchemy Engine?",
         answer:
-          "Yes. The structure is meant to flex from focused launch sprints to broader end-to-end builds, depending on how much product, brand, and digital support the team needs."
+          "Blend Engine is for creating perfumes by combining existing oils — designed for labs, retailers, and studios. Alchemy Engine is a deeper formulation AI for chemists and fragrance houses, trained on proprietary chemical data."
+      },
+      {
+        question: "Do you offer branding as a standalone service?",
+        answer:
+          "Yes. Branding, website, and social setup can be taken independently or bundled with a private label order."
       }
     ]
   },
-  contact: {
-    heading: "Ready to shape the next fragrance launch?",
-    subcopy:
-      "Start with a discovery conversation and map the product, brand, and launch requirements before committing to production.",
-    note:
-      "Typical response time is 1-2 business days. Include timeline, product stage, and current team setup.",
-    locations: ["Remote-first", "Available worldwide"]
+  ctaBanner: {
+    heading: "Ready to Build Something?",
+    subheading:
+      "Whether you need a product, a brand, or a technology partner — let's talk.",
+    ctaLabel: "Get in Touch"
+  },
+  footer: {
+    tagline: "Where Fragrance Meets Business",
+    services: [
+      { label: "Private Label", href: "#what-we-do" },
+      { label: "Wholesale Oils", href: "#what-we-do" },
+      { label: "Branding", href: "#what-we-do" },
+      { label: "Consultancy", href: "#what-we-do" }
+    ],
+    technology: [
+      { label: "Blend Engine", href: "#tech-ai" },
+      { label: "Alchemy Engine", href: "#tech-ai" },
+      { label: "Websites & ERP", href: "#tech-ai" }
+    ],
+    company: [
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+      { label: "Privacy Policy", href: "#" },
+      { label: "Terms", href: "#" }
+    ]
   }
 };

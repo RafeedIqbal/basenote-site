@@ -81,16 +81,19 @@ export default function HeroSection({ content }: HeroSectionProps) {
 
                 <div className={styles.heroBottomRow}>
                     <div className={styles.heroSummaryBlock}>
+                        <p className={styles.heroHeadline} data-hero-copy="">
+                            {content.hero.headline}
+                        </p>
                         <p className={styles.heroSummary} data-hero-copy="">
                             {content.hero.summary}
                         </p>
                     </div>
                     <div className={styles.heroActions} data-hero-actions="">
-                        <a href="#contact" className={defaultStyles.primaryButton}>
-                            Contact us
+                        <a href="/contact" className={defaultStyles.primaryButton}>
+                            {content.hero.ctaLabel}
                         </a>
-                        <a href="#portfolio" className={defaultStyles.secondaryButton}>
-                            View our work
+                        <a href="#what-we-do" className={defaultStyles.secondaryButton}>
+                            {content.hero.secondaryCtaLabel}
                         </a>
                     </div>
                 </div>

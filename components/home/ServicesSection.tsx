@@ -16,7 +16,7 @@ type ServicesSectionProps = {
     content: HomePageContent;
 };
 
-type PillarItem = HomePageContent["pillars"]["items"][number];
+type ServiceItem = HomePageContent["pillars"]["items"][number];
 
 export default function ServicesSection({ content }: ServicesSectionProps) {
     const rootRef = useRef<HTMLElement>(null);
@@ -237,11 +237,11 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
         });
     }, [activeIndex, exitingIndex]);
 
-    const renderCardBody = (item: PillarItem) => (
+    const renderCardBody = (item: ServiceItem, index: number) => (
         <>
             <div className={styles.cardTop}>
                 <div className={styles.cardEyebrowRow}>
-                    <span className={styles.cardPillar}>{item.eyebrow}</span>
+                    <span className={styles.cardPillar}>{`0${index + 1}`}</span>
                     <span className={styles.cardRule} aria-hidden="true" />
                 </div>
                 <h3 className={styles.cardTitle}>{item.subtitle}</h3>
@@ -249,25 +249,6 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
             </div>
 
             <p className={styles.cardDescription}>{item.description}</p>
-
-            <div className={styles.cardLists}>
-                <div>
-                    <h4 className={styles.listHeading}>Key Focus</h4>
-                    <ul className={styles.list}>
-                        {item.bullets.map((bullet) => (
-                            <li key={bullet}>{bullet}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                    <h4 className={styles.listHeading}>Deliverables</h4>
-                    <ul className={styles.list}>
-                        {item.deliverables.map((d) => (
-                            <li key={d}>{d}</li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
         </>
     );
 
@@ -275,10 +256,6 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
     const exiting =
         exitingIndex === null ? null : content.pillars.items[exitingIndex];
     const activePanelId = `service-panel-${active.id}`;
-    const headingLines =
-        content.pillars.heading === "We're trusted by industry leaders."
-            ? ["We're trusted by", "industry leaders."]
-            : [content.pillars.heading];
     const cardFrameStyle =
         maxCardHeight > 0
             ? ({
@@ -303,18 +280,7 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
                                 {content.pillars.eyebrow}
                             </span>
                             <h2 className={styles.heading}>
-                                {headingLines.map((line, index) => (
-                                    <span
-                                        key={`${line}-${index}`}
-                                        className={`${styles.headingLine}${
-                                            index === 1
-                                                ? ` ${styles.headingLineNoWrap}`
-                                                : ""
-                                        }`}
-                                    >
-                                        {line}
-                                    </span>
-                                ))}
+                                {content.pillars.heading}
                             </h2>
                             <p className={styles.lede}>{content.pillars.lede}</p>
                         </div>
@@ -333,7 +299,7 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
                                 aria-labelledby={`service-tab-${active.id}`}
                                 className={`${styles.card} ${styles.cardActive}`}
                             >
-                                {renderCardBody(active)}
+                                {renderCardBody(active, activeIndex)}
                             </article>
                             {exiting ? (
                                 <article
@@ -341,7 +307,7 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
                                     aria-hidden="true"
                                     className={`${styles.card} ${styles.cardExiting}`}
                                 >
-                                    {renderCardBody(exiting)}
+                                    {renderCardBody(exiting, exitingIndex!)}
                                 </article>
                             ) : null}
                         </div>
@@ -354,7 +320,7 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
                                     }}
                                     className={`${styles.card} ${styles.cardSizer}`}
                                 >
-                                    {renderCardBody(item)}
+                                    {renderCardBody(item, index)}
                                 </article>
                             ))}
                         </div>
@@ -385,7 +351,7 @@ export default function ServicesSection({ content }: ServicesSectionProps) {
                                 tabIndex={isActive ? 0 : -1}
                             >
                                 <span className={styles.tabNumber}>
-                                    {item.stat}
+                                    {`0${index + 1}`}
                                 </span>
                                 <span className={styles.tabLabel}>
                                     {item.title}

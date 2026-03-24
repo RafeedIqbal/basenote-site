@@ -34,25 +34,43 @@
     color: rgba(0, 0, 0, 0.6);
 }
 
-.sectionIntroBody {
+.portfolioHeader {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    max-width: 600px;
+    gap: 1rem;
+    max-width: 700px;
 }
 
-.sectionHeading {
+.portfolioHeading {
     font-family: var(--font-sans, sans-serif);
     font-size: clamp(2.5rem, 5vw, 4.5rem);
     font-weight: 500;
     line-height: 1.1;
     letter-spacing: -0.03em;
+    margin: 0;
 }
 
-.sectionLede {
+.portfolioSubheading {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0;
+}
+
+.portfolioDescription {
     font-size: 1.125rem;
     color: rgba(0, 0, 0, 0.6);
     line-height: 1.6;
+    margin: 0;
+}
+
+.placeholder {
+    font-size: 1.125rem;
+    color: rgba(0, 0, 0, 0.5);
+    line-height: 1.6;
+    font-style: italic;
 }
 
 .portfolioGrid {

@@ -1,0 +1,245 @@
+.siteHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem clamp(1rem, 2vw, 2rem);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    pointer-events: none;
+}
+
+.siteHeader > * {
+    pointer-events: auto;
+}
+
+.brandMark {
+    display: inline-flex;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    color: #000;
+}
+
+.headerSymbol {
+    width: 3rem;
+    height: 3rem;
+    flex-shrink: 0;
+}
+
+.menuButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 6.5rem;
+    border: none;
+    border-radius: 999px;
+    padding: 0.7rem 1.1rem;
+    background: transparent;
+    color: #000;
+    cursor: pointer;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menuButton:hover {
+    transform: translateY(-2px);
+}
+
+.menuButtonLabel {
+    font-family: var(--font-mono), monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.menuOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menuOverlay[data-open="true"] {
+    pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
+}
+
+.menuBackdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    padding: 0;
+    background: rgba(3, 10, 24, 0.52);
+    backdrop-filter: blur(22px);
+}
+
+.menuPanel {
+    position: absolute;
+    inset: 1rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.85fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding: clamp(1.5rem, 2.5vw, 2.5rem);
+    border-radius: var(--radius-2xl);
+    background:
+        radial-gradient(circle at top left, rgba(255, 100, 61, 0.12), transparent 38%),
+        radial-gradient(circle at 84% 20%, rgba(51, 218, 255, 0.1), transparent 34%),
+        rgba(242, 243, 247, 0.98);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-soft);
+    transform: translateY(-1.5rem) scale(0.98);
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+    max-height: calc(100dvh - 2rem);
+    overflow: hidden;
+    will-change: transform;
+}
+
+.menuOverlay[data-open="true"] .menuPanel {
+    transform: none;
+}
+
+.menuColumn,
+.menuMeta {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: min(1.75rem, 2dvh);
+    min-height: 0;
+    overflow: hidden;
+}
+
+.menuNav {
+    display: grid;
+    gap: min(0.9rem, 1.2dvh);
+    margin-top: 0;
+}
+
+.menuLink {
+    display: block;
+    padding: min(0.9rem, 1.2dvh) 0;
+    border-bottom: 1px solid var(--border-light);
+    transition:
+        transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        color 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menuLink:hover {
+    transform: translateX(0.35rem);
+    color: var(--color-accent-deep);
+}
+
+.menuText {
+    font-family: var(--font-display), sans-serif;
+    font-size: clamp(1.6rem, min(5vw, 5.5dvh), 5rem);
+    line-height: 0.9;
+    text-transform: uppercase;
+}
+
+.menuSummary {
+    margin: 0;
+    max-width: 22rem;
+    color: var(--color-muted);
+}
+
+.menuCtaButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    background: #000;
+    color: #fff;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    align-self: flex-start;
+}
+
+.menuCtaButton:hover {
+    background: var(--color-muted);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1280px) {
+    .menuPanel {
+        grid-template-columns: 1fr minmax(240px, 0.85fr);
+        gap: 1.25rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .siteHeader {
+        padding: 0.85rem 1rem;
+    }
+
+    .menuPanel {
+        display: flex;
+        flex-direction: column;
+        inset: 0.7rem;
+        max-height: calc(100dvh - 1.4rem);
+        gap: min(1.4rem, 2dvh);
+    }
+
+    .menuText {
+        font-size: clamp(1.4rem, min(11vw, 5.5dvh), 3.75rem);
+    }
+
+    .menuMeta {
+        border-top: 1px solid var(--border-light);
+        padding-top: 1rem;
+        flex-shrink: 1;
+    }
+}
+
+@media (max-width: 640px) {
+    .brandMark {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .headerSymbol {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .menuButton {
+        min-height: 3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menuOverlay,
+    .menuPanel,
+    .menuLink,
+    .menuButton,
+    .menuCtaButton {
+        transition: none;
+    }
+}

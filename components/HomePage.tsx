@@ -9,12 +9,15 @@ import styles from "./home/HomePage.module.css";
 
 import HeroSection from "./home/HeroSection";
 import OpportunitySection from "./home/OpportunitySection";
-import PortfolioSection from "./home/PortfolioSection";
 import ServicesSection from "./home/ServicesSection";
-import ProcessSection from "./home/ProcessSection";
+import TechProductsSection from "./home/TechProductsSection";
+import AudiencesSection from "./home/AudiencesSection";
 import WhyBasenoteSection from "./home/WhyBasenoteSection";
+import ProcessSection from "./home/ProcessSection";
+import PortfolioSection from "./home/PortfolioSection";
 import FaqSection from "./home/FaqSection";
-import ContactFooter from "./home/ContactFooter";
+import CtaBanner from "./home/CtaBanner";
+import Footer from "./home/Footer";
 
 type HomePageProps = {
   content: HomePageContent;
@@ -210,6 +213,9 @@ export default function HomePage({ content }: HomePageProps) {
     { scope: rootRef }
   );
 
+  const navLinks = content.nav.filter((item) => !item.isCta);
+  const navCta = content.nav.find((item) => item.isCta);
+
   return (
     <div ref={rootRef} className={styles.page}>
       <BasenoteSymbol
@@ -261,16 +267,15 @@ export default function HomePage({ content }: HomePageProps) {
           <div className={styles.menuColumn}>
             <span className={styles.eyebrow}>Navigation</span>
             <nav className={styles.menuNav} aria-label="Primary">
-              {content.nav.map((item, index) => (
+              {navLinks.map((item, index) => (
                 <a
-                  key={item.href}
+                  key={item.href + item.label}
                   ref={index === 0 ? firstMenuLinkRef : undefined}
                   href={item.href}
                   className={styles.menuLink}
                   onClick={() => setMenuOpen(false)}
                   tabIndex={menuOpen ? 0 : -1}
                 >
-                  <span className={styles.menuNumber}>{item.number}</span>
                   <span className={styles.menuText}>{item.label}</span>
                 </a>
               ))}
@@ -280,9 +285,19 @@ export default function HomePage({ content }: HomePageProps) {
           <div className={styles.menuMeta}>
             <div>
               <span className={styles.eyebrow}>Basenote Solutions</span>
-              <p className={styles.menuSummary}>{content.hero.supporting}</p>
+              <p className={styles.menuSummary}>{content.hero.summary}</p>
             </div>
 
+            {navCta ? (
+              <a
+                href={navCta.href}
+                className={styles.menuCtaButton}
+                onClick={() => setMenuOpen(false)}
+                tabIndex={menuOpen ? 0 : -1}
+              >
+                {navCta.label}
+              </a>
+            ) : null}
           </div>
         </div>
       </div>
@@ -309,11 +324,14 @@ export default function HomePage({ content }: HomePageProps) {
           </div>
         </div>
         <ServicesSection content={content} />
-        <PortfolioSection content={content} />
+        <TechProductsSection content={content} />
+        <AudiencesSection content={content} />
         <WhyBasenoteSection content={content} />
         <ProcessSection content={content} />
+        <PortfolioSection content={content} />
         <FaqSection content={content} />
-        <ContactFooter content={content} />
+        <CtaBanner content={content} />
+        <Footer content={content} />
       </main>
     </div>
   );
