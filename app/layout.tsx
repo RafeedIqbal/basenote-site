@@ -25,24 +25,35 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://basenotesolutions.com"),
+  metadataBase: new URL("https://www.basenotesolutions.com"),
+  alternates: {
+    canonical: "/"
+  },
   title: {
-    default: "Basenote Solutions",
+    default: "Basenote Solutions — Fragrance Brand Consultancy",
     template: "%s | Basenote Solutions"
   },
   description:
     "Designing and launching fragrance brands through scent, craft, and strategy.",
+  keywords: [
+    "fragrance brand consultancy",
+    "perfume brand development",
+    "scent strategy",
+    "fragrance launch",
+    "Basenote Solutions"
+  ],
   openGraph: {
-    title: "Basenote Solutions",
+    title: "Basenote Solutions — Fragrance Brand Consultancy",
     description:
       "Designing and launching fragrance brands through scent, craft, and strategy.",
+    url: "/",
     siteName: "Basenote Solutions",
     locale: "en_US",
     type: "website"
   },
   twitter: {
     card: "summary_large_image",
-    title: "Basenote Solutions",
+    title: "Basenote Solutions — Fragrance Brand Consultancy",
     description:
       "Designing and launching fragrance brands through scent, craft, and strategy."
   }

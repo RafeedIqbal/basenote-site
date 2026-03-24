@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/"
     },
-    sitemap: "https://basenotesolutions.com/sitemap.xml"
+    sitemap: "https://www.basenotesolutions.com/sitemap.xml"
   };
 }
