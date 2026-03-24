@@ -68,7 +68,7 @@
 
 .processNumber {
     font-family: var(--font-mono, monospace);
-    color: #00ccff;
+    color: var(--color-cyan);
     /* Deformo Cyan */
     font-size: 1.25rem;
     font-weight: 600;

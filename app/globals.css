@@ -8,7 +8,7 @@
   --color-accent: #ff643d;
   --color-accent-deep: #c83d1e;
   --color-accent-soft: #ffd7cc;
-  --color-cyan: #33daff;
+  --color-cyan: #00406c;
   --border-dark: rgba(255, 255, 255, 0.16);
   --border-light: rgba(15, 20, 33, 0.11);
   --shadow-soft: 0 22px 72px rgba(12, 17, 31, 0.12);
@@ -48,7 +48,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, rgba(51, 218, 255, 0.07), transparent 28%),
+    radial-gradient(circle at top left, rgba(0, 64, 108, 0.07), transparent 28%),
     var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body), sans-serif;

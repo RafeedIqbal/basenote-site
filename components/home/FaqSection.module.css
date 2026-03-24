@@ -77,7 +77,7 @@
 }
 
 .faqButton:hover {
-    color: #00ccff;
+    color: var(--color-cyan);
     /* Interactive accent */
 }
 

@@ -180,9 +180,9 @@
 }
 
 .tag {
-    background-color: #00ccff;
+    background-color: var(--color-cyan);
     /* The Deformo Cyan */
-    color: #000;
+    color: #fff;
     padding: 0.25rem 0.75rem;
     border-radius: 4px;
     font-family: var(--font-mono, monospace);
