@@ -31,12 +31,12 @@
   position: fixed;
   top: 1.2rem;
   left: clamp(1rem, 2vw, 2rem);
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 6.5rem;
+  height: 6.5rem;
   z-index: 38;
   pointer-events: none;
   transform-origin: center center;
-  color: #fff;
+  filter: invert(1);
   mix-blend-mode: difference;
 }
 
@@ -415,8 +415,8 @@
   }
 
   .backgroundSymbol {
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 5rem;
+    height: 5rem;
     top: 1rem;
   }
 

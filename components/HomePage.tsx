@@ -218,7 +218,9 @@ export default function HomePage({ content }: HomePageProps) {
 
   return (
     <div ref={rootRef} className={styles.page}>
-      <BasenoteSymbol
+      <img
+        src="/assets/logo-icon-3d.svg"
+        alt=""
         className={styles.backgroundSymbol}
         data-logo-symbol=""
         data-menu-open={menuOpen}
@@ -228,7 +230,11 @@ export default function HomePage({ content }: HomePageProps) {
       </a>
       <header className={styles.siteHeader} data-menu-open={menuOpen}>
         <div className={styles.brandMark} aria-hidden="true">
-          <BasenoteSymbol className={styles.headerSymbol} />
+          <img
+            src="/assets/logo-icon-3d.svg"
+            alt=""
+            className={styles.headerSymbol}
+          />
         </div>
 
         <button
