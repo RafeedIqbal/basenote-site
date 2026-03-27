@@ -1,5 +1,8 @@
 .main {
     padding-top: 6rem;
+    background:
+        linear-gradient(180deg, rgba(3, 15, 38, 0.08) 0%, rgba(3, 15, 38, 0) 20rem),
+        var(--color-paper);
 }
 
 .container {
@@ -20,21 +23,29 @@
 }
 
 .heroSection {
-    padding: 6rem 0 4rem;
+    padding: 6.5rem 0 3.5rem;
 }
 
 .heading {
     font-family: var(--font-display, sans-serif);
-    font-size: clamp(3rem, 6vw, 6rem);
+    font-size: clamp(3rem, 6vw, 5.6rem);
     font-weight: 500;
     line-height: 0.95;
     letter-spacing: -0.04em;
+    margin: 0 0 1.25rem;
+    max-width: 14ch;
+}
+
+.subheading {
+    max-width: 38rem;
     margin: 0;
-    max-width: 800px;
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    line-height: 1.7;
+    color: rgba(0, 0, 0, 0.68);
 }
 
 .storySection {
-    padding: 0 0 6rem;
+    padding: 0 0 5rem;
 }
 
 .storyContent {
@@ -51,9 +62,47 @@
     margin: 0;
 }
 
+.highlightGrid {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.highlightCard {
+    padding: 1.5rem;
+    border: 1px solid rgba(15, 20, 33, 0.08);
+    border-radius: 1.5rem;
+    background:
+        radial-gradient(circle at top right, rgba(255, 100, 61, 0.08), transparent 32%),
+        rgba(255, 255, 255, 0.82);
+    box-shadow: 0 20px 48px rgba(12, 17, 31, 0.08);
+}
+
+.highlightTitle {
+    margin: 0 0 0.65rem;
+    font-family: var(--font-display, sans-serif);
+    font-size: 1.4rem;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+}
+
+.highlightDescription {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.68);
+    line-height: 1.65;
+}
+
 .teamSection {
     padding: 4rem 0 8rem;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sectionIntro {
+    max-width: 34rem;
+    margin: 0 0 2rem;
+    color: rgba(0, 0, 0, 0.68);
+    line-height: 1.7;
 }
 
 .teamGrid {
@@ -68,6 +117,12 @@
     }
 }
 
+@media (max-width: 900px) {
+    .highlightGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (min-width: 1281px) {
     .teamGrid {
         grid-template-columns: repeat(4, 1fr);
@@ -75,8 +130,11 @@
 }
 
 .teamCard {
-    border-top: 2px solid #000;
-    padding-top: 2rem;
+    padding: 1.75rem;
+    border: 1px solid rgba(15, 20, 33, 0.08);
+    border-radius: 1.5rem;
+    background: rgba(255, 255, 255, 0.74);
+    box-shadow: 0 20px 48px rgba(12, 17, 31, 0.06);
 }
 
 .teamCardContent {

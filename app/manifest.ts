@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Basenote Solutions",
     short_name: "Basenote",
     description:
-      "Designing and launching fragrance brands through scent, craft, and strategy.",
+      "Private label perfumes, brand strategy, and AI-powered fragrance technology for modern launches.",
     start_url: "/",
     display: "browser",
     background_color: "#030f26",

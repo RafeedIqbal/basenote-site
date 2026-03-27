@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { HomePageContent } from "@/data/home-content";
 import Image from "next/image";
 import defaultStyles from "./HomePage.module.css";
@@ -89,12 +90,12 @@ export default function HeroSection({ content }: HeroSectionProps) {
                         </p>
                     </div>
                     <div className={styles.heroActions} data-hero-actions="">
-                        <a href="/contact" className={defaultStyles.primaryButton}>
+                        <Link href="/contact" className={defaultStyles.primaryButton}>
                             {content.hero.ctaLabel}
-                        </a>
-                        <a href="#what-we-do" className={defaultStyles.secondaryButton}>
+                        </Link>
+                        <Link href="/#what-we-do" className={defaultStyles.secondaryButton}>
                             {content.hero.secondaryCtaLabel}
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

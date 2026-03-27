@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { homePageContent } from "@/data/home-content";
+import { getCurrentYear } from "@/lib/site";
 import styles from "./PageFooter.module.css";
 
 export default function PageFooter() {
@@ -16,9 +18,9 @@ export default function PageFooter() {
                             <ul className={styles.linkList}>
                                 {footer.services.map((link) => (
                                     <li key={link.label}>
-                                        <a href={link.href} className={styles.link}>
+                                        <Link href={link.href} className={styles.link}>
                                             {link.label}
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -29,9 +31,9 @@ export default function PageFooter() {
                             <ul className={styles.linkList}>
                                 {footer.technology.map((link) => (
                                     <li key={link.label}>
-                                        <a href={link.href} className={styles.link}>
+                                        <Link href={link.href} className={styles.link}>
                                             {link.label}
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -42,9 +44,9 @@ export default function PageFooter() {
                             <ul className={styles.linkList}>
                                 {footer.company.map((link) => (
                                     <li key={link.label}>
-                                        <a href={link.href} className={styles.link}>
+                                        <Link href={link.href} className={styles.link}>
                                             {link.label}
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -53,7 +55,7 @@ export default function PageFooter() {
                 </div>
 
                 <div className={styles.bottom}>
-                    <span>&copy; 2025 Base Note Solutions. All rights reserved.</span>
+                    <span>&copy; {getCurrentYear()} Basenote Solutions. All rights reserved.</span>
                 </div>
             </div>
         </footer>

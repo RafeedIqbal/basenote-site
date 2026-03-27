@@ -1,4 +1,6 @@
+import Link from "next/link";
 import type { HomePageContent } from "@/data/home-content";
+import { getCurrentYear } from "@/lib/site";
 import styles from "./Footer.module.css";
 
 type FooterProps = {
@@ -18,9 +20,9 @@ export default function Footer({ content }: FooterProps) {
                             <ul className={styles.linkList}>
                                 {content.footer.services.map((link) => (
                                     <li key={link.label}>
-                                        <a href={link.href} className={styles.link}>
+                                        <Link href={link.href} className={styles.link}>
                                             {link.label}
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -31,9 +33,9 @@ export default function Footer({ content }: FooterProps) {
                             <ul className={styles.linkList}>
                                 {content.footer.technology.map((link) => (
                                     <li key={link.label}>
-                                        <a href={link.href} className={styles.link}>
+                                        <Link href={link.href} className={styles.link}>
                                             {link.label}
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -44,9 +46,9 @@ export default function Footer({ content }: FooterProps) {
                             <ul className={styles.linkList}>
                                 {content.footer.company.map((link) => (
                                     <li key={link.label}>
-                                        <a href={link.href} className={styles.link}>
+                                        <Link href={link.href} className={styles.link}>
                                             {link.label}
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -55,7 +57,7 @@ export default function Footer({ content }: FooterProps) {
                 </div>
 
                 <div className={styles.bottom}>
-                    <span>&copy; 2025 Base Note Solutions. All rights reserved.</span>
+                    <span>&copy; {getCurrentYear()} Basenote Solutions. All rights reserved.</span>
                 </div>
             </div>
         </footer>

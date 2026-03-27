@@ -2,7 +2,9 @@ import { ImageResponse } from "next/og";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-export const alt = "Basenote Solutions";
+import { SITE_NAME } from "@/lib/site";
+
+export const alt = SITE_NAME;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -49,7 +51,7 @@ export default function OgImage() {
               textTransform: "uppercase"
             }}
           >
-            Basenote Solutions
+            {SITE_NAME}
           </span>
           <span
             style={{
@@ -58,8 +60,7 @@ export default function OgImage() {
               letterSpacing: "0.02em"
             }}
           >
-            Designing and launching fragrance brands through scent, craft, and
-            strategy.
+            Fragrance brands, private label launches, and AI-powered scent technology.
           </span>
         </div>
       </div>

@@ -130,9 +130,9 @@ export type HomePageContent = {
 
 export const homePageContent: HomePageContent = {
   nav: [
-    { label: "What We Do", href: "#what-we-do" },
-    { label: "Tech & AI", href: "#tech-ai" },
-    { label: "Who We Work With", href: "#who-we-work-with" },
+    { label: "What We Do", href: "/#what-we-do" },
+    { label: "Tech & AI", href: "/#tech-ai" },
+    { label: "Who We Work With", href: "/#who-we-work-with" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
     { label: "Get in Touch", href: "/contact", isCta: true }
@@ -140,16 +140,16 @@ export const homePageContent: HomePageContent = {
   hero: {
     headline: "Where Fragrance Meets Business",
     summary:
-      "Private label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts.",
-    ctaLabel: "Get Started",
-    secondaryCtaLabel: "Explore What We Do"
+      "Private label perfumes, brand strategy, and AI-powered fragrance technology for founders, brands, and operators who want a sharper path from concept to shelf.",
+    ctaLabel: "Start Your Enquiry",
+    secondaryCtaLabel: "Explore Services"
   },
   opportunity: {
     headline: "The Fragrance Industry Is Wide Open",
     paragraphs: [
       "The global fragrance market is worth over $50 billion — and it's still growing. But breaking in has always required connections, capital, and manufacturing access most people don't have.",
-      "Base Note changes that.",
-      "We combine direct access to a UAE-based manufacturing facility, in-house brand and tech capabilities, and AI tools that didn't exist five years ago. The result: a faster, smarter path from idea to shelf."
+      "Basenote changes that.",
+      "We combine direct access to a UAE-based manufacturing facility, in-house brand and tech capability, and AI tools that did not exist a few years ago. The result is a faster, smarter route from idea to launch."
     ]
   },
   pillars: {
@@ -256,7 +256,7 @@ export const homePageContent: HomePageContent = {
     ]
   },
   reasons: {
-    eyebrow: "Why Base Note",
+    eyebrow: "Why Basenote",
     heading: "Why Work With Us",
     items: [
       {
@@ -316,69 +316,69 @@ export const homePageContent: HomePageContent = {
     heading: "What We've Built",
     subheading: "In Association with TAC Perfumes",
     description:
-      "Our work spans private label products, brand launches, and fragrance solutions across global markets — delivered in partnership with TAC Perfumes, our UAE-based manufacturing partner.",
+      "Our work spans private label launches, brand systems, and fragrance supply partnerships shaped with TAC Perfumes, our UAE-based manufacturing partner.",
     placeholder: "Client case study cards to be added.",
     projects: [
       {
-        id: "private-label-launch",
-        title: "Private Label Launch",
-        category: "Product development",
+        id: "studio-signature-launch",
+        title: "Studio Signature Launch",
+        category: "Private label launch",
         summary:
-          "End-to-end private label fragrance created for a UK-based lifestyle brand — from scent brief to finished product, packaging, and delivery.",
-        impact: "First production run delivered on schedule",
-        tags: ["Private Label", "Packaging", "UAE"],
+          "A complete fragrance concept translated into finished product, packaging direction, and launch-ready presentation for a lifestyle-led client.",
+        impact: "Launch-ready product system delivered for first production planning",
+        tags: ["Private Label", "Packaging", "Launch"],
         images: [
           {
-            src: "/portfolio/placeholder-1a.svg",
-            alt: "Placeholder product image",
-            caption: "Product view"
+            src: "/portfolio/studio-bottle.svg",
+            alt: "Rendered fragrance bottle for the Studio Signature launch",
+            caption: "Hero product"
           },
           {
-            src: "/portfolio/placeholder-1b.svg",
-            alt: "Placeholder packaging image",
-            caption: "Packaging view"
+            src: "/portfolio/studio-founder.svg",
+            alt: "Founder portrait and campaign art for the Studio Signature launch",
+            caption: "Launch narrative"
           }
         ]
       },
       {
-        id: "brand-identity-build",
-        title: "Brand Identity Build",
-        category: "Branding & digital",
+        id: "aurum-brand-system",
+        title: "Aurum Brand System",
+        category: "Brand identity",
         summary:
-          "Full brand identity, website, and social presence built for a new fragrance house entering the DTC market.",
-        impact: "Brand launched with a cohesive digital presence from day one",
-        tags: ["Branding", "Website", "Launch"],
+          "A premium visual world built to support fragrance storytelling across product, campaign, and ecommerce touchpoints.",
+        impact: "A cohesive brand direction established before go-to-market execution",
+        tags: ["Branding", "Creative", "DTC"],
         images: [
           {
-            src: "/portfolio/placeholder-2a.svg",
-            alt: "Placeholder brand identity image",
-            caption: "Brand view"
+            src: "/portfolio/aurum-bottle.svg",
+            alt: "Aurum fragrance bottle visual",
+            caption: "Product system"
           },
           {
-            src: "/portfolio/placeholder-2b.svg",
-            alt: "Placeholder website image",
-            caption: "Digital view"
+            src: "/portfolio/aurum-creator.svg",
+            alt: "Creative direction visual for the Aurum brand system",
+            caption: "Campaign direction"
           }
         ]
       },
       {
-        id: "wholesale-partnership",
-        title: "Wholesale Oil Partnership",
-        category: "Fragrance oils",
+        id: "velocity-supply-partnership",
+        title: "Velocity Supply Partnership",
+        category: "Fragrance supply",
         summary:
-          "Ongoing wholesale fragrance oil supply for a mid-size retailer — competitive pricing, flexible volumes, and reliable logistics from our UAE facility.",
-        impact: "Recurring quarterly orders established",
-        tags: ["Wholesale", "Oils", "Supply"],
+          "A supply-led engagement designed around dependable sourcing, flexible ordering, and a presentation standard that matched the client's retail ambitions.",
+        impact: "Repeat-order confidence built around sourcing and operational reliability",
+        tags: ["Wholesale", "Operations", "Supply"],
         images: [
           {
-            src: "/portfolio/placeholder-3a.svg",
-            alt: "Placeholder oil bottles image",
-            caption: "Product view"
+            src: "/portfolio/velocity-bottle.svg",
+            alt: "Velocity bottle product visual",
+            caption: "Retail-ready product"
           },
           {
-            src: "/portfolio/placeholder-3b.svg",
-            alt: "Placeholder warehouse image",
-            caption: "Operations view"
+            src: "/portfolio/velocity-athlete.svg",
+            alt: "Velocity campaign visual featuring an athlete",
+            caption: "Brand extension"
           }
         ]
       }
@@ -423,29 +423,29 @@ export const homePageContent: HomePageContent = {
     ]
   },
   ctaBanner: {
-    heading: "Ready to Build Something?",
+    heading: "Ready to Build With Us?",
     subheading:
-      "Whether you need a product, a brand, or a technology partner — let's talk.",
+      "Whether you need a product, a brand, or a technology partner, we can scope the smartest next step together.",
     ctaLabel: "Get in Touch"
   },
   footer: {
     tagline: "Where Fragrance Meets Business",
     services: [
-      { label: "Private Label", href: "#what-we-do" },
-      { label: "Wholesale Oils", href: "#what-we-do" },
-      { label: "Branding", href: "#what-we-do" },
-      { label: "Consultancy", href: "#what-we-do" }
+      { label: "Private Label", href: "/#what-we-do" },
+      { label: "Wholesale Oils", href: "/#what-we-do" },
+      { label: "Branding", href: "/#what-we-do" },
+      { label: "Consultancy", href: "/#what-we-do" }
     ],
     technology: [
-      { label: "Blend Engine", href: "#tech-ai" },
-      { label: "Alchemy Engine", href: "#tech-ai" },
-      { label: "Websites & ERP", href: "#tech-ai" }
+      { label: "Blend Engine", href: "/#tech-ai" },
+      { label: "Alchemy Engine", href: "/#tech-ai" },
+      { label: "Websites & ERP", href: "/#tech-ai" }
     ],
     company: [
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms", href: "#" }
+      { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms", href: "/terms" }
     ]
   }
 };

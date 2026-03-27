@@ -24,6 +24,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-padding-top: 5.5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -54,11 +58,39 @@ body {
   font-family: var(--font-body), sans-serif;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+section[id],
+main[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+.skipLink {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 90;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: var(--color-paper);
+  color: var(--color-night);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 16px 38px rgba(2, 7, 18, 0.18);
+  transform: translateY(-140%);
+  transition: transform 0.2s ease;
+}
+
+.skipLink:focus-visible {
+  transform: translateY(0);
 }
 
 button,

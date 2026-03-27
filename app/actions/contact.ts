@@ -36,6 +36,10 @@ function escapeHtml(value: string) {
     .replace(/'/g, "&#39;");
 }
 
+function sanitizeHeaderValue(value: string) {
+  return value.replace(/[\r\n]+/g, " ").trim();
+}
+
 export async function submitContactForm(
   formData: FormData
 ): Promise<ContactResult> {
@@ -66,7 +70,7 @@ export async function submitContactForm(
     };
   }
 
-  const guardResult = await guardPublicSubmission(formData, email);
+  const guardResult = await guardPublicSubmission(formData);
 
   if (!guardResult.ok) {
     if (guardResult.reason === "spam") {
@@ -92,6 +96,9 @@ export async function submitContactForm(
     host: "smtp.gmail.com",
     port: 465,
     secure: true,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
     auth: {
       user: gmailUser,
       pass: gmailAppPassword
@@ -104,7 +111,9 @@ export async function submitContactForm(
   const safeInterest = escapeHtml(interest);
   const safeMessage = escapeHtml(message).replace(/\n/g, "<br />");
 
-  const subject = `[Basenote] ${interest} enquiry from ${fullName}`;
+  const subject = `[Basenote] ${sanitizeHeaderValue(
+    interest
+  )} enquiry from ${sanitizeHeaderValue(fullName)}`;
 
   const textBody = [
     "New contact enquiry",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import type { HomePageContent } from "@/data/home-content";
 import { gsap, useGSAP } from "@/lib/gsap";
@@ -228,9 +229,6 @@ export default function HomePage({ content }: HomePageProps) {
         data-menu-open={menuOpen}
         priority
       />
-      <a href="#home" className={styles.visuallyHiddenHomeLink}>
-        Basenote Solutions home
-      </a>
       <header className={styles.siteHeader} data-menu-open={menuOpen}>
         <div className={styles.brandMark} aria-hidden="true">
           <Image
@@ -279,7 +277,7 @@ export default function HomePage({ content }: HomePageProps) {
             <span className={styles.eyebrow}>Navigation</span>
             <nav className={styles.menuNav} aria-label="Primary">
               {navLinks.map((item, index) => (
-                <a
+                <Link
                   key={item.href + item.label}
                   ref={index === 0 ? firstMenuLinkRef : undefined}
                   href={item.href}
@@ -288,7 +286,7 @@ export default function HomePage({ content }: HomePageProps) {
                   tabIndex={menuOpen ? 0 : -1}
                 >
                   <span className={styles.menuText}>{item.label}</span>
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
@@ -300,20 +298,20 @@ export default function HomePage({ content }: HomePageProps) {
             </div>
 
             {navCta ? (
-              <a
+              <Link
                 href={navCta.href}
                 className={styles.menuCtaButton}
                 onClick={() => setMenuOpen(false)}
                 tabIndex={menuOpen ? 0 : -1}
               >
                 {navCta.label}
-              </a>
+              </Link>
             ) : null}
           </div>
         </div>
       </div>
 
-      <main ref={mainRef}>
+      <main ref={mainRef} id="main-content">
         <div className={styles.heroOpportunityWrapper}>
           <div className={styles.videoBackground} aria-hidden="true">
             <video

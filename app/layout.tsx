@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Antonio, IBM_Plex_Mono, Schibsted_Grotesk } from "next/font/google";
 
 import SmoothScroll from "@/components/SmoothScroll";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_ORIGIN } from "@/lib/site";
 
 import "./globals.css";
 
@@ -25,16 +26,12 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.basenotesolutions.com"),
-  alternates: {
-    canonical: "/"
-  },
+  metadataBase: new URL(SITE_ORIGIN),
   title: {
-    default: "Basenote Solutions — Fragrance Brand Consultancy",
+    default: `Fragrance Brand Consultancy | ${SITE_NAME}`,
     template: "%s | Basenote Solutions"
   },
-  description:
-    "Private label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts.",
+  description: SITE_DESCRIPTION,
   keywords: [
     "private label perfume",
     "fragrance brand consultancy",
@@ -44,11 +41,9 @@ export const metadata: Metadata = {
     "Basenote Solutions"
   ],
   openGraph: {
-    title: "Basenote Solutions — Fragrance Brand Consultancy",
-    description:
-      "Private label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts.",
-    url: "/",
-    siteName: "Basenote Solutions",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_NAME,
     locale: "en_US",
     type: "website"
   },
@@ -71,6 +66,9 @@ export default function RootLayout({
       className={`${antonio.variable} ${schibstedGrotesk.variable} ${ibmPlexMono.variable}`}
     >
       <body>
+        <a href="#main-content" className="skipLink">
+          Skip to content
+        </a>
         <SmoothScroll />
         {children}
       </body>

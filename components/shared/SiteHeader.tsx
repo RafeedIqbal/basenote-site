@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { homePageContent } from "@/data/home-content";
-import BasenoteSymbol from "@/components/home/BasenoteSymbol";
 import styles from "./SiteHeader.module.css";
 
 export default function SiteHeader() {
@@ -29,6 +29,30 @@ export default function SiteHeader() {
     }, [menuOpen]);
 
     useEffect(() => {
+        const mainElement = document.querySelector("main");
+        const footerElement = document.querySelector("footer");
+
+        if (menuOpen) {
+            mainElement?.setAttribute("inert", "");
+            mainElement?.setAttribute("aria-hidden", "true");
+            footerElement?.setAttribute("inert", "");
+            footerElement?.setAttribute("aria-hidden", "true");
+        } else {
+            mainElement?.removeAttribute("inert");
+            mainElement?.removeAttribute("aria-hidden");
+            footerElement?.removeAttribute("inert");
+            footerElement?.removeAttribute("aria-hidden");
+        }
+
+        return () => {
+            mainElement?.removeAttribute("inert");
+            mainElement?.removeAttribute("aria-hidden");
+            footerElement?.removeAttribute("inert");
+            footerElement?.removeAttribute("aria-hidden");
+        };
+    }, [menuOpen]);
+
+    useEffect(() => {
         if (menuOpen) {
             const timer = window.setTimeout(() => {
                 firstMenuLinkRef.current?.focus();
@@ -45,12 +69,74 @@ export default function SiteHeader() {
     }, [menuOpen]);
 
     useEffect(() => {
-        if (!menuOpen) return;
+        if (!menuOpen) {
+            return;
+        }
+
+        const getFocusableElements = () => {
+            const menuOverlay = menuOverlayRef.current;
+
+            if (!menuOverlay) {
+                return [];
+            }
+
+            return Array.from(
+                menuOverlay.querySelectorAll<HTMLElement>(
+                    [
+                        "a[href]",
+                        "button:not([disabled]):not([tabindex='-1'])",
+                        "input:not([disabled]):not([tabindex='-1'])",
+                        "select:not([disabled]):not([tabindex='-1'])",
+                        "textarea:not([disabled]):not([tabindex='-1'])",
+                        "[tabindex]:not([tabindex='-1'])"
+                    ].join(", ")
+                )
+            ).filter((element) => {
+                const computedStyle = window.getComputedStyle(element);
+                return (
+                    computedStyle.visibility !== "hidden" &&
+                    computedStyle.display !== "none"
+                );
+            });
+        };
 
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
                 event.preventDefault();
                 setMenuOpen(false);
+                return;
+            }
+
+            if (event.key !== "Tab") {
+                return;
+            }
+
+            const focusableElements = getFocusableElements();
+
+            if (focusableElements.length === 0) {
+                event.preventDefault();
+                return;
+            }
+
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            const activeElement = document.activeElement as HTMLElement | null;
+            const activeInsideMenu = activeElement
+                ? focusableElements.includes(activeElement)
+                : false;
+
+            if (event.shiftKey) {
+                if (!activeInsideMenu || activeElement === firstElement) {
+                    event.preventDefault();
+                    lastElement.focus();
+                }
+
+                return;
+            }
+
+            if (!activeInsideMenu || activeElement === lastElement) {
+                event.preventDefault();
+                firstElement.focus();
             }
         };
 
@@ -62,7 +148,13 @@ export default function SiteHeader() {
         <>
             <header className={styles.siteHeader}>
                 <Link href="/" className={styles.brandMark} aria-label="Basenote Solutions home">
-                    <BasenoteSymbol className={styles.headerSymbol} />
+                    <Image
+                        src="/assets/logo-icon-3d.svg"
+                        alt=""
+                        width={48}
+                        height={48}
+                        className={styles.headerSymbol}
+                    />
                 </Link>
 
                 <button
@@ -111,7 +203,7 @@ export default function SiteHeader() {
                                 <span className={styles.menuText}>Home</span>
                             </Link>
                             {navLinks.map((item) => (
-                                <a
+                                <Link
                                     key={item.href + item.label}
                                     href={item.href}
                                     className={styles.menuLink}
@@ -119,7 +211,7 @@ export default function SiteHeader() {
                                     tabIndex={menuOpen ? 0 : -1}
                                 >
                                     <span className={styles.menuText}>{item.label}</span>
-                                </a>
+                                </Link>
                             ))}
                         </nav>
                     </div>
@@ -131,14 +223,14 @@ export default function SiteHeader() {
                         </div>
 
                         {navCta ? (
-                            <a
+                            <Link
                                 href={navCta.href}
                                 className={styles.menuCtaButton}
                                 onClick={() => setMenuOpen(false)}
                                 tabIndex={menuOpen ? 0 : -1}
                             >
                                 {navCta.label}
-                            </a>
+                            </Link>
                         ) : null}
                     </div>
                 </div>

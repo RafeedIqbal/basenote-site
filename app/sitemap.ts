@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next";
 
+import { PUBLIC_ROUTES, SITE_ORIGIN } from "@/lib/site";
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: "https://www.basenotesolutions.com",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1
-    }
-  ];
+  const lastModified = new Date();
+
+  return PUBLIC_ROUTES.map((route) => ({
+    url: route === "/" ? SITE_ORIGIN : `${SITE_ORIGIN}${route}`,
+    lastModified,
+    changeFrequency: route === "/" ? "weekly" : "monthly",
+    priority: route === "/" ? 1 : 0.7
+  }));
 }

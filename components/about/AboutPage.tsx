@@ -1,5 +1,3 @@
-"use client";
-
 import SiteHeader from "@/components/shared/SiteHeader";
 import PageFooter from "@/components/shared/PageFooter";
 import styles from "./AboutPage.module.css";
@@ -31,17 +29,39 @@ const teamMembers = [
     }
 ];
 
+const highlights = [
+    {
+        title: "Direct Factory Access",
+        description:
+            "Manufacturing through TAC Perfumes in the UAE — no middlemen, no markup chains."
+    },
+    {
+        title: "In-House Tech Team",
+        description:
+            "Arizmi Labs builds the AI tools and digital infrastructure that power our workflow."
+    },
+    {
+        title: "End-to-End Delivery",
+        description:
+            "From formulation to brand identity to market-ready product — one team, one process."
+    }
+];
+
 export default function AboutPage() {
     return (
         <>
             <SiteHeader />
-            <main className={styles.main}>
+            <main id="main-content" className={styles.main}>
                 <section className={styles.heroSection}>
                     <div className={styles.container}>
                         <span className={styles.eyebrow}>About</span>
                         <h1 className={styles.heading}>
                             Tech People. Fragrance Industry.
                         </h1>
+                        <p className={styles.subheading}>
+                            Basenote Solutions helps founders and operators move from
+                            fragrance idea to launch-ready business with one connected team.
+                        </p>
                     </div>
                 </section>
 
@@ -66,12 +86,27 @@ export default function AboutPage() {
                                 something that hasn&apos;t been built before.
                             </p>
                         </div>
+
+                        <div className={styles.highlightGrid}>
+                            {highlights.map((highlight) => (
+                                <article key={highlight.title} className={styles.highlightCard}>
+                                    <h2 className={styles.highlightTitle}>{highlight.title}</h2>
+                                    <p className={styles.highlightDescription}>
+                                        {highlight.description}
+                                    </p>
+                                </article>
+                            ))}
+                        </div>
                     </div>
                 </section>
 
                 <section className={styles.teamSection}>
                     <div className={styles.container}>
                         <span className={styles.eyebrow}>The Team</span>
+                        <p className={styles.sectionIntro}>
+                            A small senior team with experience across fragrance, brand building,
+                            and technical delivery.
+                        </p>
                         <div className={styles.teamGrid}>
                             {teamMembers.map((member) => (
                                 <article key={member.name} className={styles.teamCard}>

@@ -23,6 +23,7 @@ export default function ContactPage() {
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -32,6 +33,7 @@ export default function ContactPage() {
         }
 
         setError(null);
+        setStatusMessage("Submitting your enquiry...");
         setIsSubmitting(true);
 
         try {
@@ -40,13 +42,16 @@ export default function ContactPage() {
             if (result.success) {
                 formRef.current?.reset();
                 setSubmitted(true);
+                setStatusMessage("Your enquiry has been sent.");
                 return;
             }
 
             setError(result.error);
+            setStatusMessage(null);
         } catch (submitError) {
             console.error("Contact form submission failed:", submitError);
             setError("Something went wrong. Please try again.");
+            setStatusMessage(null);
         } finally {
             setIsSubmitting(false);
         }
@@ -55,15 +60,18 @@ export default function ContactPage() {
     return (
         <>
             <SiteHeader />
-            <main className={styles.main}>
+            <main id="main-content" className={styles.main}>
                 <section className={styles.heroSection}>
                     <div className={styles.container}>
                         <span className={styles.eyebrow}>Contact</span>
-                        <h1 className={styles.heading}>Let&apos;s Talk</h1>
+                        <h1 className={styles.heading}>Tell Us What You&apos;re Building</h1>
                         <p className={styles.subheading}>
-                            Tell us what you&apos;re working on and we&apos;ll come back to you
-                            soon.
+                            Share your product, brand, or technology brief and we&apos;ll reply
+                            with the clearest next step for your launch.
                         </p>
+                        <div className={styles.heroNotes}>
+                            <p>Best for: private label launches, branding scopes, fragrance supply, and technology partnerships.</p>
+                        </div>
                     </div>
                 </section>
 
@@ -73,7 +81,8 @@ export default function ContactPage() {
                             <div className={styles.successMessage}>
                                 <h2 className={styles.successHeading}>Thank you</h2>
                                 <p className={styles.successText}>
-                                    Your enquiry has been received.
+                                    Your enquiry has been received. We&apos;ll review the
+                                    brief and come back with the most useful next step.
                                 </p>
                             </div>
                         ) : (
@@ -83,6 +92,11 @@ export default function ContactPage() {
                                 onSubmit={handleSubmit}
                             >
                                 <FormGuardFields />
+
+                                <p className={styles.formIntro}>
+                                    Give us a little context up front and we&apos;ll make our
+                                    first reply more useful.
+                                </p>
 
                                 <div className={styles.fieldGroup}>
                                     <label htmlFor="fullName" className={styles.label}>
@@ -133,12 +147,17 @@ export default function ContactPage() {
                                     <label htmlFor="interest" className={styles.label}>
                                         What are you interested in?
                                     </label>
+                                    <p id="interest-helper" className={styles.helperText}>
+                                        Choose the closest fit. If your brief spans multiple
+                                        areas, select the one you want to start with.
+                                    </p>
                                     <select
                                         id="interest"
                                         name="interest"
                                         required
                                         className={styles.select}
                                         defaultValue=""
+                                        aria-describedby="interest-helper"
                                     >
                                         <option value="" disabled>
                                             Select an option
@@ -155,6 +174,10 @@ export default function ContactPage() {
                                     <label htmlFor="message" className={styles.label}>
                                         Tell us more
                                     </label>
+                                    <p id="message-helper" className={styles.helperText}>
+                                        Useful details include product stage, target market,
+                                        timing, or the type of support you need.
+                                    </p>
                                     <textarea
                                         id="message"
                                         name="message"
@@ -162,8 +185,24 @@ export default function ContactPage() {
                                         required
                                         maxLength={5000}
                                         className={styles.textarea}
+                                        aria-describedby="message-helper"
                                     />
                                 </div>
+
+                                <p className={styles.privacyNote}>
+                                    This form is for business enquiries. Submission details are
+                                    used only to review and respond to your request.
+                                </p>
+
+                                {statusMessage ? (
+                                    <p
+                                        className={styles.statusMessage}
+                                        role="status"
+                                        aria-live="polite"
+                                    >
+                                        {statusMessage}
+                                    </p>
+                                ) : null}
 
                                 {error ? (
                                     <p className={styles.errorMessage} role="alert">
