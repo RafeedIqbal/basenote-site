@@ -1,10 +1,17 @@
 import { ImageResponse } from "next/og";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export const alt = "Basenote Solutions";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OgImage() {
+  const svgBuffer = readFileSync(
+    join(process.cwd(), "public/assets/logo-icon-3d.svg")
+  );
+  const svgBase64 = svgBuffer.toString("base64");
+
   return new ImageResponse(
     (
       <div
@@ -19,17 +26,12 @@ export default function OgImage() {
           gap: 40
         }}
       >
-        <svg
-          width="120"
-          height="137"
-          viewBox="0 0 3927 4492"
-          fill="none"
-        >
-          <path
-            d="M3709.28 2970.33L1963.19 0L0 3335.31L1963.19 4492L3926.37 3335.31L1963.19 2178.62L829.067 2846.81L1963.19 889.042M881.469 3335.31L1961.31 2655.9L3041.16 3335.31L1961.31 4014.73L881.469 3335.31Z"
-            fill="white"
-          />
-        </svg>
+        <img
+          src={`data:image/svg+xml;base64,${svgBase64}`}
+          alt=""
+          width={160}
+          height={160}
+        />
         <div
           style={{
             display: "flex",

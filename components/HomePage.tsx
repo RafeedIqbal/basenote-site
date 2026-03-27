@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import type { HomePageContent } from "@/data/home-content";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-import BasenoteSymbol from "./home/BasenoteSymbol";
 import styles from "./home/HomePage.module.css";
 
 import HeroSection from "./home/HeroSection";
@@ -218,21 +218,26 @@ export default function HomePage({ content }: HomePageProps) {
 
   return (
     <div ref={rootRef} className={styles.page}>
-      <img
+      <Image
         src="/assets/logo-icon-3d.svg"
         alt=""
+        width={104}
+        height={104}
         className={styles.backgroundSymbol}
         data-logo-symbol=""
         data-menu-open={menuOpen}
+        priority
       />
       <a href="#home" className={styles.visuallyHiddenHomeLink}>
         Basenote Solutions home
       </a>
       <header className={styles.siteHeader} data-menu-open={menuOpen}>
         <div className={styles.brandMark} aria-hidden="true">
-          <img
+          <Image
             src="/assets/logo-icon-3d.svg"
             alt=""
+            width={72}
+            height={72}
             className={styles.headerSymbol}
           />
         </div>
