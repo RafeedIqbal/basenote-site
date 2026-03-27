@@ -2,8 +2,8 @@
     position: relative;
     z-index: 3;
     isolation: isolate;
-    background-color: #ececf1;
-    color: #050507;
+    background-color: #E8E2D8;
+    color: #0A0A0A;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -242,13 +242,13 @@
 }
 
 .tab:hover {
-    color: #050507;
+    color: #0A0A0A;
     background: rgba(255, 255, 255, 0.32);
 }
 
 .tab[data-active="true"] {
-    color: #ffffff;
-    background: #000000;
+    color: #F2EDE4;
+    background: #0A0A0A;
 }
 
 .tabNumber {
@@ -270,7 +270,7 @@
 .tab:focus-visible {
     position: relative;
     z-index: 1;
-    outline: 2px solid #0f1219;
+    outline: 2px solid #0A0A0A;
     outline-offset: -2px;
 }
 

@@ -1,7 +1,7 @@
 .main {
     padding-top: 6rem;
     background:
-        linear-gradient(180deg, rgba(3, 15, 38, 0.08) 0%, rgba(3, 15, 38, 0) 20rem),
+        linear-gradient(180deg, rgba(10, 10, 10, 0.08) 0%, rgba(10, 10, 10, 0) 20rem),
         var(--color-paper);
 }
 
@@ -71,12 +71,12 @@
 
 .highlightCard {
     padding: 1.5rem;
-    border: 1px solid rgba(15, 20, 33, 0.08);
+    border: 1px solid rgba(10, 10, 10, 0.08);
     border-radius: 1.5rem;
     background:
-        radial-gradient(circle at top right, rgba(255, 100, 61, 0.08), transparent 32%),
-        rgba(255, 255, 255, 0.82);
-    box-shadow: 0 20px 48px rgba(12, 17, 31, 0.08);
+        radial-gradient(circle at top right, rgba(59, 158, 255, 0.08), transparent 32%),
+        rgba(242, 237, 228, 0.82);
+    box-shadow: 0 20px 48px rgba(10, 10, 10, 0.08);
 }
 
 .highlightTitle {
@@ -131,10 +131,10 @@
 
 .teamCard {
     padding: 1.75rem;
-    border: 1px solid rgba(15, 20, 33, 0.08);
+    border: 1px solid rgba(10, 10, 10, 0.08);
     border-radius: 1.5rem;
-    background: rgba(255, 255, 255, 0.74);
-    box-shadow: 0 20px 48px rgba(12, 17, 31, 0.06);
+    background: rgba(242, 237, 228, 0.74);
+    box-shadow: 0 20px 48px rgba(10, 10, 10, 0.06);
 }
 
 .teamCardContent {

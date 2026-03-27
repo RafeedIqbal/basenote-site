@@ -1,17 +1,17 @@
 :root {
-  --color-night: #030f26;
-  --color-night-soft: #0a1a36;
-  --color-paper: #f2f3f7;
-  --color-paper-strong: #e8ebf1;
-  --color-ink: #0f1421;
-  --color-muted: #505a6d;
-  --color-accent: #ff643d;
-  --color-accent-deep: #c83d1e;
-  --color-accent-soft: #ffd7cc;
-  --color-cyan: #00406c;
+  --color-night: #1C1C1C;
+  --color-night-soft: #1C1C1C;
+  --color-paper: #F2EDE4;
+  --color-paper-strong: #E8E2D8;
+  --color-ink: #0A0A0A;
+  --color-muted: #6B6560;
+  --color-accent: #3B9EFF;
+  --color-accent-deep: #2A7ED4;
+  --color-accent-soft: #C5DDFF;
+  --color-cyan: #3B9EFF;
   --border-dark: rgba(255, 255, 255, 0.16);
-  --border-light: rgba(15, 20, 33, 0.11);
-  --shadow-soft: 0 22px 72px rgba(12, 17, 31, 0.12);
+  --border-light: rgba(10, 10, 10, 0.11);
+  --shadow-soft: 0 22px 72px rgba(10, 10, 10, 0.12);
   --radius-lg: 1.5rem;
   --radius-xl: 2rem;
   --radius-2xl: 2.5rem;
@@ -52,7 +52,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, rgba(0, 64, 108, 0.07), transparent 28%),
+    radial-gradient(circle at top left, rgba(59, 158, 255, 0.06), transparent 28%),
     var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body), sans-serif;
@@ -84,7 +84,7 @@ main[id] {
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  box-shadow: 0 16px 38px rgba(2, 7, 18, 0.18);
+  box-shadow: 0 16px 38px rgba(10, 10, 10, 0.18);
   transform: translateY(-140%);
   transition: transform 0.2s ease;
 }
@@ -108,7 +108,7 @@ svg {
 }
 
 ::selection {
-  background: rgba(255, 109, 66, 0.25);
+  background: rgba(59, 158, 255, 0.25);
 }
 
 :focus-visible {

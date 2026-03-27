@@ -1,7 +1,7 @@
 .portfolioSection {
-    background-color: #f8f8f8;
+    background-color: #F2EDE4;
     /* Off-white Deformo style */
-    color: #000;
+    color: #0A0A0A;
     padding: 8rem 2rem;
 }
 
@@ -87,7 +87,7 @@
     flex-direction: column;
     gap: clamp(1rem, 2.2vw, 1.35rem);
     padding-bottom: 6rem;
-    background-color: #f8f8f8;
+    background-color: #F2EDE4;
 }
 
 @media (min-width: 1281px) {
@@ -117,7 +117,7 @@
     align-items: stretch;
     border-bottom: 1px solid rgba(0, 0, 0, 0.18);
     padding: 0.5rem 0;
-    background-color: #f8f8f8;
+    background-color: #F2EDE4;
     position: relative;
     z-index: 2;
 }
@@ -182,7 +182,7 @@
 .tag {
     background-color: var(--color-cyan);
     /* The Deformo Cyan */
-    color: #fff;
+    color: #F2EDE4;
     padding: 0.25rem 0.75rem;
     border-radius: 4px;
     font-family: var(--font-mono, monospace);
@@ -200,7 +200,7 @@
 .portfolioMediaFrame {
     position: relative;
     flex: 1;
-    background-color: #ddd;
+    background-color: #DDD8D0;
     border-radius: 8px;
     overflow: hidden;
     min-height: 30vh;
@@ -233,7 +233,7 @@
     position: absolute;
     bottom: 1rem;
     left: 1rem;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(242, 237, 228, 0.9);
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
     font-family: var(--font-mono, monospace);

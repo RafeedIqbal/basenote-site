@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1.5rem clamp(1rem, 2vw, 2rem);
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(242, 237, 228, 0.92);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     pointer-events: none;
@@ -23,7 +23,7 @@
     align-items: center;
     width: 3rem;
     height: 3rem;
-    color: #000;
+    color: #0A0A0A;
 }
 
 .headerSymbol {
@@ -41,7 +41,7 @@
     border-radius: 999px;
     padding: 0.7rem 1.1rem;
     background: transparent;
-    color: #000;
+    color: #0A0A0A;
     cursor: pointer;
     transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -92,7 +92,7 @@
     inset: 0;
     border: 0;
     padding: 0;
-    background: rgba(3, 10, 24, 0.52);
+    background: rgba(10, 10, 10, 0.52);
     backdrop-filter: blur(22px);
 }
 
@@ -105,9 +105,9 @@
     padding: clamp(1.5rem, 2.5vw, 2.5rem);
     border-radius: var(--radius-2xl);
     background:
-        radial-gradient(circle at top left, rgba(255, 100, 61, 0.12), transparent 38%),
-        radial-gradient(circle at 84% 20%, rgba(0, 64, 108, 0.1), transparent 34%),
-        rgba(242, 243, 247, 0.98);
+        radial-gradient(circle at top left, rgba(59, 158, 255, 0.1), transparent 38%),
+        radial-gradient(circle at 84% 20%, rgba(59, 158, 255, 0.08), transparent 34%),
+        rgba(242, 237, 228, 0.98);
     color: var(--color-ink);
     box-shadow: var(--shadow-soft);
     transform: translateY(-1.5rem) scale(0.98);
@@ -170,8 +170,8 @@
     justify-content: center;
     padding: 0.85rem 1.5rem;
     border-radius: 999px;
-    background: #000;
-    color: #fff;
+    background: #0A0A0A;
+    color: #F2EDE4;
     font-family: var(--font-mono), monospace;
     font-size: 0.78rem;
     letter-spacing: 0.1em;

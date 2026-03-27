@@ -1,6 +1,6 @@
 .footer {
     background-color: #0a0a0a;
-    color: #fff;
+    color: #F2EDE4;
     padding: 4rem 2rem 2rem;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .link:hover {
-    color: #fff;
+    color: #F2EDE4;
 }
 
 .bottom {

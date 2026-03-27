@@ -1,6 +1,6 @@
 .opportunitySection {
     background-color: transparent;
-    color: #fff;
+    color: #F2EDE4;
     padding: 0 2rem;
     min-height: 100svh;
     display: flex;
@@ -31,7 +31,7 @@
     font-weight: 500;
     line-height: 1.05;
     letter-spacing: -0.03em;
-    color: #fff;
+    color: #F2EDE4;
     margin: 0;
     max-width: 100%;
 }
@@ -46,7 +46,7 @@
     display: inline-block;
     opacity: 0;
     transform: translateY(0.26em);
-    color: #fff;
+    color: #F2EDE4;
 }
 
 .opportunityParagraphs {
