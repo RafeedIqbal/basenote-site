@@ -13,14 +13,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem clamp(1rem, 2vw, 2rem);
-  color: #F2EDE4;
-  mix-blend-mode: difference;
+  color: var(--color-ink);
   pointer-events: none;
 }
 
 .siteHeader[data-menu-open="true"] {
   color: var(--color-ink);
-  mix-blend-mode: normal;
 }
 
 .siteHeader > * {
@@ -36,8 +34,6 @@
   z-index: 38;
   pointer-events: none;
   transform-origin: center center;
-  filter: invert(1);
-  mix-blend-mode: difference;
 }
 
 .backgroundSymbol[data-menu-open="true"] {
