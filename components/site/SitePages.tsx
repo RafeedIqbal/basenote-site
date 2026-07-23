@@ -240,17 +240,7 @@ export function LandingPage() {
   return (
     <SiteFrame>
       <section className={`${styles.homeHero} ${styles.toneBlack}`}>
-        <div className={styles.heroSpray}>
-          <Image
-            src={`${assetRoot}/hero-spray.png`}
-            alt="Perfume bottle surrounded by fragrance mist"
-            fill
-            sizes="(max-width: 860px) 100vw, 62vw"
-            priority
-          />
-        </div>
         <div className={styles.heroVeil} />
-        <div className={styles.heroAngle} />
         <div className={styles.homeHeroInner}>
           <div className={styles.homeHeroCopy}>
             <Eyebrow>— The fragrance opportunity</Eyebrow>
@@ -267,7 +257,6 @@ export function LandingPage() {
             </div>
           </div>
         </div>
-        <span className={styles.scrollLabel}>Scroll</span>
       </section>
 
       <SectionDivider />

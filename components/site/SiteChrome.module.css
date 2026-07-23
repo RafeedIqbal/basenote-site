@@ -202,7 +202,7 @@
 .footer {
   padding: clamp(56px, 7vw, 90px) 0 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: #000;
+  background: transparent;
 }
 
 .footerGrid {

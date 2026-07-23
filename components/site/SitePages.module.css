@@ -1,33 +1,104 @@
 .page {
+  --red-bloom-x: 104%;
+  --red-spill-x: -6%;
+  --blue-bloom-x: -8%;
+  --amber-bloom-x: 106%;
+  --amber-spill-x: -8%;
+  position: relative;
+  isolation: isolate;
   min-height: 100vh;
-  background: #000;
+  background: #010101;
   color: #fff;
 }
 
+/* One continuous canvas for every route: sparse colour blooms sit behind the
+   entire page rather than restarting at individual section boundaries. */
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 82% 11% at var(--red-bloom-x) 10%,
+      rgba(154, 62, 42, 0.5) 0%,
+      rgba(105, 38, 27, 0.28) 38%,
+      transparent 76%
+    ),
+    radial-gradient(
+      ellipse 68% 9% at var(--red-spill-x) 9%,
+      rgba(128, 46, 31, 0.3) 0%,
+      transparent 74%
+    ),
+    radial-gradient(
+      ellipse 96% 12% at var(--blue-bloom-x) 36%,
+      rgba(32, 96, 130, 0.44) 0%,
+      rgba(18, 61, 84, 0.25) 42%,
+      transparent 77%
+    ),
+    radial-gradient(
+      ellipse 96% 12% at var(--amber-bloom-x) 58%,
+      rgba(160, 126, 24, 0.5) 0%,
+      rgba(105, 81, 14, 0.28) 42%,
+      transparent 77%
+    ),
+    radial-gradient(
+      ellipse 70% 9% at var(--amber-spill-x) 57%,
+      rgba(135, 105, 18, 0.26) 0%,
+      transparent 73%
+    ),
+    linear-gradient(
+      180deg,
+      #050302 0%,
+      #020202 23%,
+      #020506 44%,
+      #040301 66%,
+      #000 76%,
+      #000 100%
+    );
+  background-repeat: no-repeat;
+}
+
+.page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.16),
+      transparent 18% 82%,
+      rgba(0, 0, 0, 0.16)
+    ),
+    linear-gradient(180deg, transparent 62%, rgba(0, 0, 0, 0.9) 78%, #000 100%);
+}
+
+/* Sections let the shared canvas show through without hard colour breaks. */
+.toneBlack,
+.toneRed,
+.toneBlue,
+.toneAmber {
+  position: relative;
+  background: transparent;
+}
+
 .toneBlack {
-  --divider-solid: #000;
-  background: #000;
+  --divider-solid: #050403;
 }
 
 .toneRed {
-  --divider-solid: #120604;
-  background:
-    radial-gradient(90% 95% at 8% 100%, rgba(118, 39, 26, 0.5), transparent 70%),
-    linear-gradient(180deg, #070303 0%, #120604 58%, #080202 100%);
+  --divider-solid: #0a0503;
 }
 
 .toneBlue {
-  --divider-solid: #031018;
-  background:
-    radial-gradient(90% 100% at 92% 48%, rgba(13, 72, 96, 0.48), transparent 72%),
-    linear-gradient(180deg, #02080b 0%, #03141d 58%, #02090d 100%);
+  --divider-solid: #04090d;
 }
 
 .toneAmber {
-  --divider-solid: #151000;
-  background:
-    radial-gradient(95% 100% at 9% 52%, rgba(104, 82, 0, 0.48), transparent 70%),
-    linear-gradient(180deg, #080700 0%, #181300 58%, #080700 100%);
+  --divider-solid: #0a0803;
 }
 
 .container,
@@ -80,7 +151,8 @@
   top: 50%;
   left: 50%;
   padding: 0 12px;
-  background: var(--divider-solid, #000);
+  background: rgba(6, 5, 4, 0.72);
+  backdrop-filter: blur(6px);
   color: rgba(255, 255, 255, 0.55);
   font-family: var(--font-mono), monospace;
   font-size: 12px;
@@ -223,35 +295,15 @@
   overflow: hidden;
 }
 
-.heroSpray {
-  position: absolute;
-  top: 50%;
-  right: -4%;
-  width: min(62vw, 820px);
-  height: min(80vh, 760px);
-  transform: translateY(-50%);
-  animation: spray 9s ease-in-out infinite;
-}
-
-.heroSpray img {
-  object-fit: contain;
-  object-position: right center;
-}
-
 .heroVeil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #000 34%, rgba(0, 0, 0, 0.35) 72%, rgba(0, 0, 0, 0.7) 100%);
-}
-
-.heroAngle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 58vw;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.18), transparent);
-  transform: rotate(8deg);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.58) 0%,
+    rgba(0, 0, 0, 0.22) 62%,
+    rgba(0, 0, 0, 0.38) 100%
+  );
 }
 
 .homeHeroInner {
@@ -293,19 +345,6 @@
 
 .homeHero .actions {
   margin-top: 40px;
-}
-
-.scrollLabel {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  color: #666;
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  transform: translateX(-50%);
-  animation: pulse 2.4s ease-in-out infinite;
 }
 
 .opportunityGrid {
@@ -373,7 +412,7 @@
 }
 
 .solutionSection {
-  background: radial-gradient(120% 90% at 50% 0%, #0e0e0e, #000 70%);
+  background: transparent;
 }
 
 .centeredHeader {
@@ -867,7 +906,7 @@
 
 .trustedSection {
   padding-block: clamp(56px, 7vw, 90px);
-  background: #000;
+  background: transparent;
   text-align: center;
 }
 
@@ -1547,11 +1586,6 @@
   50% { transform: translateY(-14px); }
 }
 
-@keyframes spray {
-  0%, 100% { opacity: 0.25; transform: translateY(-50%) scale(1); }
-  50% { opacity: 0.5; transform: translateY(-50%) scale(1.04); }
-}
-
 @keyframes pulse {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 1; }
@@ -1592,14 +1626,13 @@
     min-height: 760px;
   }
 
-  .heroSpray {
-    right: -24%;
-    width: 100vw;
-    opacity: 0.6;
-  }
-
   .heroVeil {
-    background: linear-gradient(90deg, #000 12%, rgba(0, 0, 0, 0.55) 72%, rgba(0, 0, 0, 0.76) 100%);
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.54) 0%,
+      rgba(0, 0, 0, 0.28) 72%,
+      rgba(0, 0, 0, 0.48) 100%
+    );
   }
 
   .opportunityGrid,
@@ -1656,6 +1689,14 @@
 }
 
 @media (max-width: 640px) {
+  .page {
+    --red-bloom-x: 86%;
+    --red-spill-x: 14%;
+    --blue-bloom-x: 14%;
+    --amber-bloom-x: 86%;
+    --amber-spill-x: 14%;
+  }
+
   .homeHero h1 {
     font-size: clamp(43px, 13.2vw, 64px);
   }
@@ -1727,12 +1768,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .heroSpray,
   .diagramOrb,
   .trainingDot,
   .blendTrack span,
-  .waveform span,
-  .scrollLabel {
+  .waveform span {
     animation: none;
   }
 
