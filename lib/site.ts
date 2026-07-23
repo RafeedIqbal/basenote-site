@@ -3,11 +3,16 @@ import type { Metadata } from "next";
 export const SITE_NAME = "Basenote Solutions";
 export const SITE_ORIGIN = "https://www.basenotesolutions.com";
 export const SITE_DESCRIPTION =
-  "Private label perfumes, brand creation, and AI-powered fragrance technology for founders, brands, and operators ready to launch with confidence.";
+  "Private-label manufacturing, fragrance brand creation, and purpose-built fragrance technology connected by one team.";
 
 export const PUBLIC_ROUTES = [
   "/",
+  "/private-label",
+  "/blend-engine",
+  "/alchemy-engine",
   "/about",
+  "/blogs",
+  "/case-studies",
   "/contact",
   "/privacy-policy",
   "/terms"

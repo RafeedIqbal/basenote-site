@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import HomePage from "@/components/HomePage";
-import { homePageContent } from "@/data/home-content";
+import { LandingPage } from "@/components/site/SitePages";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -8,14 +7,14 @@ export const metadata: Metadata = {
     absolute: `Fragrance Brand Consultancy | ${SITE_NAME}`
   },
   description:
-    "Private label perfumes, brand strategy, and AI-powered fragrance technology for founders, brands, and operators ready to launch with confidence.",
+    "Private-label manufacturing, fragrance brand creation, and purpose-built fragrance technology connected by one team.",
   alternates: {
     canonical: "/"
   },
   openGraph: {
     title: `Fragrance Brand Consultancy | ${SITE_NAME}`,
     description:
-      "Private label perfumes, brand strategy, and AI-powered fragrance technology for founders, brands, and operators ready to launch with confidence.",
+      "Private-label manufacturing, fragrance brand creation, and purpose-built fragrance technology connected by one team.",
     url: "/",
     siteName: SITE_NAME,
     locale: "en_US",
@@ -25,10 +24,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `Fragrance Brand Consultancy | ${SITE_NAME}`,
     description:
-      "Private label perfumes, brand strategy, and AI-powered fragrance technology for founders, brands, and operators ready to launch with confidence."
+      "Private-label manufacturing, fragrance brand creation, and purpose-built fragrance technology connected by one team."
   }
 };
 
 export default function Page() {
-  return <HomePage content={homePageContent} />;
+  return <LandingPage />;
 }

@@ -1,0 +1,258 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 70;
+  height: var(--header-height);
+  border-bottom: 1px solid var(--line);
+  background: rgba(3, 3, 3, 0.86);
+  backdrop-filter: blur(18px);
+}
+
+.headerInner {
+  width: var(--container);
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-serif), serif;
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.brandMark {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+}
+
+.desktopNav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.navLink,
+.mobileLink {
+  position: relative;
+  color: var(--muted);
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 180ms ease;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1.65rem;
+  height: 1px;
+  background: var(--white);
+  transform: scaleX(0);
+  transition: transform 180ms ease;
+}
+
+.navLink:hover,
+.navLink:focus-visible,
+.navLinkActive {
+  color: var(--white);
+}
+
+.navLinkActive::after {
+  transform: scaleX(1);
+}
+
+.headerCta,
+.menuButton {
+  border: 1px solid var(--white);
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.headerCta {
+  padding: 0.7rem 1rem;
+}
+
+.menuButton {
+  display: none;
+  min-width: 5rem;
+  padding: 0.72rem 1rem;
+  cursor: pointer;
+}
+
+.mobilePanel {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  z-index: 65;
+  display: none;
+  padding: 1.25rem;
+  background: rgba(0, 0, 0, 0.96);
+}
+
+.mobilePanelOpen {
+  display: block;
+}
+
+.mobileNav {
+  width: var(--container);
+  margin: 0 auto;
+  display: grid;
+}
+
+.mobileLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 4.5rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--white);
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1.55rem, 7vw, 2.6rem);
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+.mobileLink::after {
+  content: "↗";
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+}
+
+.footer {
+  border-top: 1px solid var(--line);
+  background: #050505;
+}
+
+.footerInner {
+  width: var(--container);
+  margin: 0 auto;
+  padding: clamp(4rem, 8vw, 7rem) 0 2rem;
+}
+
+.footerTop {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(9rem, 0.5fr));
+  gap: 3rem;
+  padding-bottom: 4rem;
+}
+
+.footerStatement {
+  max-width: 32rem;
+}
+
+.footerTitle {
+  margin: 0 0 1rem;
+  font-family: var(--font-serif), serif;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.footerText {
+  max-width: 29rem;
+  margin: 0;
+  color: var(--muted);
+}
+
+.footerGroupTitle,
+.footerMeta {
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.footerLinks {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.footerLink {
+  width: fit-content;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.9rem;
+}
+
+.footerLink:hover,
+.footerLink:focus-visible {
+  color: var(--white);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.footerBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.legalLinks {
+  display: flex;
+  gap: 1.25rem;
+}
+
+@media (max-width: 1180px) {
+  .desktopNav {
+    display: none;
+  }
+
+  .headerCta {
+    margin-left: auto;
+  }
+
+  .menuButton {
+    display: inline-flex;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .headerCta {
+    display: none;
+  }
+
+  .footerTop {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footerStatement {
+    grid-column: 1 / -1;
+  }
+
+  .footerBottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLink,
+  .navLink::after {
+    transition: none;
+  }
+}

@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Antonio, IBM_Plex_Mono, Schibsted_Grotesk } from "next/font/google";
+import { IBM_Plex_Mono, Lexend_Deca, Source_Serif_4 } from "next/font/google";
 
 import SmoothScroll from "@/components/SmoothScroll";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_ORIGIN } from "@/lib/site";
 
 import "./globals.css";
 
-const antonio = Antonio({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-display"
+  variable: "--font-serif"
 });
 
-const schibstedGrotesk = Schibsted_Grotesk({
+const lexendDeca = Lexend_Deca({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-body"
@@ -63,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${antonio.variable} ${schibstedGrotesk.variable} ${ibmPlexMono.variable}`}
+      className={`${sourceSerif.variable} ${lexendDeca.variable} ${ibmPlexMono.variable}`}
     >
       <body>
         <a href="#main-content" className="skipLink">

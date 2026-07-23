@@ -7,7 +7,7 @@ const teamMembers = [
         name: "Taseen Ahmed Choudhury",
         role: "Founder & CEO",
         description:
-            "Entrepreneur across perfumery and tech. Founder of TAC Perfumes, Base Note Solutions, and Arizmi Labs."
+            "Entrepreneur across perfumery and tech. Founder of TAC Perfumes, Basenote Solutions, and Arizmi Labs."
     },
     {
         name: "Amrit",
@@ -19,7 +19,7 @@ const teamMembers = [
         name: "Mish",
         role: "Branding Lead",
         description:
-            "Manages brand creation and visual identity for Base Note clients."
+            "Manages brand creation and visual identity for Basenote clients."
     },
     {
         name: "Rafeed",
@@ -69,12 +69,12 @@ export default function AboutPage() {
                     <div className={styles.container}>
                         <div className={styles.storyContent}>
                             <p className={styles.storyParagraph}>
-                                Base Note Solutions was built at the intersection of two worlds
+                                Basenote Solutions was built at the intersection of two worlds
                                 most companies don&apos;t connect — fragrance manufacturing and
                                 technology.
                             </p>
                             <p className={styles.storyParagraph}>
-                                Founded by Taseen Ahmed Choudhury, Base Note draws on direct
+                                Founded by Taseen Ahmed Choudhury, Basenote draws on direct
                                 access to TAC Perfumes — a UAE-based fragrance factory — and a
                                 dedicated tech development team at Arizmi Labs. The result is a
                                 company that can take a client from raw idea to finished product

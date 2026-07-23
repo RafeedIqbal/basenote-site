@@ -1,4 +1,4 @@
-import AboutPage from "@/components/about/AboutPage";
+import { AboutPage } from "@/components/site/SitePages";
 import { createPageMetadata } from "@/lib/site";
 
 export const metadata = createPageMetadata({
