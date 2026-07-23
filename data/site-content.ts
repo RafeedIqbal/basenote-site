@@ -13,266 +13,361 @@ export type ServiceCard = {
   description: string;
   eyebrow: string;
   href: string;
-  image: string;
   title: string;
 };
 
 export type EditorialCard = {
   category: string;
+  date: string;
   description: string;
-  href?: string;
+  href: string;
   image: string;
   title: string;
 };
 
-export type ProductMedia = {
-  description: string;
-  poster?: string;
-  sources?: {
-    mp4?: string;
-    webm?: string;
-  };
-  status: "placeholder" | "video";
-  title: string;
+export type CaseStudy = EditorialCard & {
+  metrics: ReadonlyArray<{
+    label: string;
+    value: string;
+  }>;
 };
 
 export const navigation: NavItem[] = [
-  { label: "Home", href: "/" },
   { label: "Private Label", href: "/private-label" },
   { label: "Blend Engine", href: "/blend-engine" },
   { label: "Alchemy Engine", href: "/alchemy-engine" },
-  { label: "About Us", href: "/about" },
-  { label: "Blogs", href: "/blogs" },
-  { label: "Case Studies", href: "/case-studies" }
+  { label: "About", href: "/about" }
 ];
+
+export const stats = [
+  { value: "$50B+", label: "Global market" },
+  { value: "UAE", label: "Direct factory access" },
+  { value: "4", label: "In-house capabilities" },
+  { value: "1", label: "Partner, end to end" }
+] as const;
+
+export const barriers = [
+  {
+    title: "No factory access",
+    description: "Manufacturing is gatekept behind relationships."
+  },
+  {
+    title: "Capital & connections",
+    description: "Traditional entry needs both, upfront."
+  },
+  {
+    title: "No brand or tech in-house",
+    description: "Product is only half the battle."
+  }
+] as const;
+
+export const capabilities = [
+  {
+    title: "Direct UAE manufacturing",
+    description: "Via TAC Perfumes — no middlemen."
+  },
+  {
+    title: "Brand · Web · Tech",
+    description: "Full identity and digital build."
+  },
+  {
+    title: "AI fragrance tools",
+    description: "Blend Engine & Alchemy Engine."
+  }
+] as const;
+
+export const audienceLabels = [
+  "Start-ups & New Brands",
+  "Established Brands",
+  "Influencers",
+  "Corporate Clients",
+  "Weddings & Events"
+] as const;
 
 export const services: ServiceCard[] = [
   {
     accent: "red",
-    eyebrow: "Create your product",
+    eyebrow: "01",
     title: "Private Label",
     description:
-      "Launch a market-ready fragrance without building a manufacturing supply chain from scratch.",
-    href: "/private-label",
-    image: "/media/basenote/private-label-feature.png"
+      "Your product, your brand — bottles, caps, packaging and bespoke fragrance, manufactured to spec in the UAE.",
+    href: "/private-label"
   },
   {
     accent: "blue",
-    eyebrow: "Create a customer experience",
+    eyebrow: "02",
     title: "Blend Engine",
     description:
-      "Turn guided scent blending into a repeatable, licensable experience for studios, labs, and retailers.",
-    href: "/blend-engine",
-    image: "/media/basenote/blend-feature.png"
+      "Combine fragrance oils into market-ready perfumes with AI. Licensed as a subscription for labs, retailers and studios.",
+    href: "/blend-engine"
   },
   {
     accent: "amber",
-    eyebrow: "Accelerate formulation",
+    eyebrow: "03",
     title: "Alchemy Engine",
     description:
-      "Use AI trained on real fragrance chemistry to explore formulations with greater speed and clarity.",
-    href: "/alchemy-engine",
-    image: "/media/basenote/alchemy-feature.png"
+      "The world’s first fragrance formulation AI — trained on proprietary chemistry to accelerate how perfumes are created.",
+    href: "/alchemy-engine"
   }
 ];
 
 export const audienceSegments = [
   {
-    title: "Founders",
-    description: "A direct route from an early idea to a launch-ready fragrance brand."
+    number: "01",
+    title: "Start-Ups & New Brands",
+    description:
+      "You have an idea. We make it real — product to brand to market. Private label is the fastest way in."
   },
   {
-    title: "Established brands",
-    description: "Manufacturing, product, and technology support without disrupting what already works."
+    number: "02",
+    title: "Established Brands",
+    description:
+      "A reliable manufacturing and tech partner who understands fragrance and won’t disrupt what you’ve built."
   },
   {
-    title: "Retailers & studios",
-    description: "Interactive fragrance experiences and dependable access to oils and production."
+    number: "03",
+    title: "Influencers & Personal Brands",
+    description:
+      "A signature fragrance turns audience trust into product. We handle creation to packaging."
   },
   {
-    title: "Fragrance houses",
-    description: "Purpose-built tools for formulation teams and technical operators."
+    number: "04",
+    title: "Corporate Clients",
+    description:
+      "Bespoke branded perfume as a corporate gift — more distinctive than standard merchandise."
   },
   {
-    title: "Corporate & events",
-    description: "Distinctive bespoke fragrance programmes for gifting, weddings, and activations."
+    number: "05",
+    title: "Weddings & Events",
+    description:
+      "Custom perfume favours with bespoke packaging — a keepsake guests actually keep."
   }
 ] as const;
 
-export const privateLabelFaqs: FaqItem[] = [
+export const processSteps = [
   {
-    question: "What is the minimum order quantity?",
-    answer:
-      "Minimums depend on the bottle, packaging, and fragrance brief. We confirm the practical starting volume during consultation instead of forcing every project into one package."
+    number: "1",
+    title: "Get in Touch",
+    description:
+      "Tell us what you’re building — product, brand, or both. We’ll ask the right questions."
   },
   {
-    question: "Can you help with the brand as well as the product?",
-    answer:
-      "Yes. Naming, identity, packaging direction, websites, and launch materials can be scoped alongside manufacturing or as a separate workstream."
+    number: "2",
+    title: "We Scope It Together",
+    description:
+      "We map requirements, timeline and budget. No guesswork, no generic packages."
   },
   {
-    question: "How long does a private-label project take?",
-    answer:
-      "Timelines vary with sampling, component availability, approvals, and order size. Once the brief is clear, we provide a staged schedule before production begins."
+    number: "3",
+    title: "We Build It",
+    description:
+      "Manufacturing, branding, tech — or all three. Our team and partners deliver."
   },
   {
-    question: "Can I source fragrance oils without a full launch package?",
-    answer:
-      "Yes. Wholesale fragrance oils are available independently for retailers, manufacturers, studios, and established brands."
+    number: "4",
+    title: "You Launch",
+    description:
+      "A product you own, a brand that works, and support for whatever comes next."
   }
-];
+] as const;
 
-export const blendFaqs: FaqItem[] = [
+export const trustedBrands = [
+  "Aurelia",
+  "Noctis",
+  "Maison V",
+  "Étier",
+  "Solace",
+  "Vireo"
+] as const;
+
+export const blendBars = [
+  { name: "Bergamot", percentage: 72 },
+  { name: "Amber", percentage: 88 },
+  { name: "Cedarwood", percentage: 54 },
+  { name: "Musk", percentage: 66 }
+] as const;
+
+export const blendFeatures = [
   {
-    question: "Who is Blend Engine designed for?",
-    answer:
-      "It is designed for fragrance studios, labs, retailers, and experience-led businesses that want to offer guided blending without building their own software."
+    title: "Guided Blending",
+    description:
+      "Combine oils with live feedback on balance, longevity and sillage."
   },
   {
-    question: "How is the platform licensed?",
-    answer:
-      "Licensing is scoped around the number of locations, expected usage, onboarding needs, and fragrance-oil supply. We provide pricing after a short discovery call."
+    title: "Compliance Built In",
+    description:
+      "Flags regulatory limits before you commit to production."
   },
   {
-    question: "Does it replace a trained perfumer?",
-    answer:
-      "No. Blend Engine structures an experience around existing fragrance oils. It helps teams guide customers consistently while leaving expert product decisions with the operator."
-  },
-  {
-    question: "Can it be adapted to our brand?",
-    answer:
-      "Branding, catalogue configuration, and operational setup can be tailored to fit the environment in which the experience will run."
+    title: "Licence & Scale",
+    description:
+      "Monthly subscription with quarterly oil purchases — built for labs and retailers."
   }
-];
-
-export const alchemyFaqs: FaqItem[] = [
-  {
-    question: "What makes Alchemy Engine different from Blend Engine?",
-    answer:
-      "Blend Engine combines existing oils for guided customer experiences. Alchemy Engine works deeper in the formulation process and is being trained on proprietary chemistry data."
-  },
-  {
-    question: "Is Alchemy Engine available now?",
-    answer:
-      "Alchemy Engine is in active development. We are speaking with technical partners and formulation teams interested in early access and licensing."
-  },
-  {
-    question: "Who is it being built for?",
-    answer:
-      "The primary audience is chemists, fragrance houses, laboratories, and technical teams that need a faster way to explore and understand formulations."
-  },
-  {
-    question: "Can we register for an early demonstration?",
-    answer:
-      "Yes. Submit a short brief and we will follow up when a relevant demonstration or partnership conversation is available."
-  }
-];
-
-export const blendMedia: ProductMedia = {
-  status: "placeholder",
-  title: "Blend Engine product walkthrough",
-  description:
-    "Product video placeholder — the final MP4/WebM walkthrough and caption file will be added when supplied."
-};
-
-export const alchemyMedia: ProductMedia = {
-  status: "placeholder",
-  title: "Alchemy Engine explainer",
-  description:
-    "Explainer video placeholder — the final MP4/WebM film, poster, and caption file will be added when supplied."
-};
+] as const;
 
 export const blogPosts: EditorialCard[] = [
   {
-    category: "Private label",
-    title: "What founders need before the first production conversation",
+    category: "Blog",
+    date: "May 2024",
+    title: "The Art and Science of Fragrance",
     description:
-      "A practical look at product positioning, volume, packaging, and the decisions that make an initial manufacturing brief useful.",
-    image: "/media/basenote/editorial-notebook.png"
+      "A deep dive into the craftsmanship, innovation and raw materials that define modern perfumery.",
+    image: "/media/basenote-handoff/editorial-1.png",
+    href: "/blogs"
   },
   {
-    category: "Fragrance retail",
-    title: "Why guided blending is becoming a stronger retail experience",
+    category: "Blog",
+    date: "Apr 2024",
+    title: "Building a Brand From a Single Note",
     description:
-      "How structure, storytelling, and a well-designed oil catalogue can turn experimentation into a repeatable customer journey.",
-    image: "/media/basenote/contact-still.png"
+      "How a signature accord becomes the backbone of an entire fragrance identity.",
+    image: "/media/basenote-handoff/editorial-2.png",
+    href: "/blogs"
   },
   {
-    category: "Technology",
-    title: "Why formulation data matters for fragrance AI",
+    category: "Case Study",
+    date: "Mar 2024",
+    title: "Private Label, Start to Shelf",
     description:
-      "Useful fragrance technology begins with domain-specific data, careful logging, and an understanding of real formulation constraints.",
-    image: "/media/basenote/fragrance-shelves.png"
+      "Inside a full private-label launch delivered with TAC Perfumes.",
+    image: "/media/basenote-handoff/editorial-3.png",
+    href: "/case-studies"
   }
 ];
 
-export const caseStudies: EditorialCard[] = [
+export const caseStudies: CaseStudy[] = [
   {
-    category: "Private-label launch",
-    title: "Studio Signature Launch",
+    category: "Private Label · Beauty",
+    date: "",
+    title: "From Idea to 5,000 Units",
     description:
-      "A fragrance concept translated into a launch-ready product direction, packaging system, and founder-facing story.",
-    image: "/media/basenote/private-label-bottle.png"
+      "A first-time founder taken from concept to a shelf-ready private-label line — bespoke fragrance, packaging and brand identity.",
+    image: "/media/basenote-handoff/editorial-3.png",
+    href: "/case-studies",
+    metrics: [
+      { value: "12 wk", label: "Idea to launch" },
+      { value: "5,000", label: "First run" }
+    ]
   },
   {
-    category: "Brand identity",
-    title: "Aurum Brand System",
+    category: "Brand + Tech",
+    date: "",
+    title: "A Signature Scent For A Creator",
     description:
-      "A premium visual world designed to keep product, campaign, and ecommerce touchpoints working as one system.",
-    image: "/media/basenote/editorial-notebook.png"
+      "Turning an influencer’s audience trust into a sell-out signature fragrance, end to end.",
+    image: "/media/basenote-handoff/editorial-2.png",
+    href: "/case-studies",
+    metrics: [
+      { value: "48h", label: "Sold out" },
+      { value: "100%", label: "Owned brand" }
+    ]
   },
   {
-    category: "Supply partnership",
-    title: "Velocity Supply Programme",
+    category: "Wholesale",
+    date: "",
+    title: "Oils, Direct & At Volume",
     description:
-      "A clear supply and presentation framework for an operator preparing to scale a fragrance offer across channels.",
-    image: "/media/basenote/manufacturing-line.png"
+      "Reliable direct-from-source fragrance oil supply for a growing multi-market retailer.",
+    image: "/media/basenote-handoff/editorial-1.png",
+    href: "/case-studies",
+    metrics: [
+      { value: "6", label: "Markets" },
+      { value: "-22%", label: "Cost per unit" }
+    ]
   }
 ];
 
 export const teamMembers = [
   {
+    initial: "T",
     name: "Taseen Ahmed Choudhury",
     role: "Founder & CEO",
     description:
-      "Entrepreneur across perfumery and technology, connecting TAC Perfumes, Basenote Solutions, and Arizmi Labs."
+      "Entrepreneur across perfumery and tech. Founder of TAC Perfumes, Base Note Solutions and Arizmi Labs."
   },
   {
+    initial: "A",
     name: "Amrit",
-    role: "In-house chemist",
+    role: "In-House Chemist",
     description:
-      "Leads formulation research and the structured data work behind Alchemy Engine."
+      "UK-based fragrance chemist. Leads formulation data logging for the Alchemy Engine."
   },
   {
+    initial: "M",
     name: "Mish",
-    role: "Branding lead",
+    role: "Branding Lead",
     description:
-      "Shapes brand identity and creative direction for clients moving from product to market."
+      "Manages brand creation and visual identity for Base Note clients."
   },
   {
+    initial: "R",
     name: "Rafeed",
-    role: "Project manager",
+    role: "Project Manager",
     description:
-      "Coordinates delivery and keeps clients, production partners, and the development team aligned."
+      "Day-to-day operations and the bridge between clients and the development team."
   }
 ] as const;
+
+export const homeFaqs: FaqItem[] = [
+  {
+    question: "What is the minimum order quantity for private label?",
+    answer:
+      "MOQs vary depending on the product and packaging selected. Get in touch and we’ll confirm based on your brief."
+  },
+  {
+    question: "Do you work with clients outside the UK?",
+    answer:
+      "Yes. We work with clients globally. Manufacturing is based in the UAE and we ship to multiple markets."
+  },
+  {
+    question: "Can I order fragrance oils without a full private label order?",
+    answer:
+      "Yes. Wholesale fragrance oils are available independently. Contact us for pricing and volume options."
+  },
+  {
+    question: "How long does a private label order take?",
+    answer:
+      "Timelines depend on complexity, volume and production schedules. We give an accurate lead time at scoping."
+  },
+  {
+    question: "What’s the difference between Blend Engine and Alchemy Engine?",
+    answer:
+      "Blend Engine creates perfumes by combining existing oils — for labs, retailers and studios. Alchemy Engine is a deeper formulation AI for chemists, trained on proprietary chemical data."
+  },
+  {
+    question: "Do you offer branding as a standalone service?",
+    answer:
+      "Yes. Branding, website and social setup can be taken independently or bundled with a private label order."
+  }
+];
 
 export const footerGroups = [
   {
     title: "Services",
     links: [
       { label: "Private Label", href: "/private-label" },
+      { label: "Wholesale Oils", href: "/contact?interest=Fragrance%20Oils" },
+      { label: "Branding", href: "/contact?interest=Branding" },
+      { label: "Consultancy", href: "/contact?interest=Consultancy" }
+    ]
+  },
+  {
+    title: "Technology",
+    links: [
       { label: "Blend Engine", href: "/blend-engine" },
-      { label: "Alchemy Engine", href: "/alchemy-engine" }
+      { label: "Alchemy Engine", href: "/alchemy-engine" },
+      { label: "Websites & ERP", href: "/contact?interest=Tech%20%26%20AI%20Products" }
     ]
   },
   {
     title: "Company",
     links: [
-      { label: "About Us", href: "/about" },
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
       { label: "Blogs", href: "/blogs" },
-      { label: "Case Studies", href: "/case-studies" },
-      { label: "Contact", href: "/contact" }
+      { label: "Case Studies", href: "/case-studies" }
     ]
   }
 ] as const;
+
+export const socialLinks = ["Instagram", "LinkedIn", "X", "YouTube"] as const;

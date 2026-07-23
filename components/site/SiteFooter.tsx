@@ -1,6 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 
-import { footerGroups } from "@/data/site-content";
+import { footerGroups, socialLinks } from "@/data/site-content";
 
 import styles from "./SiteChrome.module.css";
 
@@ -8,13 +9,20 @@ export default function SiteFooter() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerInner}>
-        <div className={styles.footerTop}>
-          <div className={styles.footerStatement}>
-            <h2 className={styles.footerTitle}>Build what comes next.</h2>
-            <p className={styles.footerText}>
-              Product, manufacturing, brand, and fragrance technology — connected by one team.
-            </p>
+        <div className={styles.footerGrid}>
+          <div className={styles.footerIdentity}>
+            <Link href="/" className={styles.brand} aria-label="Basenote home">
+              <Image
+                src="/media/basenote-handoff/logo-white.png"
+                alt=""
+                width={30}
+                height={30}
+              />
+              <span>Basenote</span>
+            </Link>
+            <p>Where Fragrance Meets Business</p>
           </div>
+
           {footerGroups.map((group) => (
             <div key={group.title}>
               <span className={styles.footerGroupTitle}>{group.title}</span>
@@ -28,13 +36,13 @@ export default function SiteFooter() {
             </div>
           ))}
         </div>
+
         <div className={styles.footerBottom}>
-          <span className={styles.footerMeta}>
-            © {new Date().getFullYear()} Basenote Solutions
-          </span>
-          <div className={styles.legalLinks}>
-            <Link href="/privacy-policy" className={styles.footerMeta}>Privacy</Link>
-            <Link href="/terms" className={styles.footerMeta}>Terms</Link>
+          <span>© {new Date().getFullYear()} Base Note Solutions. All rights reserved.</span>
+          <div className={styles.socialLinks} aria-label="Social media">
+            {socialLinks.map((social) => (
+              <span key={social}>{social}</span>
+            ))}
           </div>
         </div>
       </div>

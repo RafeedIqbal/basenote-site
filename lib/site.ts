@@ -45,12 +45,14 @@ export function createPageMetadata({
       url: path,
       siteName: SITE_NAME,
       locale: "en_US",
-      type: "website"
+      type: "website",
+      images: ["/og.png"]
     },
     twitter: {
       card: "summary_large_image",
       title: pageTitle,
-      description
+      description,
+      images: ["/og.png"]
     }
   };
 }

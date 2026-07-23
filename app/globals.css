@@ -1,11 +1,11 @@
 :root {
   --black: #000000;
   --white: #ffffff;
-  --muted: #a6a6a6;
-  --line: rgba(255, 255, 255, 0.16);
-  --red: #ef6a42;
-  --blue: #5dc1ec;
-  --amber: #e6c933;
+  --muted: #a8a8a8;
+  --line: rgba(255, 255, 255, 0.12);
+  --red: #e0a893;
+  --blue: #9fd0e6;
+  --amber: #e6cd85;
   --header-height: 4.5rem;
   --container: min(1200px, calc(100vw - 3rem));
 }
@@ -98,7 +98,8 @@ svg {
 }
 
 ::selection {
-  background: rgba(93, 193, 236, 0.35);
+  background: #fff;
+  color: #000;
 }
 
 :focus-visible {

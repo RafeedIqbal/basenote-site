@@ -12,6 +12,7 @@ const interestOptions = [
   "Branding",
   "Fragrance Oils",
   "Consultancy",
+  "Tech & AI Products",
   "Blend Engine",
   "Alchemy Engine",
   "Not Sure Yet"

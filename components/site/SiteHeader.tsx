@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -16,22 +17,23 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     if (!open) {
-      document.body.style.overflow = "";
       return;
     }
 
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     firstLinkRef.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        event.preventDefault();
         setOpen(false);
-        buttonRef.current?.focus();
+        menuButtonRef.current?.focus();
         return;
       }
 
@@ -39,10 +41,9 @@ export default function SiteHeader() {
         return;
       }
 
-      const links = Array.from(
-        menuRef.current.querySelectorAll<HTMLAnchorElement>("a[href]")
+      const focusable = Array.from(
+        menuRef.current.querySelectorAll<HTMLElement>("a[href], button")
       );
-      const focusable = buttonRef.current ? [buttonRef.current, ...links] : links;
       const first = focusable[0];
       const last = focusable.at(-1);
 
@@ -56,8 +57,9 @@ export default function SiteHeader() {
     };
 
     window.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
@@ -66,14 +68,21 @@ export default function SiteHeader() {
     <>
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <Link href="/" className={styles.brand} aria-label="Basenote Solutions home">
-            <span className={styles.brandMark} aria-hidden="true">B</span>
+          <Link href="/" className={styles.brand} aria-label="Basenote home">
+            <Image
+              src="/media/basenote-handoff/logo-white.png"
+              alt=""
+              width={30}
+              height={30}
+              priority
+            />
             <span>Basenote</span>
           </Link>
 
           <nav className={styles.desktopNav} aria-label="Primary navigation">
             {navigation.map((item) => {
               const active = isActivePath(pathname, item.href);
+
               return (
                 <Link
                   key={item.href}
@@ -85,20 +94,23 @@ export default function SiteHeader() {
                 </Link>
               );
             })}
+            <Link href="/contact" className={styles.headerCta}>
+              Get in touch
+            </Link>
           </nav>
 
-          <Link href="/contact" className={styles.headerCta}>
-            Start a project
-          </Link>
           <button
-            ref={buttonRef}
+            ref={menuButtonRef}
             type="button"
             className={styles.menuButton}
+            aria-label="Open menu"
             aria-expanded={open}
             aria-controls="mobile-navigation"
-            onClick={() => setOpen((current) => !current)}
+            onClick={() => setOpen(true)}
           >
-            {open ? "Close" : "Menu"}
+            <span />
+            <span />
+            <span />
           </button>
         </div>
       </header>
@@ -109,6 +121,21 @@ export default function SiteHeader() {
         className={`${styles.mobilePanel} ${open ? styles.mobilePanelOpen : ""}`}
         aria-hidden={!open}
       >
+        <div className={styles.mobileTopline}>
+          <span className={styles.mobileBrand}>Basenote</span>
+          <button
+            type="button"
+            className={styles.closeButton}
+            aria-label="Close menu"
+            onClick={() => {
+              setOpen(false);
+              menuButtonRef.current?.focus();
+            }}
+          >
+            ×
+          </button>
+        </div>
+        <span className={styles.menuLabel}>Navigation</span>
         <nav className={styles.mobileNav} aria-label="Mobile navigation">
           {navigation.map((item, index) => (
             <Link
@@ -122,15 +149,15 @@ export default function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/contact"
-            className={styles.mobileLink}
-            tabIndex={open ? 0 : -1}
-            onClick={() => setOpen(false)}
-          >
-            Start a project
-          </Link>
         </nav>
+        <Link
+          href="/contact"
+          className={styles.mobileCta}
+          tabIndex={open ? 0 : -1}
+          onClick={() => setOpen(false)}
+        >
+          Get in touch
+        </Link>
       </div>
     </>
   );
