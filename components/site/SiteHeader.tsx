@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+import { setScrollLocked } from "@/lib/scroll";
 import { navigation } from "@/data/site-content";
 import { ScrollTrigger, useGSAP } from "@/lib/gsap";
 
@@ -40,6 +41,7 @@ export default function SiteHeader() {
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    setScrollLocked(true);
     firstLinkRef.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -73,6 +75,7 @@ export default function SiteHeader() {
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      setScrollLocked(false);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
@@ -132,6 +135,7 @@ export default function SiteHeader() {
       <div
         ref={menuRef}
         id="mobile-navigation"
+        data-lenis-prevent=""
         className={`${styles.mobilePanel} ${open ? styles.mobilePanelOpen : ""}`}
         aria-hidden={!open}
       >

@@ -1,10 +1,63 @@
-.faqItem { border-top: 1px solid rgba(255,255,255,.17); }
-.faqItem:last-child { border-bottom: 1px solid rgba(255,255,255,.17); }
-.faqItem h3 { margin: 0; font: inherit; }
-.faqItem button { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 100%; padding: 25px 0; border: 0; background: none; color: white; font-size: 17px; text-align: left; cursor: pointer; }
-.faqItem button span { flex: none; color: var(--pl-canyon, white); font: 30px var(--font-serif), serif; }
-.answer { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .35s ease, visibility .35s; }
-.answer[data-open="true"] { grid-template-rows: 1fr; visibility: visible; }
-.answer > div { min-height: 0; overflow: hidden; }
-.answer p { max-width: 78ch; margin: 0; padding-bottom: 26px; color: #bcb8b6; font-size: 16px; line-height: 1.85; }
-@media (prefers-reduced-motion: reduce) { .answer { transition: none; } }
+.faq {
+  display: block;
+}
+.faqItem {
+  border-top: 1px solid rgba(255, 255, 255, 0.17);
+}
+.faqItem:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.17);
+}
+.faqItem h3 {
+  margin: 0;
+  font: inherit;
+}
+.faqItem button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 25px 0;
+  border: 0;
+  background: none;
+  color: white;
+  font-size: 17px;
+  text-align: left;
+  cursor: pointer;
+}
+.faqItem button span {
+  flex: none;
+  color: var(--pl-canyon, white);
+  font:
+    30px var(--font-serif),
+    serif;
+}
+.answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.35s ease,
+    visibility 0.35s;
+}
+.answer[data-open="true"] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+}
+.answer > div {
+  min-height: 0;
+  overflow: hidden;
+}
+.answer p {
+  max-width: 78ch;
+  margin: 0;
+  padding-bottom: 26px;
+  color: #bcb8b6;
+  font-size: 16px;
+  line-height: 1.85;
+}
+@media (prefers-reduced-motion: reduce) {
+  .answer {
+    transition: none;
+  }
+}

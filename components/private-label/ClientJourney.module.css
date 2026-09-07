@@ -1,0 +1,190 @@
+.section {
+  position: relative;
+  padding: 80px 0 54px;
+  height: 100svh;
+  min-height: 660px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.heading {
+  width: min(1200px, calc(100% - 80px));
+  margin: 0 auto 45px;
+}
+.heading h2 {
+  margin: 15px 0 0;
+  font:
+    400 clamp(40px, 4.8vw, 68px) / 1.08 var(--font-serif),
+    serif;
+  letter-spacing: -0.04em;
+}
+.viewport {
+  width: 100%;
+  overflow: clip;
+}
+.track {
+  display: flex;
+  width: max-content;
+  padding-inline: max(40px, calc((100vw - 1200px) / 2));
+  gap: 24px;
+}
+.card {
+  width: min(560px, 65vw);
+  min-height: 335px;
+  height: clamp(335px, 44vh, 480px);
+  flex: none;
+  background: linear-gradient(140deg, #291510, #100b09);
+  border: 1px solid #80443366;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+}
+.card:nth-child(3n + 2) {
+  background: linear-gradient(130deg, #793527, #301b15);
+}
+.card:nth-child(3n) {
+  background: linear-gradient(130deg, #351b14, #1a0c09);
+}
+.milestone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 34px;
+  border-bottom: 1px solid #ba796038;
+  font:
+    15px var(--font-mono),
+    monospace;
+  color: #ca9e8c;
+}
+.milestone i {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #dcb7a6;
+  border-radius: 50%;
+}
+.cardCopy {
+  padding: 40px 34px;
+  margin-top: auto;
+}
+.cardCopy h3 {
+  font:
+    400 clamp(30px, 3.3vw, 48px) / 1.1 var(--font-serif),
+    serif;
+  letter-spacing: -0.025em;
+  margin: 0 0 24px;
+}
+.cardCopy p {
+  max-width: 36ch;
+  font-size: 17px;
+  line-height: 1.8;
+  margin: 0;
+  color: #cfbdb4;
+}
+.cta {
+  position: relative;
+  min-height: 310px;
+  padding: 100px 20px;
+  display: grid;
+  place-content: center;
+  overflow: clip;
+}
+.cta a {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  font:
+    400 clamp(26px, 4.3vw, 58px) / 1.2 var(--font-serif),
+    serif;
+  letter-spacing: -0.03em;
+}
+.cta a span {
+  color: #bf7059;
+}
+.particles {
+  position: absolute;
+  inset: 8% 15%;
+  pointer-events: none;
+  opacity: 0;
+}
+.cta[data-in-view="true"] .particles {
+  opacity: 1;
+}
+.particles i {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #a75d45;
+  animation: drift 3s calc(var(--i) * -0.21s) infinite;
+  animation-play-state: paused;
+}
+.cta[data-in-view="true"] .particles i {
+  animation-play-state: running;
+}
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(10px);
+    opacity: 0.05;
+  }
+  50% {
+    transform: translateY(-18px);
+    opacity: 0.7;
+  }
+}
+@media (max-width: 859px), (prefers-reduced-motion: reduce) {
+  .section {
+    height: auto;
+    min-height: 0;
+    padding-block: 70px 20px;
+  }
+  .heading {
+    width: calc(100% - 40px);
+    margin-bottom: 32px;
+  }
+  .track {
+    width: auto;
+    display: grid;
+    gap: 16px;
+    padding-inline: 20px;
+    transform: none !important;
+  }
+  .card {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+  .cardCopy {
+    padding: 26px;
+  }
+  .cardCopy h3 {
+    font-size: 32px;
+    margin-bottom: 15px;
+  }
+  .cardCopy p {
+    font-size: 16px;
+    max-width: none;
+  }
+  .milestone {
+    padding: 18px 26px;
+  }
+  .cta {
+    min-height: 220px;
+    padding-block: 70px;
+  }
+  .cta a {
+    gap: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .particles {
+    display: none;
+  }
+  .particles i {
+    animation: none;
+  }
+}

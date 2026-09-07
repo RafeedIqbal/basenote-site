@@ -14,7 +14,6 @@ import {
   capabilities,
   caseStudies,
   homeFaqs,
-  processSteps,
   services,
   stats,
   teamMembers,
@@ -425,47 +424,6 @@ export function AboutPage() {
   );
 }
 
-export function PrivateLabelPage() {
-  return (
-    <SiteFrame>
-      <section className={`${styles.productHero} ${styles.privateHero} ${styles.toneRed}`}>
-        <div className={styles.productHeroArt}>
-          <Image src={`${assetRoot}/product-1.png`} alt="Private-label fragrance bottles and packaging" fill sizes="60vw" priority />
-        </div>
-        <div className={styles.productHeroVeil} />
-        <div className={styles.productHeroInner}>
-          <Eyebrow tone="red">Core Service · 01</Eyebrow>
-          <h1 data-reveal="">Private Label</h1>
-          <p data-reveal="">Choose from an extensive catalogue of bottles, caps and packaging. We work with our manufacturing partner in the UAE to produce your bespoke fragrance — to your brief, at your volume.</p>
-          <Link href="/contact?interest=Private%20Label" className={styles.primaryButton} data-reveal="">Start your product</Link>
-        </div>
-      </section>
-      <SectionDivider tone="red" />
-      <section className={`${styles.section} ${styles.toneRed}`}>
-        <div className={`${styles.container} ${styles.processGrid}`}>
-          <div data-reveal="">
-            <Eyebrow>The Process</Eyebrow>
-            <h2 className={styles.sectionTitle}>Manufacturing<br />Process</h2>
-            <p className={styles.bodyCopy}>From enquiry to launch, everything runs through direct access to TAC Perfumes — no middlemen, better pricing, faster timelines and full quality control.</p>
-            <div className={styles.labImage}>
-              <Image src={`${assetRoot}/lab.png`} alt="Fragrance laboratory" fill sizes="(max-width: 860px) 100vw, 50vw" />
-            </div>
-          </div>
-          <div className={styles.processList} data-reveal="">
-            {processSteps.map((step) => (
-              <article key={step.number}>
-                <span>{step.number}</span>
-                <div><h3>{step.title}</h3><p>{step.description}</p></div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-      <SectionDivider tone="red" />
-      <PageCta tone="red" />
-    </SiteFrame>
-  );
-}
 
 export function BlendEnginePage() {
   return (

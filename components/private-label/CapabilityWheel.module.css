@@ -1,0 +1,204 @@
+.section {
+  position: relative;
+  min-height: 760px;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding: 74px 0 50px;
+  background:
+    radial-gradient(ellipse at 78% 52%, #943f2d70, transparent 63%),
+    radial-gradient(ellipse at 10% 90%, #8b3a2a30, transparent 60%);
+}
+.inner {
+  width: min(1200px, calc(100% - 80px));
+  margin: auto;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 40px;
+  align-items: center;
+}
+.heading h2 {
+  font:
+    400 clamp(42px, 5vw, 70px) / 1.04 var(--font-serif),
+    serif;
+  letter-spacing: -0.045em;
+  max-width: 11ch;
+  margin: 22px 0;
+}
+.heading p {
+  color: #c4b4ae;
+  font-size: 17px;
+  line-height: 1.85;
+  max-width: 42ch;
+}
+.wheel {
+  --radius: 175px;
+  height: 550px;
+  position: relative;
+  touch-action: pan-y;
+}
+.rings {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #d29c822b;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 50px #ffffff03,
+    0 0 0 51px #d29c8212;
+}
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+}
+.alignment {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 80px;
+  height: calc(var(--radius) + 42px);
+  transform: translate(-50%, -40px);
+  border: 1px solid #ae67564d;
+  border-radius: 48px;
+  background: linear-gradient(180deg, #943f2d05, #943f2d40);
+}
+.orbit {
+  --rotation: 0deg;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+}
+.dial {
+  --angle: 0deg;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-content: center;
+  background: #221310;
+  border: 1px solid #ae67564d;
+  border-radius: 50%;
+  color: #baa39c;
+  transform: translate(-50%, -50%) rotate(calc(var(--angle) + var(--rotation)))
+    translateY(var(--radius))
+    rotate(calc(-1 * (var(--angle) + var(--rotation))));
+  cursor: pointer;
+}
+.dial svg {
+  opacity: 0.6;
+  filter: blur(1px);
+  transition:
+    filter 0.25s,
+    opacity 0.25s;
+}
+.dial[data-selected="true"] {
+  background: var(--pl-canyon);
+  color: #fff;
+  border-color: #b97660;
+}
+.dial[data-selected="true"] svg,
+.dial:focus-visible svg {
+  opacity: 1;
+  filter: none;
+}
+.dialLabel {
+  position: absolute;
+  width: 105px;
+  left: 50%;
+  top: 65px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  text-align: center;
+  filter: blur(1px);
+  opacity: 0.55;
+}
+.dial[data-selected="true"] .dialLabel {
+  opacity: 0;
+}
+.selectedLabel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  margin: 0;
+  font:
+    400 26px var(--font-serif),
+    serif;
+  text-align: center;
+}
+@media (max-width: 1100px) {
+  .wheel {
+    --radius: 144px;
+  }
+  .rings {
+    width: 288px;
+    height: 288px;
+  }
+}
+@media (max-width: 859px) {
+  .section {
+    min-height: auto;
+    padding: 65px 0 45px;
+  }
+  .inner {
+    width: calc(100% - 40px);
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .heading h2 {
+    max-width: 12ch;
+  }
+  .heading p {
+    font-size: 16px;
+  }
+  .wheel {
+    --radius: 112px;
+    height: 405px;
+    margin-inline: 0;
+  }
+  .rings {
+    width: 224px;
+    height: 224px;
+    box-shadow:
+      0 0 0 34px #ffffff03,
+      0 0 0 35px #d29c8212;
+  }
+  .dial {
+    width: 44px;
+    height: 44px;
+  }
+  .dialLabel {
+    display: none;
+  }
+  .selectedLabel {
+    bottom: 10px;
+    font-size: 25px;
+  }
+  .logo {
+    width: 66px;
+    height: 66px;
+  }
+  .alignment {
+    width: 66px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit {
+    --rotation: 0deg !important;
+  }
+  .dial svg,
+  .dialLabel {
+    filter: none;
+    transition: none;
+  }
+  .alignment {
+    display: none;
+  }
+}
