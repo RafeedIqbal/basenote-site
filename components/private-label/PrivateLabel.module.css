@@ -135,6 +135,7 @@
 }
 .audiencePanel {
   background: #050403;
+  box-shadow: inset 0 0 0 1px #ffffff1a;
   transition: background 0.3s;
 }
 .audiencePanel[data-open="true"] {
@@ -175,7 +176,7 @@
 }
 .panelDescription {
   display: block;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.65;
   color: #bdb4af;
 }
@@ -201,19 +202,19 @@
 }
 .panelDetail p {
   margin: 0 0 26px;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.8;
   color: #fff0e8;
 }
 .bestFor {
   font:
-    11px var(--font-mono),
+    12px var(--font-mono),
     monospace;
   letter-spacing: 0.13em;
 }
 .panelDetail .bestForCopy {
   margin-top: 10px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .panelDetail a {
   display: inline-block;

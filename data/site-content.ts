@@ -424,7 +424,7 @@ export type PrivateLabelContent = {
   journey: { title: string; stages: PrivateLabelStage[]; cta: string };
   featured: {
     title: string;
-    video: string;
+    video: string | null;
     poster: string;
     posterAlt: string;
     play: string;
@@ -613,7 +613,7 @@ export const privateLabel: PrivateLabelContent = {
     title: "One partner. Every stage.",
     description:
       "Basenote brings the full fragrance process together, whether you need one partner from idea to launch or expert support at a specific stage.",
-    logo: "/assets/logo-icon-3d.svg",
+    logo: "/media/basenote-handoff/logo-white.png",
     logoAlt: "Basenote",
     selectionLabel: "Choose a capability",
     items: [
@@ -695,7 +695,8 @@ export const privateLabel: PrivateLabelContent = {
   },
   featured: {
     title: "Meet ALPAC.",
-    video: "/media/hero-background2.mp4",
+    // Enable playback once the project film is supplied.
+    video: null,
     poster: "/media/private-label/portfolio/alpac.png",
     posterAlt: "ALPAC London Ewa fragrance",
     play: "Play the ALPAC film",

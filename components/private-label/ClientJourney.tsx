@@ -18,7 +18,7 @@ export default function ClientJourney() {
     () => {
       const media = gsap.matchMedia();
       media.add(
-        "(min-width: 860px) and (prefers-reduced-motion: no-preference)",
+        "(min-width: 860px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)",
         () => {
           const distance = () =>
             Math.max(

@@ -136,7 +136,7 @@
     opacity: 0.7;
   }
 }
-@media (max-width: 859px), (prefers-reduced-motion: reduce) {
+@media (max-width: 859px), (max-height: 699px), (prefers-reduced-motion: reduce) {
   .section {
     height: auto;
     min-height: 0;

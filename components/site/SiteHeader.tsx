@@ -25,6 +25,19 @@ export default function SiteHeader() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 860px)");
+    const closeOnDesktop = () => {
+      if (!desktop.matches) return;
+      if (menuRef.current?.contains(document.activeElement)) {
+        headerRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+      }
+      setOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
+
   useGSAP(() => {
     if (!privateLabel) return;
     const trigger = ScrollTrigger.create({
@@ -137,7 +150,11 @@ export default function SiteHeader() {
         id="mobile-navigation"
         data-lenis-prevent=""
         className={`${styles.mobilePanel} ${open ? styles.mobilePanelOpen : ""}`}
+        role="dialog"
+        aria-modal={open ? true : undefined}
+        aria-label="Navigation"
         aria-hidden={!open}
+        inert={!open}
       >
         <div className={styles.mobileTopline}>
           {privateLabel ? <Image src="/media/basenote-handoff/logo-white.png" alt="Basenote" width={30} height={30} /> : <span className={styles.mobileBrand}>Basenote</span>}

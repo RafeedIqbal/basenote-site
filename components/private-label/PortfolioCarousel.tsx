@@ -11,7 +11,8 @@ export default function PortfolioCarousel() {
   const [active, setActive] = useState(0);
   const root = useRef<HTMLElement>(null);
   const displacement = useRef<SVGFEDisplacementMapElement>(null);
-  const pointer = useRef<{ x: number; y: number; moved: boolean } | null>(null);
+  const pointer = useRef<{ id: number; x: number; y: number; moved: boolean } | null>(null);
+  const dragged = useRef(false);
   const keyboardFocus = useRef(false);
   useEffect(() => {
     if (keyboardFocus.current) {
@@ -84,8 +85,10 @@ export default function PortfolioCarousel() {
       <div
         className={styles.viewport}
         onPointerDown={(event) => {
-          if (event.button !== 0) return;
+          if (event.button !== 0 || !event.isPrimary) return;
+          dragged.current = false;
           pointer.current = {
+            id: event.pointerId,
             x: event.clientX,
             y: event.clientY,
             moved: false,
@@ -93,16 +96,23 @@ export default function PortfolioCarousel() {
         }}
         onPointerMove={(event) => {
           if (
-            pointer.current &&
-            Math.abs(event.clientX - pointer.current.x) > 12
+            pointer.current?.id === event.pointerId &&
+            Math.abs(event.clientX - pointer.current.x) > 12 &&
+            Math.abs(event.clientX - pointer.current.x) >
+              Math.abs(event.clientY - pointer.current.y)
           ) {
             pointer.current.moved = true;
             event.currentTarget.setPointerCapture(event.pointerId);
           }
         }}
         onPointerUp={(event) => {
-          if (!pointer.current) return;
-          const { x, y } = pointer.current;
+          if (pointer.current?.id !== event.pointerId) return;
+          const { x, y, moved } = pointer.current;
+          pointer.current = null;
+          dragged.current = moved;
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
           const delta = event.clientX - x;
           if (
             Math.abs(delta) > 40 &&
@@ -112,6 +122,17 @@ export default function PortfolioCarousel() {
         }}
         onPointerCancel={() => {
           pointer.current = null;
+          dragged.current = false;
+        }}
+        onLostPointerCapture={() => {
+          pointer.current = null;
+        }}
+        onClickCapture={(event) => {
+          if (event.detail !== 0 && dragged.current) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          dragged.current = false;
         }}
       >
         {content.slides.map((slide, index) => {
@@ -131,11 +152,7 @@ export default function PortfolioCarousel() {
               aria-current={offset === 0 ? "true" : undefined}
               aria-hidden={Math.abs(offset) > 1}
               tabIndex={Math.abs(offset) <= 1 ? 0 : -1}
-              onClick={(event) => {
-                if (event.detail === 0 || !pointer.current?.moved)
-                  select(index);
-                pointer.current = null;
-              }}
+              onClick={() => select(index)}
             >
               <div
                 className={styles.image}

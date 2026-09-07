@@ -44,6 +44,11 @@
   box-shadow: 0 0 0 1px var(--pl-canyon);
   z-index: 2;
 }
+.slide[data-offset="2"],
+.slide[data-offset="-2"] {
+  opacity: 0;
+  pointer-events: none;
+}
 .image {
   position: absolute;
   inset: -3%;

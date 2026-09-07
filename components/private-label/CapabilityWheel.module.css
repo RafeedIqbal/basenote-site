@@ -114,13 +114,17 @@
   left: 50%;
   top: 65px;
   transform: translateX(-50%);
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
   filter: blur(1px);
   opacity: 0.55;
 }
 .dial[data-selected="true"] .dialLabel {
   opacity: 0;
+}
+.dial:focus-visible .dialLabel {
+  filter: none;
+  opacity: 1;
 }
 .selectedLabel {
   position: absolute;
@@ -200,5 +204,10 @@
   }
   .alignment {
     display: none;
+  }
+}
+@media (max-height: 699px) {
+  .section {
+    min-height: auto;
   }
 }

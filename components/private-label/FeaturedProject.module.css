@@ -26,9 +26,13 @@
   height: 100%;
   object-fit: contain;
 }
+.player[data-has-video="false"] {
+  aspect-ratio: 1;
+  max-width: 760px;
+  margin-inline: auto;
+}
 .poster {
-  object-fit: cover;
-  object-position: center 53%;
+  object-fit: contain;
 }
 .play {
   position: absolute;

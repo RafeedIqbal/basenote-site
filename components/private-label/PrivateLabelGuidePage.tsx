@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { scrollToPosition } from "@/lib/scroll";
 import {
   privateLabel,
   privateLabelFaqs,
@@ -67,6 +68,26 @@ export default function PrivateLabelGuidePage() {
                     <Link
                       href={`#${chapter.id}`}
                       aria-current={active === index ? "location" : undefined}
+                      onClick={(event) => {
+                        if (
+                          event.button !== 0 || event.metaKey || event.ctrlKey ||
+                          event.shiftKey || event.altKey
+                        ) return;
+                        const target = document.getElementById(chapter.id);
+                        if (!target) return;
+                        event.preventDefault();
+                        // Keep Next and Lenis from applying a second, unoffset scroll.
+                        event.stopPropagation();
+                        const offset = parseFloat(
+                          getComputedStyle(document.documentElement).scrollPaddingTop,
+                        ) || 88;
+                        if (window.location.hash !== `#${chapter.id}`) {
+                          window.history.pushState(null, "", `#${chapter.id}`);
+                        }
+                        scrollToPosition(
+                          target.getBoundingClientRect().top + window.scrollY - offset,
+                        );
+                      }}
                     >
                       <span>{chapter.number}</span>
                       {chapter.title}
@@ -159,13 +180,14 @@ export default function PrivateLabelGuidePage() {
                       </Link>
                     </div>
                   ) : chapter.parentAnchor ? (
-                    <Link
+                    <a
                       href={`/private-label#${chapter.parentAnchor}`}
                       className={styles.sectionLink}
+                      onClick={(event) => event.stopPropagation()}
                     >
                       {content.viewSection}
                       <span aria-hidden="true">↗</span>
-                    </Link>
+                    </a>
                   ) : null}
                 </div>
               </section>

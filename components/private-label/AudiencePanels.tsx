@@ -22,7 +22,11 @@ export default function AudiencePanels() {
       <div
         className={styles.audienceGrid}
         onKeyDown={(event) => {
-          if (event.key === "Escape") setOpen(null);
+          if (event.key === "Escape" && open !== null) {
+            event.preventDefault();
+            document.getElementById(`segment-${open}`)?.focus();
+            setOpen(null);
+          }
         }}
       >
         {content.segments.map((segment, index) => (

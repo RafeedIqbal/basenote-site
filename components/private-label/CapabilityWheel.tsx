@@ -21,7 +21,7 @@ export default function CapabilityWheel() {
     () => {
       const media = gsap.matchMedia();
       media.add(
-        "(min-width: 860px) and (prefers-reduced-motion: no-preference)",
+        "(min-width: 860px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)",
         () => {
           const animation = gsap.fromTo(
             orbit.current,
@@ -46,7 +46,8 @@ export default function CapabilityWheel() {
           };
         },
       );
-      media.add("(max-width: 859px), (prefers-reduced-motion: reduce)", () => {
+      media.add("(max-width: 859px), (max-height: 699px), (prefers-reduced-motion: reduce)", () => {
+        gsap.killTweensOf(orbit.current);
         gsap.set(orbit.current, { "--rotation": "0deg" });
         setActive(0);
       });
@@ -122,7 +123,9 @@ export default function CapabilityWheel() {
             onKeyDown={(event) => {
               if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
                 event.preventDefault();
-                choose(active + (event.key === "ArrowRight" ? 1 : -1));
+                const next = (active + (event.key === "ArrowRight" ? 1 : -1) + 8) % 8;
+                choose(next);
+                event.currentTarget.querySelectorAll<HTMLButtonElement>("button")[next]?.focus({ preventScroll: true });
               }
             }}
           >

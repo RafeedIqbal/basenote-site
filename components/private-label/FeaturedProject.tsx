@@ -70,18 +70,20 @@ export default function FeaturedProject() {
           </span>
           <h2 id="featured-title">{content.title}</h2>
         </div>
-        <div className={styles.player} data-started={started}>
-          <video
-            ref={video}
-            src={content.video}
-            poster={content.poster}
-            muted
-            playsInline
-            controls={started}
-            preload="none"
-            aria-label={content.title}
-            onError={() => setError(true)}
-          />
+        <div className={styles.player} data-has-video={Boolean(content.video)}>
+          {content.video ? (
+            <video
+              ref={video}
+              src={content.video}
+              poster={content.poster}
+              muted
+              playsInline
+              controls={started}
+              preload="none"
+              aria-label={content.title}
+              onError={() => setError(true)}
+            />
+          ) : null}
           {!started ? (
             <>
               <Image
@@ -91,22 +93,24 @@ export default function FeaturedProject() {
                 sizes="(max-width: 859px) 100vw, 1200px"
                 className={styles.poster}
               />
-              <button
-                type="button"
-                onClick={play}
-                className={styles.play}
-                aria-label={content.play}
-              >
-                <svg
-                  width="22"
-                  height="24"
-                  viewBox="0 0 22 24"
-                  fill="currentColor"
-                  aria-hidden="true"
+              {content.video ? (
+                <button
+                  type="button"
+                  onClick={play}
+                  className={styles.play}
+                  aria-label={content.play}
                 >
-                  <path d="M3 2 20 12 3 22Z" />
-                </svg>
-              </button>
+                  <svg
+                    width="22"
+                    height="24"
+                    viewBox="0 0 22 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 2 20 12 3 22Z" />
+                  </svg>
+                </button>
+              ) : null}
             </>
           ) : null}
         </div>
