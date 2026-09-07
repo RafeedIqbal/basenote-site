@@ -8,6 +8,7 @@ export const SITE_DESCRIPTION =
 export const PUBLIC_ROUTES = [
   "/",
   "/private-label",
+  "/private-label/guide",
   "/blend-engine",
   "/alchemy-engine",
   "/about",

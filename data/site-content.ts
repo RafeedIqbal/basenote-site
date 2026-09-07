@@ -345,6 +345,7 @@ export const footerGroups = [
     title: "Services",
     links: [
       { label: "Private Label", href: "/private-label" },
+      { label: "Private Label Guide", href: "/private-label/guide" },
       { label: "Wholesale Oils", href: "/contact?interest=Fragrance%20Oils" },
       { label: "Branding", href: "/contact?interest=Branding" },
       { label: "Consultancy", href: "/contact?interest=Consultancy" },
@@ -741,4 +742,157 @@ export const privateLabel: PrivateLabelContent = {
       "Launch your own fragrance with bespoke development, packaging, manufacturing and delivery, with support shaped around your project.",
     draft: true,
   },
+};
+
+export type PrivateLabelGuideChapter = {
+  id: string;
+  number: string;
+  title: string;
+  paragraphs: string[];
+  kind:
+    | "intro"
+    | "audiences"
+    | "journey"
+    | "commercial"
+    | "preparation"
+    | "ownership"
+    | "faqs"
+    | "next";
+  parentAnchor?: string;
+};
+
+export type PrivateLabelGuideContent = {
+  title: string;
+  introduction: string;
+  draft: boolean;
+  back: string;
+  contentsLabel: string;
+  progressLabel: string;
+  chapterLabel: string;
+  returnLink: string;
+  contactLink: string;
+  viewSection: string;
+  metadata: { title: string; description: string };
+  stageNotes: string[];
+  chapters: PrivateLabelGuideChapter[];
+};
+
+// Draft copy for review. Source facts: Basenote Solutions – Private Label Dev.
+export const privateLabelGuide: PrivateLabelGuideContent = {
+  title: "Your private label guide",
+  introduction:
+    "An idea, an existing brand, or simply a direction you want to explore. This guide takes you through the decisions, the process and the support available as you develop your own fragrance.",
+  draft: true,
+  back: "Private Label",
+  contentsLabel: "In this guide",
+  progressLabel: "Reading progress",
+  chapterLabel: "Chapter",
+  returnLink: "Explore Private Label",
+  contactLink: "Start your fragrance",
+  viewSection: "Explore this on the Private Label page",
+  metadata: {
+    title: "Private Label Guide",
+    description:
+      "Explore Basenote’s private label fragrance process, from the first idea and product development to production, delivery and launch.",
+  },
+  stageNotes: [
+    "You do not need a finished brief. A reference, an audience or an ambition can be the starting point for shaping the concept together.",
+    "The audience, positioning and target price point give the fragrance and product decisions a shared commercial direction.",
+    "Basenote can develop the scent with its in-house chemist, refine an existing direction or work with a fragrance you already have.",
+    "Bottle, cap, decoration and finish are considered around the brief and budget. Existing components can be incorporated subject to technical and production requirements.",
+    "The carton, inserts, print and finishes complete the product. Custom packaging can affect the overall project timeline.",
+    "The story and identity can be developed with you, or the project can follow your existing brand guidelines. Branding can also be scoped separately.",
+    "Website, ecommerce and digital launch assets can form part of the support you need. Their scope follows the requirements of your project.",
+    "Once the product is approved, the process moves into filling and assembly, with quality checks and packing before delivery.",
+    "Finished stock is coordinated to its final destination. Shipping and delivery are among the factors that affect the final project cost.",
+    "Launch planning, content and campaigns help take the fragrance to market. Support can be focused on the stages you need.",
+  ],
+  chapters: [
+    {
+      id: "what-private-label-means",
+      number: "01",
+      title: "What private label means at Basenote",
+      kind: "intro",
+      parentAnchor: "why-basenote",
+      paragraphs: [
+        "Private label brings the work of creating your own fragrance together: fragrance development, product design, packaging, manufacturing and delivery, with brand and launch support where you need it.",
+        "You can work with Basenote from the first idea through to launch, or bring the team into a particular stage. The project is shaped around what you want to create, the audience you want to reach and the support you need.",
+      ],
+    },
+    {
+      id: "who-it-is-for",
+      number: "02",
+      title: "Who it is for",
+      kind: "audiences",
+      parentAnchor: "who-its-for",
+      paragraphs: [
+        "A fragrance can be the beginning of a new business, an extension of an established brand or a product created for a particular audience or occasion. These six starting points describe the kinds of projects Basenote can support.",
+      ],
+    },
+    {
+      id: "idea-to-market",
+      number: "03",
+      title: "The journey, idea to market",
+      kind: "journey",
+      parentAnchor: "client-journey",
+      paragraphs: [
+        "The full journey spans ten stages. You may need support across all of them, or arrive with some elements already in place. The stages below explain how the idea, fragrance, product and launch connect.",
+      ],
+    },
+    {
+      id: "commercial-expectations",
+      number: "04",
+      title: "What to expect",
+      kind: "commercial",
+      parentAnchor: "what-to-expect",
+      paragraphs: [
+        "A typical starting point is 500 units per fragrance, with indicative unit costs from around £20. These are guides for an initial conversation: the product, components and volume all affect the final scope and cost.",
+        "A typical project takes around 8–12 weeks. Bespoke fragrance development, custom packaging and more complex projects can take longer. The fragrance, bottle, packaging, shipping, delivery and level of support all need to be considered together.",
+        "Support can range from a focused service to full end-to-end delivery. Branding and creative support can be scoped separately, and fragrance oils can be supplied without a full private label order.",
+      ],
+    },
+    {
+      id: "what-to-bring",
+      number: "05",
+      title: "What you need to bring",
+      kind: "preparation",
+      parentAnchor: "hero",
+      paragraphs: [
+        "Nothing needs to be finished before you get in touch. You can arrive with a developed fragrance, a rough idea, a reference or simply a direction you want to explore.",
+        "If you already know your audience or target price point, those details can help shape the concept. If you have a bottle, packaging, fragrance or other components, Basenote can build around them, subject to technical and production requirements.",
+        "An existing identity or set of brand guidelines can also guide the project. Where those elements are still open, brand positioning, storytelling, visual identity and packaging can be part of the work.",
+      ],
+    },
+    {
+      id: "ownership-and-markets",
+      number: "06",
+      title: "Ownership, compliance and international clients",
+      kind: "ownership",
+      parentAnchor: "faq",
+      paragraphs: [
+        "Fragrance ownership depends on how it is developed. Bespoke formulations, licensed fragrances and existing formulas can have different arrangements. Basenote will make the ownership position clear before development begins.",
+        "Compliance is one of the capabilities Basenote brings to the process. Focused projects and bespoke commissions receive the same production and compliance standards described for the wider private label service.",
+        "Basenote works with clients internationally and can support projects across different markets. Share the intended market and destination when discussing the project so they can form part of the conversation.",
+      ],
+    },
+    {
+      id: "frequently-asked-questions",
+      number: "07",
+      title: "Frequently asked questions",
+      kind: "faqs",
+      parentAnchor: "faq",
+      paragraphs: [],
+    },
+    {
+      id: "next-steps",
+      number: "08",
+      title: "Your next step",
+      kind: "next",
+      parentAnchor: "start-your-fragrance",
+      paragraphs: [
+        "Tell us what you are looking to create and where you would like support. We can talk through the idea, what you need from Basenote and the most practical route forward.",
+        "You do not need to have all the answers yet. The first conversation can help shape the direction.",
+      ],
+    },
+  ],
 };
