@@ -135,8 +135,8 @@ export default function CapabilityWheel() {
                 aria-label={label}
                 aria-pressed={active === index}
                 style={{ "--angle": `${index * 45}deg` } as CSSProperties}
-                onClick={() => {
-                  if (!dragged.current) choose(index);
+                onClick={(event) => {
+                  if (event.detail === 0 || !dragged.current) choose(index);
                   dragged.current = false;
                 }}
               >

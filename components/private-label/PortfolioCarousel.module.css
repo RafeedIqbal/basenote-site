@@ -28,7 +28,8 @@
   border-radius: 12px;
   overflow: hidden;
   background: #111;
-  transform: translateX(calc(-50% + var(--offset) * 107%)) scale(0.88);
+  transform: translateX(calc(-50% + var(--offset) * var(--slide-step, 107%)))
+    scale(0.88);
   opacity: 0.42;
   transition:
     transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -82,6 +83,7 @@
     height: 78vw;
   }
   .slide {
+    --slide-step: 98%;
     width: 78vw;
     border-radius: 8px;
   }

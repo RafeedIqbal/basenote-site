@@ -2,9 +2,12 @@
 
 import { useEffect, useRef } from "react";
 
-import { FORM_HONEYPOT_FIELD, FORM_SUBMITTED_AT_FIELD } from "@/lib/form-guard-constants";
+import {
+  FORM_HONEYPOT_FIELD,
+  FORM_SUBMITTED_AT_FIELD,
+} from "@/lib/form-guard-constants";
 
-import styles from "./ContactPage.module.css";
+import styles from "./FormGuardFields.module.css";
 
 export default function FormGuardFields() {
   const submittedAtRef = useRef<HTMLInputElement>(null);

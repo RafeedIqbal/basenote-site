@@ -288,7 +288,12 @@
   overflow: clip;
   background:
     radial-gradient(ellipse at 20% 20%, var(--pl-ochre), transparent 70%),
-    linear-gradient(125deg, #32120c, var(--pl-varnish), #160905);
+    linear-gradient(
+      125deg,
+      var(--pl-canyon),
+      var(--pl-varnish),
+      var(--pl-ochre)
+    );
 }
 .finalCta::after {
   content: "";

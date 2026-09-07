@@ -104,7 +104,6 @@
 .container,
 .homeHeroInner,
 .pageHeroInner,
-.productHeroInner,
 .contactGrid {
   width: min(100%, 1200px);
   margin: 0 auto;
@@ -188,7 +187,6 @@
 .editorialHeader h2,
 .ctaContent h2,
 .pageHero h1,
-.productHero h1,
 .centerProductHero h1,
 .listingHero h1,
 .contactSection h1 {
@@ -233,7 +231,10 @@
   line-height: 1.2;
   text-align: center;
   text-transform: uppercase;
-  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
 }
 
 .primaryButton {
@@ -569,7 +570,9 @@
   padding: 30px;
   border: 1px solid;
   border-radius: 4px;
-  transition: border-color 260ms ease, transform 260ms ease;
+  transition:
+    border-color 260ms ease,
+    transform 260ms ease;
 }
 
 .serviceRed {
@@ -958,8 +961,7 @@
 }
 
 .editorialImage img,
-.caseImage img,
-.labImage img {
+.caseImage img {
   object-fit: cover;
 }
 
@@ -1051,7 +1053,11 @@
 .ctaGlow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(80% 120% at 50% 100%, rgba(160, 69, 53, 0.2), transparent 60%);
+  background: radial-gradient(
+    80% 120% at 50% 100%,
+    rgba(160, 69, 53, 0.2),
+    transparent 60%
+  );
 }
 
 .ctaContent {
@@ -1084,7 +1090,6 @@
 }
 
 .pageHero h1,
-.productHero h1,
 .centerProductHero h1,
 .listingHero h1,
 .contactSection h1 {
@@ -1134,7 +1139,6 @@
   font-size: 20px;
 }
 
-.productHero,
 .centerProductHero {
   position: relative;
   overflow: hidden;
@@ -1143,41 +1147,6 @@
   align-items: center;
 }
 
-.productHeroArt,
-.productHeroVeil {
-  position: absolute;
-  inset: 0;
-}
-
-.productHeroArt {
-  top: 0;
-  right: -10%;
-  left: auto;
-  width: 60%;
-}
-
-.productHeroArt img {
-  object-fit: contain;
-  object-position: right center;
-  opacity: 0.55;
-}
-
-.productHeroVeil {
-  background: linear-gradient(90deg, #000 38%, rgba(0, 0, 0, 0.08) 75%);
-}
-
-.productHeroInner {
-  position: relative;
-  z-index: 2;
-  padding-block: clamp(70px, 9vw, 110px);
-}
-
-.productHero h1 {
-  font-size: clamp(42px, 8vw, 88px);
-  text-transform: uppercase;
-}
-
-.productHeroInner > p,
 .centerProductHeroInner > p {
   max-width: 640px;
   margin: 26px 0 0;
@@ -1187,67 +1156,8 @@
   line-height: 1.55;
 }
 
-.productHeroInner > a,
 .centerProductHeroInner > a {
   margin-top: 34px;
-}
-
-.processGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(40px, 6vw, 90px);
-}
-
-.processGrid .bodyCopy {
-  margin-top: 22px;
-}
-
-.labImage {
-  position: relative;
-  height: 300px;
-  margin-top: 26px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-}
-
-.processList {
-  display: flex;
-  flex-direction: column;
-}
-
-.processList article {
-  padding: 22px 0;
-  display: flex;
-  gap: 22px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.processList article > span {
-  width: 48px;
-  height: 48px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  border-radius: 50%;
-  font-family: var(--font-mono), monospace;
-  font-size: 15px;
-}
-
-.processList h3 {
-  margin: 2px 0 8px;
-  font-family: var(--font-serif), serif;
-  font-size: 22px;
-  font-weight: 600;
-}
-
-.processList p {
-  margin: 0;
-  color: #9a9a9a;
-  font-size: 14.5px;
-  font-weight: 300;
-  line-height: 1.6;
 }
 
 .centerProductHero {
@@ -1582,23 +1492,41 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes growBar {
-  from { transform: scaleX(0.12); }
-  to { transform: scaleX(1); }
+  from {
+    transform: scaleX(0.12);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 @keyframes wave {
-  from { transform: scaleY(0.35); }
-  to { transform: scaleY(1); }
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
 }
 
 @media (max-width: 980px) {
@@ -1639,7 +1567,6 @@
   .solutionDiagram,
   .techRow,
   .aboutIntro,
-  .processGrid,
   .contactGrid,
   .legalLayout,
   .blendDetailGrid,
@@ -1662,15 +1589,6 @@
 
   .audienceGrid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .productHeroArt {
-    right: -32%;
-    width: 95%;
-  }
-
-  .productHeroVeil {
-    background: linear-gradient(90deg, #000 20%, rgba(0, 0, 0, 0.42) 100%);
   }
 
   .predictedProfile {
@@ -1734,18 +1652,8 @@
     height: 240px;
   }
 
-  .productHero,
   .centerProductHero {
     min-height: 590px;
-  }
-
-  .productHeroArt {
-    right: -48%;
-    width: 130%;
-  }
-
-  .productHeroVeil {
-    background: linear-gradient(90deg, #000 24%, rgba(0, 0, 0, 0.56) 100%);
   }
 
   .caseImage {

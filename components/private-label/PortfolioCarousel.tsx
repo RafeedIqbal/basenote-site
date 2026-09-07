@@ -131,8 +131,9 @@ export default function PortfolioCarousel() {
               aria-current={offset === 0 ? "true" : undefined}
               aria-hidden={Math.abs(offset) > 1}
               tabIndex={Math.abs(offset) <= 1 ? 0 : -1}
-              onClick={() => {
-                if (!pointer.current?.moved) select(index);
+              onClick={(event) => {
+                if (event.detail === 0 || !pointer.current?.moved)
+                  select(index);
                 pointer.current = null;
               }}
             >

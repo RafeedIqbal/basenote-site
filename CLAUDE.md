@@ -1,35 +1,35 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Project
+Basenote Solutions is an eleven-route Next.js 16 App Router marketing site with React 19 and strict TypeScript. Read `AGENTS.md` for repository conventions and `docs/private-label-handoff.md` for the private label implementation, asset provenance, draft copy, and validation record.
 
-## Project Overview
-
-Basenote Solutions marketing site — a single-page Next.js 16 app for a fragrance brand consultancy. Domain: basenotesolutions.com.
-
-## Commands
-
-```bash
-npm run dev      # Start dev server (Next.js)
-npm run build    # Production build
-npm run lint     # ESLint with zero warnings allowed (--max-warnings=0)
-```
-
-No test framework is configured.
+Public routes: `/`, `/private-label`, `/private-label/guide`, `/blend-engine`, `/alchemy-engine`, `/about`, `/blogs`, `/case-studies`, `/contact`, `/privacy-policy`, `/terms`. `lib/site.ts` owns `PUBLIC_ROUTES`, shared metadata helpers, and the site origin; `app/sitemap.ts` derives its entries from that list.
 
 ## Architecture
+- `app/`: route entrypoints, metadata, layout, global CSS, and `actions/contact.ts`.
+- `components/site/SitePages.tsx`: main site page views, supported by its CSS Module, shared header/footer, and `InquiryForm`.
+- `components/site/shared.tsx`: `SiteFrame`, `Eyebrow`, `SectionDivider`, and `FaqList`; exclusive animated FAQ behavior is opt-in.
+- `components/private-label/`: ten-section private label marketing page, eight-chapter guide, carousel, capability wheel, horizontal journey, video, figures, and WebGL background, with co-located CSS Modules.
+- `data/site-content.ts`: centralized typed copy, links, media, navigation, audiences, stages, and FAQs. New page content is in `privateLabel`, `privateLabelGuide`, and `privateLabelFaqs`. Retain documented pricing, timing, and ownership qualifications; the guide, teaser, and new metadata descriptions remain drafts.
+- `components/contact/FormGuardFields.tsx` and its stylesheet: live hidden form guard used by `InquiryForm`; server checks are in `lib/contact-form-guard.ts`.
+- `public/assets/` and `public/media/`: static assets. Private label project artwork is in `public/media/private-label/portfolio/`.
 
-- **Next.js 16** with App Router, React 19, TypeScript (strict mode)
-- **Single page**: `app/page.tsx` renders `components/HomePage.tsx` with content from `data/home-content.ts`
-- **Content/view separation**: All copy, navigation items, portfolio projects, services, FAQ, etc. are typed and defined in `data/home-content.ts` (`HomePageContent` type), passed as props to section components
-- **CSS Modules**: Each section component in `components/home/` has a co-located `.module.css` file. Global styles in `app/globals.css`
-- **GSAP + ScrollTrigger**: Animations throughout. `lib/gsap.ts` is the single registration point — always import `gsap`, `ScrollTrigger`, and `useGSAP` from `@/lib/gsap`, not directly from packages
-- **Lenis**: Smooth scrolling via `components/SmoothScroll.tsx`, mounted in root layout. Respects `prefers-reduced-motion`
-- **Fonts**: Three Google Fonts loaded in `app/layout.tsx` as CSS variables: `--font-display` (Antonio), `--font-body` (Schibsted Grotesk), `--font-mono` (IBM Plex Mono)
-- **Path aliases**: `@/*` maps to project root (e.g., `@/components/...`, `@/lib/...`, `@/data/...`)
+## Styling and animation
+Fonts loaded through `next/font/google` in `app/layout.tsx` are Source Serif 4 (`--font-serif`), Lexend Deca (`--font-body`), and Space Mono (`--font-mono`). Preserve the shared canvas and scope the private label palette to its two routes. Use CSS Modules and `next/image` with responsive `sizes`.
 
-## Key Patterns
+Import GSAP, ScrollTrigger, and useGSAP from `@/lib/gsap`. `SmoothScroll.tsx` owns Lenis and responds to live reduced-motion changes; `lib/scroll.ts` coordinates scroll positioning and menu locks. Clean up effects and WebGL resources on route changes. Private label desktop pins use the 860px breakpoint; reduced motion and mobile layouts remain unpinned. Keep keyboard navigation, fixed-header focus/menu handling, explicit media playback, and static shader fallbacks functional.
 
-- Section components receive the full `HomePageContent` object as `content` prop
-- GSAP animations use `data-*` attributes as selectors (e.g., `data-hero-video`, `data-logo-symbol`)
-- `"use client"` is used on components with animations or interactivity; page and layout are server components
-- Images served via Next.js Image optimization (AVIF/WebP configured in `next.config.ts`)
+## Commands and checks
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+npm run start
+```
+ESLint allows zero warnings. No automated test framework is configured. Run lint and build, then smoke test responsive layouts, route links, mobile menu, focus, section hashes, pin release/resizing, live reduced-motion changes, and contact defaults. Check the form guard without submitting an enquiry. Capture screenshots for UI changes.
+
+## Preserved hosting configuration
+There is also a secondary Sites/Vinext/Cloudflare target. Preserve `vite.config.ts`, `sites-vite-plugin.ts`, `worker/index.ts`, `.openai/hosting.json`, `build:sites`, and dependencies `vinext`, `vite`, `wrangler`, `@cloudflare/vite-plugin`, `@vitejs/plugin-react`, `@vitejs/plugin-rsc`, and `react-server-dom-webpack`. Status: **possibly unused, needs confirmation**. Do not infer that the Next.js build makes them safe to delete.
+
+Use descriptive commits, preserve unrelated changes, and do not push or deploy without task authorization.
