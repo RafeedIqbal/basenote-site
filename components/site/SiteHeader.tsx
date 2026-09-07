@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { navigation } from "@/data/site-content";
+import { ScrollTrigger, useGSAP } from "@/lib/gsap";
 
 import styles from "./SiteChrome.module.css";
 
@@ -15,10 +16,22 @@ function isActivePath(pathname: string, href: string) {
 
 export default function SiteHeader() {
   const pathname = usePathname();
+  const privateLabel = pathname === "/private-label" || pathname === "/private-label/guide";
+  const [hidden, setHidden] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
+
+  useGSAP(() => {
+    if (!privateLabel) return;
+    const trigger = ScrollTrigger.create({
+      start: 0, end: "max",
+      onUpdate: (self) => setHidden(!open && !headerRef.current?.contains(document.activeElement) && self.scroll() > 72 && self.direction > 0)
+    });
+    return () => trigger.kill();
+  }, { dependencies: [privateLabel, open], revertOnUpdate: true });
 
   useEffect(() => {
     if (!open) {
@@ -66,7 +79,8 @@ export default function SiteHeader() {
 
   return (
     <>
-      <header className={styles.header}>
+      {privateLabel ? <div className={styles.headerSpace} aria-hidden="true" /> : null}
+      <header ref={headerRef} onFocusCapture={() => setHidden(false)} className={`${styles.header} ${privateLabel ? styles.privateHeader : ""} ${privateLabel && hidden && !open ? styles.headerHidden : ""}`}>
         <div className={styles.headerInner}>
           <Link href="/" className={styles.brand} aria-label="Basenote home">
             <Image
@@ -74,7 +88,7 @@ export default function SiteHeader() {
               alt=""
               width={30}
               height={30}
-              priority
+              priority={!privateLabel}
             />
             <span>Basenote</span>
           </Link>
@@ -122,7 +136,7 @@ export default function SiteHeader() {
         aria-hidden={!open}
       >
         <div className={styles.mobileTopline}>
-          <span className={styles.mobileBrand}>Basenote</span>
+          {privateLabel ? <Image src="/media/basenote-handoff/logo-white.png" alt="Basenote" width={30} height={30} /> : <span className={styles.mobileBrand}>Basenote</span>}
           <button
             type="button"
             className={styles.closeButton}

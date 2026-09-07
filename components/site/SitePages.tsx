@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties } from "react";
 
-import { gsap, useGSAP } from "@/lib/gsap";
 import {
   audienceLabels,
   audienceSegments,
@@ -20,13 +19,11 @@ import {
   stats,
   teamMembers,
   trustedBrands,
-  type EditorialCard,
-  type FaqItem
+  type EditorialCard
 } from "@/data/site-content";
 
 import InquiryForm from "./InquiryForm";
-import SiteFooter from "./SiteFooter";
-import SiteHeader from "./SiteHeader";
+import { SiteFrame, Eyebrow, SectionDivider, FaqList } from "./shared";
 
 import styles from "./SitePages.module.css";
 
@@ -36,71 +33,6 @@ const waves = Array.from({ length: 24 }, (_, index) => ({
   duration: `${(0.7 + (index % 5) * 0.18).toFixed(2)}s`,
   height: `${25 + Math.round(60 * Math.abs(Math.sin(index * 0.9)))}%`
 }));
-
-type SiteFrameProps = {
-  children: ReactNode;
-};
-
-function SiteFrame({ children }: SiteFrameProps) {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(
-    () => {
-      const q = gsap.utils.selector(rootRef);
-      const elements = q("[data-reveal]");
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-
-      if (reduceMotion) {
-        gsap.set(elements, { autoAlpha: 1, y: 0 });
-        return;
-      }
-
-      elements.forEach((element) => {
-        gsap.fromTo(
-          element,
-          { autoAlpha: 0, y: 26 },
-          {
-            autoAlpha: 1,
-            duration: 0.9,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 90%",
-              once: true
-            },
-            y: 0
-          }
-        );
-      });
-    },
-    { scope: rootRef }
-  );
-
-  return (
-    <div ref={rootRef} className={styles.page}>
-      <SiteHeader />
-      <main id="main-content">{children}</main>
-      <SiteFooter />
-    </div>
-  );
-}
-
-function SectionDivider({ tone = "black" }: { tone?: "amber" | "black" | "blue" | "red" }) {
-  return (
-    <div className={`${styles.dividerBand} ${styles[`tone${tone[0].toUpperCase()}${tone.slice(1)}`]}`} aria-hidden="true">
-      <div className={styles.divider}>
-        <span>+</span>
-      </div>
-    </div>
-  );
-}
-
-function Eyebrow({ children, tone }: { children: ReactNode; tone?: "amber" | "blue" | "red" }) {
-  const toneClass = tone ? styles[`eyebrow${tone[0].toUpperCase()}${tone.slice(1)}`] : "";
-  return <span className={`${styles.eyebrow} ${toneClass}`}>{children}</span>;
-}
 
 function PageCta({ tone = "black" }: { tone?: "amber" | "black" | "blue" | "red" }) {
   return (
@@ -218,19 +150,6 @@ function EditorialGrid({ cards, showDates = false }: { cards: EditorialCard[]; s
             <p>{card.description}</p>
           </div>
         </article>
-      ))}
-    </div>
-  );
-}
-
-function FaqList({ items }: { items: FaqItem[] }) {
-  return (
-    <div className={styles.faqList}>
-      {items.map((item) => (
-        <details key={item.question} className={styles.faqItem} data-reveal="">
-          <summary>{item.question}<span aria-hidden="true">+</span></summary>
-          <p>{item.answer}</p>
-        </details>
       ))}
     </div>
   );

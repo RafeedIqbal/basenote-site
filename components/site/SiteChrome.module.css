@@ -8,6 +8,12 @@
   backdrop-filter: blur(14px);
 }
 
+.headerSpace { height: 72px; }
+.privateHeader { position: fixed; inset: 0 0 auto; transition: transform .22s ease; }
+.headerHidden { transform: translateY(-100%); }
+@media (max-width: 859px) { .privateHeader .brand > span { display: none; } }
+@media (prefers-reduced-motion: reduce) { .privateHeader { transition: none; } }
+
 .headerInner,
 .footerInner {
   width: min(100%, 1320px);

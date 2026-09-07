@@ -7,14 +7,11 @@ import { ScrollTrigger } from "@/lib/gsap";
 
 export default function SmoothScroll() {
   useEffect(() => {
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (reduceMotion) {
-      return;
-    }
-
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let stop = () => {};
+    const configure = () => {
+      stop();
+      if (preference.matches) { stop = () => {}; ScrollTrigger.refresh(); return; }
     const lenis = new Lenis({
       autoRaf: false,
       smoothWheel: true,
@@ -33,11 +30,16 @@ export default function SmoothScroll() {
 
     frameId = window.requestAnimationFrame(update);
 
-    return () => {
+    stop = () => {
       window.cancelAnimationFrame(frameId);
       unsubscribeScroll();
       lenis.destroy();
     };
+    ScrollTrigger.refresh();
+    };
+    configure();
+    preference.addEventListener("change", configure);
+    return () => { preference.removeEventListener("change", configure); stop(); };
   }, []);
 
   return null;
