@@ -1,3 +1,6 @@
+import guideCatalogue from "./private-label-catalogue.json";
+import guideOptions from "./private-label-options.json";
+
 export type NavItem = {
   href: string;
   label: string;
@@ -744,156 +747,435 @@ export const privateLabel: PrivateLabelContent = {
     draft: true,
   },
 };
-
+export type GuideImage = { src: string; alt: string };
+export type GuideCatalogueItem = GuideImage & { number: string };
+export type GuideStep = {
+  title: string;
+  paragraphs: string[];
+  points?: string[];
+  note?: string;
+};
 export type PrivateLabelGuideChapter = {
   id: string;
   number: string;
   title: string;
+  headline: string;
   paragraphs: string[];
-  kind:
-    | "intro"
-    | "audiences"
-    | "journey"
-    | "commercial"
-    | "preparation"
-    | "ownership"
-    | "faqs"
-    | "next";
-  parentAnchor?: string;
 };
-
 export type PrivateLabelGuideContent = {
   title: string;
   introduction: string;
-  draft: boolean;
   back: string;
   contentsLabel: string;
   progressLabel: string;
   chapterLabel: string;
-  returnLink: string;
-  contactLink: string;
-  viewSection: string;
   metadata: { title: string; description: string };
-  stageNotes: string[];
   chapters: PrivateLabelGuideChapter[];
+  elements: { title: string; subtitle: string; paragraphs: string[] }[];
+  packaging: {
+    optionsTitle: string;
+    sizeTitle: string;
+    sizes: string[];
+    finishTitle: string;
+    finishes: string[];
+    paperTitle: string;
+    paperImages: GuideImage[];
+    rigidTitle: string;
+    types: { title: string; images: GuideImage[] }[];
+  };
+  components: {
+    catalogueNote: string;
+    cap: { title: string; description: string; items: GuideCatalogueItem[] };
+    bottle: { title: string; description: string; items: GuideCatalogueItem[] };
+    sourcingTitle: string;
+    sourcingDescription: string;
+    finishTitle: string;
+    finishDescription: string;
+    finishes: { title: string; description: string; images: GuideImage[] }[];
+  };
+  fragrance: {
+    routes: { title: string; subtitle: string; paragraphs: string[] }[];
+    timelineTitle: string;
+    steps: GuideStep[];
+  };
+  production: { steps: GuideStep[]; qualification: string };
+  final: {
+    primary: string;
+    secondary: string;
+    formTitle: string;
+    detailsTitle: string;
+    choicesTitle: string;
+    notesTitle: string;
+    submit: string;
+    success: string;
+  };
+  formFields: {
+    requiredHint: string;
+    name: string;
+    email: string;
+    phone: string;
+    spoken: string;
+    choose: string;
+    undecided: string;
+    packaging: string;
+    bottle: string;
+    cap: string;
+    finish: string;
+    fragrance: string;
+    notes: string;
+    images: string;
+    privacy: string;
+  };
+  labels: {
+    next: string;
+    jumpToReference: string;
+    previousImage: string;
+    nextImage: string;
+    imageUnavailable: string;
+    catalogueUnavailable: string;
+    step: string;
+    close: string;
+    sending: string;
+    error: string;
+    uploadHint: string;
+    privacy: string;
+  };
 };
 
-// Draft copy for review. Source facts: Basenote Solutions – Private Label Dev.
+// Supplied Private Label Guide, Google Doc 1POnHMwxhE2u-1xX2zjPmrGs8CAZNbeXEDFqVfiEi4qo, 8 September 2026.
 export const privateLabelGuide: PrivateLabelGuideContent = {
-  title: "Your private label guide",
+  title: "Everything you need to understand before creating your fragrance.",
   introduction:
-    "An idea, an existing brand, or simply a direction you want to explore. This guide takes you through the decisions, the process and the support available as you develop your own fragrance.",
-  draft: true,
+    "From packaging and bottles to fragrance development, production and launch, this guide breaks the process down into simple decisions.",
   back: "Private Label",
   contentsLabel: "In this guide",
   progressLabel: "Reading progress",
   chapterLabel: "Chapter",
-  returnLink: "Explore Private Label",
-  contactLink: "Start your fragrance",
-  viewSection: "Explore this on the Private Label page",
   metadata: {
     title: "Private Label Guide",
     description:
-      "Explore Basenote’s private label fragrance process, from the first idea and product development to production, delivery and launch.",
+      "From packaging and bottles to fragrance development, production and launch, this guide breaks the process down into simple decisions.",
   },
-  stageNotes: [
-    "You do not need a finished brief. A reference, an audience or an ambition can be the starting point for shaping the concept together.",
-    "The audience, positioning and target price point give the fragrance and product decisions a shared commercial direction.",
-    "Basenote can develop the scent with its in-house chemist, refine an existing direction or work with a fragrance you already have.",
-    "Bottle, cap, decoration and finish are considered around the brief and budget. Existing components can be incorporated subject to technical and production requirements.",
-    "The carton, inserts, print and finishes complete the product. Custom packaging can affect the overall project timeline.",
-    "The story and identity can be developed with you, or the project can follow your existing brand guidelines. Branding can also be scoped separately.",
-    "Website, ecommerce and digital launch assets can form part of the support you need. Their scope follows the requirements of your project.",
-    "Once the product is approved, the process moves into filling and assembly, with quality checks and packing before delivery.",
-    "Finished stock is coordinated to its final destination. Shipping and delivery are among the factors that affect the final project cost.",
-    "Launch planning, content and campaigns help take the fragrance to market. Support can be focused on the stages you need.",
-  ],
   chapters: [
     {
-      id: "what-private-label-means",
+      id: "start-here",
       number: "01",
-      title: "What private label means at Basenote",
-      kind: "intro",
-      parentAnchor: "why-basenote",
+      title: "Start here",
+      headline: "Three elements bring the product together",
       paragraphs: [
-        "Private label brings the work of creating your own fragrance together: fragrance development, product design, packaging, manufacturing and delivery, with brand and launch support where you need it.",
-        "You can work with Basenote from the first idea through to launch, or bring the team into a particular stage. The project is shaped around what you want to create, the audience you want to reach and the support you need.",
+        "Private label comes down to three things: packaging, bottle & cap, and fragrance. Get those right, and the rest becomes much easier to build.",
       ],
     },
     {
-      id: "who-it-is-for",
+      id: "choose-your-packaging",
       number: "02",
-      title: "Who it is for",
-      kind: "audiences",
-      parentAnchor: "who-its-for",
+      title: "Choose your packaging",
+      headline: "Choose your packaging",
       paragraphs: [
-        "A fragrance can be the beginning of a new business, an extension of an established brand or a product created for a particular audience or occasion. These six starting points describe the kinds of projects Basenote can support.",
+        "There are two main routes or tiers: paper packaging or rigid packaging.",
+        "The right choice depends on the product you’re building, how you want it to feel and where you want it to sit in the market.",
       ],
     },
     {
-      id: "idea-to-market",
+      id: "choose-your-bottle-cap",
       number: "03",
-      title: "The journey, idea to market",
-      kind: "journey",
-      parentAnchor: "client-journey",
+      title: "Choose your bottle & cap",
+      headline: "Choose your bottle & cap",
       paragraphs: [
-        "The full journey spans ten stages. You may need support across all of them, or arrive with some elements already in place. The stages below explain how the idea, fragrance, product and launch connect.",
+        "Start with the cap, then find the bottle that works around it. From there, coatings and finishes can completely change how the final product looks.",
+        "Caps generally offer less room for customisation unless we move into custom moulds, so choosing the cap first can help avoid having to rework the bottle later. Bottles offer much more freedom through shape, coating, printing and labels.",
       ],
     },
     {
-      id: "commercial-expectations",
+      id: "create-your-fragrance",
       number: "04",
-      title: "What to expect",
-      kind: "commercial",
-      parentAnchor: "what-to-expect",
+      title: "Create your fragrance",
+      headline: "Create your fragrance",
       paragraphs: [
-        "A typical starting point is 500 units per fragrance, with indicative unit costs from around £20. These are guides for an initial conversation: the product, components and volume all affect the final scope and cost.",
-        "A typical project takes around 8–12 weeks. Bespoke fragrance development, custom packaging and more complex projects can take longer. The fragrance, bottle, packaging, shipping, delivery and level of support all need to be considered together.",
-        "Support can range from a focused service to full end-to-end delivery. Branding and creative support can be scoped separately, and fragrance oils can be supplied without a full private label order.",
+        "There are two ways to approach the scent itself: start from an existing fragrance direction or formulate something bespoke.",
       ],
     },
     {
-      id: "what-to-bring",
+      id: "get-production-ready",
       number: "05",
-      title: "What you need to bring",
-      kind: "preparation",
-      parentAnchor: "hero",
+      title: "Get production-ready",
+      headline: "Get production-ready",
       paragraphs: [
-        "Nothing needs to be finished before you get in touch. You can arrive with a developed fragrance, a rough idea, a reference or simply a direction you want to explore.",
-        "If you already know your audience or target price point, those details can help shape the concept. If you have a bottle, packaging, fragrance or other components, Basenote can build around them, subject to technical and production requirements.",
-        "An existing identity or set of brand guidelines can also guide the project. Where those elements are still open, brand positioning, storytelling, visual identity and packaging can be part of the work.",
+        "Once the fragrance, bottle, cap and packaging are aligned, we can lock the specification, confirm the costs and prepare the product for manufacture.",
       ],
     },
     {
-      id: "ownership-and-markets",
+      id: "make-it-real",
       number: "06",
-      title: "Ownership, compliance and international clients",
-      kind: "ownership",
-      parentAnchor: "faq",
+      title: "Make it real",
+      headline: "Ready for the next step?",
       paragraphs: [
-        "Fragrance ownership depends on how it is developed. Bespoke formulations, licensed fragrances and existing formulas can have different arrangements. Basenote will make the ownership position clear before development begins.",
-        "Compliance is one of the capabilities Basenote brings to the process. Focused projects and bespoke commissions receive the same production and compliance standards described for the wider private label service.",
-        "Basenote works with clients internationally and can support projects across different markets. Share the intended market and destination when discussing the project so they can form part of the conversation.",
-      ],
-    },
-    {
-      id: "frequently-asked-questions",
-      number: "07",
-      title: "Frequently asked questions",
-      kind: "faqs",
-      parentAnchor: "faq",
-      paragraphs: [],
-    },
-    {
-      id: "next-steps",
-      number: "08",
-      title: "Your next step",
-      kind: "next",
-      parentAnchor: "start-your-fragrance",
-      paragraphs: [
-        "Tell us what you are looking to create and where you would like support. We can talk through the idea, what you need from Basenote and the most practical route forward.",
-        "You do not need to have all the answers yet. The first conversation can help shape the direction.",
+        "Whether you’re still exploring or already working through your options with us, send us what you’ve chosen and we’ll take it from there.",
       ],
     },
   ],
+  elements: [
+    {
+      title: "Packaging",
+      subtitle: "How the product is presented.",
+      paragraphs: [
+        "Packaging sets the tone before the bottle is even opened.",
+        "Choose between paper and rigid formats, then refine the structure, inserts, print and finishes around the position you want the product to hold in the market.",
+        "From understated and accessible to highly finished and premium, the packaging should support both the product and the price point.",
+      ],
+    },
+    {
+      title: "Bottle & cap",
+      subtitle: "The physical shape of the product.",
+      paragraphs: [
+        "Choose the bottle size, weight and silhouette, then pair it with a cap that works technically and visually.",
+        "The base components are only the starting point. Coatings, colour, printing, labels and decoration can completely change how the finished bottle feels.",
+        "We’ll help you balance what looks right with what is practical to manufacture at your volume.",
+      ],
+    },
+    {
+      title: "Fragrance",
+      subtitle: "Formulate the scent.",
+      paragraphs: [
+        "This is where you define what the fragrance actually smells like.",
+        "Start with a direction, reference or idea, then develop it through sampling and refinement until the formula is ready for production.",
+        "You can work from an existing fragrance direction or create something bespoke with a chemist, depending on the product you want to build, the market you’re entering and how distinctive you want the scent to be.",
+      ],
+    },
+  ],
+  packaging: {
+    optionsTitle: "Customisation Options",
+    sizeTitle: "Size / Shape options",
+    sizes: ["Fully Custom", "Made-To-Measure"],
+    finishTitle: "Finish Options",
+    finishes: ["UV", "Spot UV", "Textured (Sanded)", "Foiling"],
+    paperTitle: "Paper / Flat box with card insert",
+    paperImages: guideOptions["Paper / Flat box with card insert"],
+    rigidTitle: "Rigid box",
+    types: [
+      { title: "Two Part Hard box", images: guideOptions["Two Part Hard box"] },
+      {
+        title: "Foldable Rigid Box",
+        images: guideOptions["Foldable Rigid Box"],
+      },
+    ],
+  },
+  components: {
+    catalogueNote: "The catalogue lists one bottle as PB50- without a complete reference. If that is your choice, include its image with your project details.",
+    cap: {
+      title: "Start with the cap.",
+      description:
+        "Caps are one of the less flexible parts of the product, so it often makes sense to choose one first and build the bottle around it.",
+      items: guideCatalogue.caps,
+    },
+    bottle: {
+      title: "Then choose your bottle.",
+      description:
+        "Shape is only the starting point. Once you have the bottle, coatings, colour, printing and labels can completely change how it feels.",
+      items: guideCatalogue.bottles,
+    },
+    sourcingTitle: "Can’t see what you’re looking for?",
+    sourcingDescription:
+      "The catalogue is a starting point, not a restriction. If you have another bottle or cap in mind, send us a reference and we can explore sourcing it.",
+    finishTitle: "Choose your finish",
+    finishDescription:
+      "A clear bottle can become almost anything. Coating changes the colour, opacity, texture and overall feel of the finished product.",
+    finishes: [
+      {
+        title: "Matte",
+        description:
+          "A smooth, non-reflective finish that gives the bottle a soft, understated and premium appearance.",
+        images: guideOptions.Matte,
+      },
+      {
+        title: "Frosting",
+        description:
+          "A translucent, diffused finish that gives glass a soft, misted appearance while partially obscuring the contents.",
+        images: guideOptions.Frosting,
+      },
+      {
+        title: "Metallic",
+        description:
+          "A reflective metal-like finish, such as gold or silver, that creates a polished and luxurious appearance.",
+        images: guideOptions.Metallic,
+      },
+      {
+        title: "Transparent",
+        description:
+          "A clear or tinted transparent finish that adds colour while allowing the glass and bottle contents to remain visible.",
+        images: guideOptions.Transparent,
+      },
+      {
+        title: "Gradient",
+        description:
+          "A finish where one colour smoothly transitions into another colour, shade or level of transparency across the bottle.",
+        images: guideOptions.Gradient,
+      },
+      {
+        title: "Jet",
+        description:
+          "A deep, highly opaque dark finish, typically jet black, that creates a bold, dramatic and premium look.",
+        images: guideOptions.Jet,
+      },
+    ],
+  },
+  fragrance: {
+    routes: [
+      {
+        title: "Inspired by",
+        subtitle: "Start from a familiar direction",
+        paragraphs: [
+          "Use an existing fragrance as the reference point and develop a scent in a similar direction.",
+          "This can be a quicker, more accessible route, but it gives you less opportunity to create something genuinely distinctive in a crowded market.",
+        ],
+      },
+      {
+        title: "Bespoke",
+        subtitle: "Formulate something of your own",
+        paragraphs: [
+          "Work with a chemist to develop a fragrance around your brief, references and creative direction.",
+          "You’ll sample and refine the scent until the formula is ready for production.",
+          "Bespoke development takes more time and investment, but gives you a much stronger opportunity to create something that belongs to your brand.",
+        ],
+      },
+    ],
+    timelineTitle: "From idea to approved formula",
+    steps: [
+      {
+        title: "Define the direction",
+        paragraphs: [
+          "Tell us what you want the fragrance to feel like, who it’s for and any references you already have.",
+        ],
+      },
+      {
+        title: "Choose your route",
+        paragraphs: [
+          "Start from an existing fragrance direction or develop something bespoke with a chemist.",
+        ],
+      },
+      {
+        title: "Develop the first samples",
+        paragraphs: [
+          "We translate the brief into fragrance samples for you to experience and compare.",
+        ],
+      },
+      {
+        title: "Review and refine",
+        paragraphs: [
+          "Tell us what’s working and what isn’t. We adjust the fragrance and develop the next iteration.",
+        ],
+      },
+      {
+        title: "Approve the fragrance",
+        paragraphs: [
+          "Once the scent is right, the final direction is signed off.",
+        ],
+      },
+      {
+        title: "Confirm the concentration",
+        paragraphs: [
+          "Lock the concentration and final fragrance specification ready for costing and production.",
+        ],
+      },
+    ],
+  },
+  production: {
+    steps: [
+      {
+        title: "Lock the specification",
+        paragraphs: ["Bring the final decisions together:"],
+        points: [
+          "fragrance",
+          "concentration",
+          "bottle",
+          "cap",
+          "packaging",
+          "decoration / finish",
+        ],
+      },
+      {
+        title: "Confirm quantities and cost",
+        paragraphs: [
+          "Once the specification is defined, Basenote can provide the final quotation.",
+          "Costs will depend on the fragrance, components, packaging, finishes and order volume.",
+        ],
+        note: "Typical minimum order: 500 units per fragrance, depending on the product and components selected.",
+      },
+      {
+        title: "Approve the final sample",
+        paragraphs: [
+          "A production-ready sample gives you the opportunity to see the elements working together before the full order moves ahead.",
+          "Nothing goes into manufacture until the agreed sample is approved.",
+        ],
+      },
+      {
+        title: "Compliance and production checks",
+        paragraphs: [
+          "Before manufacture, the product needs to be checked against the relevant regulatory and production requirements.",
+          "This is where Basenote handles the technical work behind the scenes so the finished product is ready for its intended market.",
+        ],
+      },
+      {
+        title: "Sign off the project",
+        paragraphs: ["Once everything is agreed:"],
+        points: [
+          "final specification approved",
+          "final quotation approved",
+          "project plan agreed",
+          "production timeline confirmed",
+        ],
+        note: "The project is then ready to move into manufacture.",
+      },
+      {
+        title: "Production deposit",
+        paragraphs: [
+          "50% of the order value is invoiced before manufacture begins.",
+        ],
+      },
+    ],
+    qualification:
+      "Figures are a guide. The typical minimum order is 500 units per fragrance and can vary with the product and components selected. Final cost depends on the fragrance, components, packaging, volume, shipping, delivery and level of support. Bespoke fragrance development, custom packaging and more complex projects can take longer.",
+  },
+  final: {
+    primary: "Send us your choices",
+    secondary: "New to Basenote? Book your 15-minute consultation",
+    formTitle: "Your project details",
+    detailsTitle: "Your details",
+    choicesTitle: "What have you chosen so far?",
+    notesTitle: "Anything else?",
+    submit: "Submit my project details",
+    success:
+      "Got it. We’ll review your choices and come back to you with the next step.",
+  },
+  formFields: {
+    requiredHint: "Fields marked * are required. Everything else is optional.",
+    name: "Name",
+    email: "Email",
+    phone: "Phone / WhatsApp",
+    spoken: "Have you already spoken to someone at Basenote?",
+    choose: "Select one",
+    undecided: "Not sure yet",
+    packaging: "Packaging type",
+    bottle: "Bottle reference",
+    cap: "Cap reference",
+    finish: "Finish",
+    fragrance: "Fragrance route",
+    notes: "Notes / references",
+    images: "Upload images or inspiration if useful",
+    privacy: "Privacy policy",
+  },
+  labels: {
+    next: "Next",
+    jumpToReference: "Go to reference",
+    previousImage: "Previous image",
+    nextImage: "Next image",
+    imageUnavailable: "Ask us to see the available options.",
+    catalogueUnavailable: "Contact us to explore the full catalogue.",
+    step: "Step",
+    close: "Close form",
+    sending: "Sending your project details…",
+    error: "Something went wrong. Please try again.",
+    uploadHint: "Up to 3 images (JPG, PNG or WebP), 3 MB in total.",
+    privacy: "Your details are used to respond to your project enquiry.",
+  },
 };

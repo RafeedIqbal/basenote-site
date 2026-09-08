@@ -1,5 +1,7 @@
 # Private Label implementation handoff
 
+**Guide update:** [8 September guide redesign](private-label-guide-handoff.md) supersedes the guide architecture, draft prose and validation notes below with the supplied six-chapter design and PDF catalogues.
+
 **Latest review:** [8 September 2026 design review](private-label-design-review.md) records subsequent fixes and screenshots. It supersedes the original notes below about the blue wheel logo, playable ALPAC stand-in, and width-only pin breakpoint. ALPAC now displays the full supplied artwork until genuine footage is available; pins require 860×700px or larger.
 
 Implemented locally on `feat/private-label-page`. No push or deployment was performed. No runtime or development dependencies were added or removed.

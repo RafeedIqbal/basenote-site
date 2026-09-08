@@ -3,6 +3,7 @@
 import nodemailer from "nodemailer";
 
 import { guardPublicSubmission } from "@/lib/contact-form-guard";
+import { parseProjectImages } from "@/lib/private-label-project";
 
 export type ContactResult =
   | { success: true }
@@ -80,6 +81,9 @@ export async function submitContactForm(
     return { success: false, error: guardResult.error };
   }
 
+  const images = await parseProjectImages(formData);
+  if (!images.ok) return { success: false, error: images.error };
+
   const gmailUser = process.env.GMAIL_USER;
   const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
   const destinationInbox = process.env.DESTINATION_INBOX;
@@ -146,7 +150,8 @@ export async function submitContactForm(
       replyTo: email,
       subject,
       text: textBody,
-      html: htmlBody
+      html: htmlBody,
+      attachments: images.attachments
     });
   } catch (error) {
     console.error("Failed to send contact form email:", error);

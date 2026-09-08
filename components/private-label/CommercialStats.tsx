@@ -4,9 +4,12 @@ import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { privateLabel } from "@/data/site-content";
 import styles from "./PrivateLabel.module.css";
+import guideStyles from "./PrivateLabelGuide.module.css";
 
 const content = privateLabel.commercial;
-export default function CommercialStats() {
+export default function CommercialStats({
+  variant,
+}: { variant?: "guide" } = {}) {
   const root = useRef<HTMLElement>(null);
   useGSAP(
     () => {
@@ -61,6 +64,29 @@ export default function CommercialStats() {
     },
     { scope: root },
   );
+  if (variant === "guide")
+    return (
+      <section
+        ref={root}
+        className={guideStyles.expectations}
+        aria-labelledby="guide-commercial-title"
+      >
+        <h3 id="guide-commercial-title">{content.title}</h3>
+        <dl>
+          {content.stats.map((stat) => (
+            <div key={stat.label}>
+              <dt>{stat.label}</dt>
+              <dd>
+                <span className={styles.srOnly}>{stat.value}</span>
+                <span data-stat="" aria-hidden="true">
+                  {stat.value}
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    );
   return (
     <section
       id="what-to-expect"

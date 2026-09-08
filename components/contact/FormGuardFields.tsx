@@ -20,11 +20,11 @@ export default function FormGuardFields() {
 
   return (
     <>
+      {/* Keep this uncontrolled: a defaultValue can reset a hidden input on rerender. */}
       <input
         ref={submittedAtRef}
         type="hidden"
         name={FORM_SUBMITTED_AT_FIELD}
-        defaultValue=""
       />
       <div aria-hidden="true" className={styles.guardField}>
         <label htmlFor={FORM_HONEYPOT_FIELD}>Company website</label>

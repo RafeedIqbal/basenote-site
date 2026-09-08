@@ -17,6 +17,10 @@ export function setScrollLocked(value: boolean) {
 }
 
 export function scrollToPosition(top: number) {
-  if (activeLenis) activeLenis.scrollTo(top, { immediate: true });
-  else window.scrollTo({ top, behavior: "instant" });
+  if (activeLenis) {
+    // A responsive reflow or opened disclosure can change the scroll limit
+    // before Lenis's debounced ResizeObserver has caught up.
+    activeLenis.resize();
+    activeLenis.scrollTo(top, { immediate: true });
+  } else window.scrollTo({ top, behavior: "instant" });
 }
