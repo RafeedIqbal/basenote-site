@@ -1,0 +1,273 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.card {
+  position: relative;
+  min-width: 0;
+  border: 1px solid #76544566;
+  border-radius: 24px;
+  background: #211a16;
+  transition: background 250ms, border-color 250ms;
+}
+
+.trigger {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  border-radius: inherit;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.card .trigger:focus-visible {
+  outline: 2px solid #e2a38a;
+  outline-offset: 6px;
+}
+
+.summary {
+  min-height: 265px;
+  padding: 26px 24px;
+  pointer-events: none;
+}
+
+.number {
+  color: #d59d84;
+  font: 12px/1.6 var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+}
+
+.card .title {
+  margin: 38px 0 22px;
+  font: 400 31px/1.15 var(--font-serif), serif;
+  letter-spacing: -0.025em;
+}
+
+.card .subtitle {
+  margin: 0 0 18px;
+  color: var(--guide-muted);
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.expand {
+  display: block;
+  width: fit-content;
+  margin-top: 20px;
+  font-size: 26px;
+  transition: transform 300ms;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    border-color: #b7795e;
+    background: #362219;
+  }
+
+  .card:hover .expand {
+    transform: rotate(90deg);
+  }
+}
+
+/* Native modal semantics keep focus and pointer input within the drawer. */
+.drawer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100%;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  padding: 20px;
+  /* Keep the panel centered while the closed dialog finishes its exit transition. */
+  place-items: center;
+  overflow: hidden;
+  background: transparent;
+  color: #2b1c16;
+  opacity: 0;
+  transition:
+    opacity 350ms,
+    display 450ms allow-discrete,
+    overlay 450ms allow-discrete;
+}
+
+.drawer[open] {
+  display: grid;
+  opacity: 1;
+}
+
+.drawer::backdrop {
+  background: rgb(0 0 0 / 0%);
+  transition:
+    background 350ms,
+    display 450ms allow-discrete,
+    overlay 450ms allow-discrete;
+}
+
+.drawer[open]::backdrop {
+  background: rgb(0 0 0 / 60%);
+}
+
+.panel {
+  position: relative;
+  width: min(600px, 100%);
+  height: 90vh;
+  height: 90dvh;
+  max-height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 32px;
+  background: var(--guide-paper, #f1e9e2);
+  transform: scale(0.94);
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drawer[open] .panel {
+  transform: scale(1);
+}
+
+@starting-style {
+  .drawer[open] {
+    opacity: 0;
+  }
+
+  .drawer[open] .panel {
+    transform: scale(0.94);
+  }
+
+  .drawer[open]::backdrop {
+    background: rgb(0 0 0 / 0%);
+  }
+}
+
+.scrollArea {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #a57e6a transparent;
+}
+
+.drawer .close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #f1e9e240;
+  border-radius: 50%;
+  padding: 0;
+  color: #fff;
+  background: #301b12d9;
+  cursor: pointer;
+  transition: background 200ms;
+}
+
+.drawer .close:hover {
+  background: #943f2d;
+}
+
+.drawer .close:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 7px #572d20;
+}
+
+/* A typographic cover carries the guide's identity in place of demo imagery. */
+.cover {
+  display: grid;
+  place-items: center;
+  height: 300px;
+  overflow: hidden;
+  background:
+    linear-gradient(to top, var(--guide-paper, #f1e9e2), transparent 85%),
+    radial-gradient(ellipse at 85% 0%, #caa07d, transparent 65%),
+    #943f2d;
+}
+
+.cover > span {
+  padding-right: 0.08em;
+  color: #f1e9e2b3;
+  font: 400 220px/1 var(--font-serif), serif;
+  letter-spacing: -0.08em;
+}
+
+.body {
+  width: min(480px, 100%);
+  margin: auto;
+  padding: 0 40px 40px;
+}
+
+.drawer .drawerTitle {
+  margin: 0 0 16px;
+  color: #2b1c16;
+  font: 400 42px/1.1 var(--font-serif), serif;
+  letter-spacing: -0.035em;
+}
+
+.drawer .body p {
+  margin: 0 0 20px;
+  color: #594438;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.drawer .body .drawerSubtitle {
+  margin-bottom: 28px;
+  color: #843e2c;
+}
+
+.drawer .body p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1100px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .summary {
+    min-height: 0;
+    padding: 25px;
+  }
+
+  .card .title {
+    margin: 15px 0;
+  }
+
+  .expand {
+    position: absolute;
+    top: 8px;
+    right: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .body {
+    padding-inline: 28px;
+  }
+
+  .drawer .drawerTitle {
+    font-size: 36px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .expand,
+  .drawer,
+  .drawer::backdrop,
+  .panel,
+  .drawer .close {
+    transition: none;
+  }
+}

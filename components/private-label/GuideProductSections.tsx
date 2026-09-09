@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useId, useRef, useState, type KeyboardEvent } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import {
   privateLabel,
   privateLabelGuide as content,
   type GuideImage,
-  type GuideCatalogueItem,
 } from "@/data/site-content";
+import GuideCatalogue from "./GuideCatalogue";
 import styles from "./PrivateLabelGuide.module.css";
 
 const number = (value: number) => String(value + 1).padStart(2, "0");
@@ -199,135 +199,6 @@ export function Packaging() {
   );
 }
 
-function Catalogue({
-  items,
-  title,
-}: {
-  items: GuideCatalogueItem[];
-  title: string;
-}) {
-  const track = useRef<HTMLDivElement>(null);
-  const trackId = useId();
-  const selectId = useId();
-  const [active, setActive] = useState(0);
-  const select = (index: number) => {
-    const node = track.current;
-    const item = node?.children[index] as HTMLElement | undefined;
-    if (!node || !item) return;
-    const first = node.children[0] as HTMLElement;
-    node.scrollTo({
-      left: item.offsetLeft - first.offsetLeft,
-      behavior: "instant",
-    });
-    setActive(index);
-  };
-  if (!items.length) return <UnavailableImage title={title} />;
-  return (
-    <div
-      className={styles.catalogue}
-      role="region"
-      aria-roledescription="carousel"
-      aria-label={title}
-    >
-      <div className={styles.catalogueJump}>
-        <label htmlFor={selectId}>{content.labels.jumpToReference}</label>
-        <select
-          id={selectId}
-          aria-label={`${title}: ${content.labels.jumpToReference}`}
-          aria-controls={trackId}
-          value={active}
-          onChange={(event) => select(Number(event.target.value))}
-        >
-          {items.map((item, index) => (
-            <option key={item.number} value={index}>
-              {item.number}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div
-        id={trackId}
-        className={styles.catalogueTrack}
-        ref={track}
-        tabIndex={0}
-        aria-label={`${title} — use arrow keys to browse`}
-        onKeyDown={(event) => {
-          let next = active;
-          if (event.key === "ArrowRight")
-            next = Math.min(active + 1, items.length - 1);
-          else if (event.key === "ArrowLeft") next = Math.max(active - 1, 0);
-          else if (event.key === "Home") next = 0;
-          else if (event.key === "End") next = items.length - 1;
-          else return;
-          event.preventDefault();
-          select(next);
-        }}
-        onScroll={() => {
-          const node = track.current;
-          const first = node?.children[0] as HTMLElement | undefined;
-          const second = node?.children[1] as HTMLElement | undefined;
-          if (node && first) {
-            const step = second
-              ? second.offsetLeft - first.offsetLeft
-              : first.offsetWidth;
-            setActive(
-              Math.min(
-                items.length - 1,
-                Math.max(0, Math.round(node.scrollLeft / step)),
-              ),
-            );
-          }
-        }}
-      >
-        {items.map((item, index) => (
-          <figure
-            key={item.src}
-            className={styles.catalogueItem}
-            aria-label={`${item.number}, ${index + 1} of ${items.length}`}
-          >
-            <div>
-              <Image
-                src={item.src}
-                alt={item.alt}
-                fill
-                sizes="(max-width: 859px) 220px, 230px"
-              />
-            </div>
-            <figcaption>{item.number}</figcaption>
-          </figure>
-        ))}
-      </div>
-      <div className={styles.galleryControls}>
-        <button
-          type="button"
-          disabled={active === 0}
-          onClick={() => select(active - 1)}
-          aria-label={`Previous ${title.toLowerCase()}`}
-          aria-controls={trackId}
-        >
-          ←
-        </button>
-        <span
-          aria-live="polite"
-          aria-atomic="true"
-          aria-label={`${items[active].number}, ${active + 1} of ${items.length}`}
-        >
-          {number(active)} / {number(items.length - 1)}
-        </span>
-        <button
-          type="button"
-          disabled={active >= items.length - 1}
-          onClick={() => select(active + 1)}
-          aria-label={`Next ${title.toLowerCase()}`}
-          aria-controls={trackId}
-        >
-          →
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export function BottleAndCap() {
   const [active, setActive] = useState(0);
   const components = content.components;
@@ -344,7 +215,7 @@ export function BottleAndCap() {
           </span>
           <h3 id={`component-${index}-title`}>{part.title}</h3>
           <p>{part.description}</p>
-          <Catalogue
+          <GuideCatalogue
             title={index === 0 ? "Caps" : "Bottles"}
             items={part.items}
           />

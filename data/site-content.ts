@@ -836,14 +836,15 @@ export type PrivateLabelGuideContent = {
     privacy: string;
   };
   labels: {
-    next: string;
     jumpToReference: string;
+    catalogueKeyboardHint: string;
     previousImage: string;
     nextImage: string;
     imageUnavailable: string;
     catalogueUnavailable: string;
     step: string;
     close: string;
+    closeDrawer: string;
     sending: string;
     error: string;
     uploadHint: string;
@@ -1174,14 +1175,15 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
     privacy: "Privacy policy",
   },
   labels: {
-    next: "Next",
     jumpToReference: "Go to reference",
+    catalogueKeyboardHint: "Use the left and right arrow keys to explore references. Home and End jump to the first and last reference. Page Up and Page Down move by nine references.",
     previousImage: "Previous image",
     nextImage: "Next image",
     imageUnavailable: "Ask us to see the available options.",
     catalogueUnavailable: "Contact us to explore the full catalogue.",
     step: "Step",
     close: "Close form",
+    closeDrawer: "Close details",
     sending: "Sending your project details…",
     error: "Something went wrong. Please try again.",
     uploadHint: "Up to 3 images (JPG, PNG or WebP), 3 MB in total.",

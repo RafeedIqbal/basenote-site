@@ -1,0 +1,157 @@
+.timeline {
+  --marker-size: 44px;
+  --step-gap: 32px;
+  --timeline-accent: #bc7b60;
+  display: grid;
+  gap: var(--step-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0 0 24px;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: var(--marker-size) minmax(0, 1fr);
+  gap: 24px;
+  position: relative;
+  border-radius: 8px;
+  scroll-margin-block: calc(var(--header-height) + 24px);
+}
+
+.rail {
+  position: relative;
+}
+
+.number {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--marker-size);
+  height: var(--marker-size);
+  border: 1px solid #b979515c;
+  border-radius: 50%;
+  background: #221b15;
+  color: #e7c0aa;
+  font: 13px/1 var(--font-mono), monospace;
+  transition:
+    background 280ms ease,
+    border-color 280ms ease,
+    color 280ms ease,
+    transform 350ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.connector {
+  position: absolute;
+  top: var(--marker-size);
+  bottom: calc(-1 * var(--step-gap));
+  left: calc((var(--marker-size) - 1px) / 2);
+  width: 1px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #8a563b40;
+}
+
+.fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--timeline-accent);
+  opacity: 0.75;
+  transform-origin: center top;
+}
+
+.step:first-child .connector {
+  mask-image: linear-gradient(transparent, #000 40%);
+}
+
+.step:last-child .connector {
+  bottom: -24px;
+  mask-image: linear-gradient(#000, transparent);
+}
+
+.copy {
+  min-width: 0;
+  max-width: 65ch;
+  padding-block: 10px;
+}
+
+.timeline .copy h3 {
+  font-size: 26px;
+  line-height: 1.2;
+  margin: 0 0 14px;
+}
+
+.timeline .copy > :last-child {
+  margin-bottom: 0;
+}
+
+.points {
+  columns: 2;
+  padding-left: 20px;
+  margin: 18px 0;
+  color: #cbb5a6;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.points li {
+  break-inside: avoid;
+  padding-right: 20px;
+}
+
+.timeline .copy .note {
+  color: #e7b89b;
+}
+
+.step:focus .number {
+  background: var(--pl-canyon);
+  border-color: var(--timeline-accent);
+  color: var(--guide-paper);
+  transform: scale(1.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .step:hover .number {
+    background: var(--pl-canyon);
+    border-color: var(--timeline-accent);
+    color: var(--guide-paper);
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: 859px) {
+  .timeline {
+    --marker-size: 38px;
+  }
+
+  .step {
+    gap: 18px;
+  }
+
+  .number {
+    font-size: 12px;
+  }
+
+  .copy {
+    padding-block: 5px;
+  }
+
+  .timeline .copy h3 {
+    font-size: 25px;
+  }
+
+  .points {
+    columns: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .number {
+    transition: none;
+  }
+
+  .timeline .step .number {
+    transform: none;
+  }
+}

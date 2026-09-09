@@ -23,9 +23,17 @@
 }
 .cover {
   position: relative;
+  isolation: isolate;
   width: 100%;
   min-height: min(850px, calc(100svh - 72px));
   padding: 34px max(40px, calc((100vw - 1320px) / 2));
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background:
     radial-gradient(
       ellipse at 95% 100%,
@@ -34,7 +42,12 @@
       transparent 70%
     ),
     linear-gradient(115deg, #100d0b 20%, #2e1912 70%, #622c20);
-  border-bottom: 1px solid var(--guide-line);
+  /* Fade only the artwork into the shared canvas, keeping the text opaque. */
+  mask-image: linear-gradient(
+    to bottom,
+    #000 calc(100% - clamp(180px, 22vw, 360px)),
+    transparent 100%
+  );
 }
 .coverTop,
 .coverBottom {
@@ -69,16 +82,6 @@
   font-size: 17px;
   line-height: 1.85;
   margin: 0;
-}
-.roundLink {
-  display: inline-grid;
-  place-items: center;
-  border: 1px solid #ba8a7370;
-  border-radius: 50%;
-  width: 52px;
-  height: 52px;
-  margin-top: 30px;
-  font-size: 22px;
 }
 .coverContents {
   padding-bottom: 6px;
@@ -137,7 +140,7 @@
 .rail ol {
   list-style: none;
   padding: 0;
-  margin: 24px 0;
+  margin: 0 0 24px;
 }
 .rail a {
   display: grid;
@@ -222,79 +225,6 @@
   letter-spacing: -0.025em;
   margin: 16px 0 22px;
 }
-.nextChapter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid var(--guide-line);
-  border-bottom: 1px solid var(--guide-line);
-  margin-top: 70px;
-  padding: 25px 0;
-}
-.nextChapter > span:first-child {
-  display: grid;
-  gap: 9px;
-  font:
-    12px var(--font-mono),
-    monospace;
-  text-transform: uppercase;
-  color: #be8f78;
-}
-.nextChapter strong {
-  color: #e9ddd4;
-  font:
-    400 17px var(--font-body),
-    sans-serif;
-  text-transform: none;
-}
-.nextChapter > span:last-child {
-  font-size: 35px;
-  color: #cd9278;
-}
-.elements {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
-  gap: 12px;
-}
-.element {
-  background: #211a16;
-  border: 1px solid #76544566;
-  transition: background 0.25s;
-}
-.element[open] {
-  background: #763625;
-}
-.element summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 26px 24px;
-  position: relative;
-  min-height: 265px;
-}
-.element summary::-webkit-details-marker {
-  display: none;
-}
-.element summary h3 {
-  margin-top: 38px;
-}
-.element summary p {
-  font-size: 16px;
-}
-.element[open] :is(p, .eyebrow) {
-  color: #f2d8c8;
-}
-.expand {
-  display: block;
-  font-size: 26px;
-  margin-top: 20px;
-}
-.element[open] .expand {
-  transform: rotate(45deg);
-}
-.elementBody {
-  padding: 0 24px 22px;
-}
 @media (max-width: 1100px) {
   .guide {
     grid-template-columns: 170px minmax(0, 1fr);
@@ -302,21 +232,6 @@
   }
   .coverLayout {
     gap: 45px;
-  }
-  .elements {
-    grid-template-columns: 1fr;
-  }
-  .element summary {
-    min-height: 0;
-    padding: 25px;
-  }
-  .element summary h3 {
-    margin: 15px 0;
-  }
-  .expand {
-    position: absolute;
-    right: 25px;
-    top: 8px;
   }
 }
 @media (max-width: 859px) {
@@ -362,7 +277,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4px 20px;
-    margin: 15px 0;
+    margin: 0 0 15px;
   }
   .rail a {
     font-size: 14px;
@@ -382,12 +297,6 @@
   .chapterHeader h2 {
     font-size: 39px;
     margin-top: 15px;
-  }
-  .nextChapter {
-    margin-top: 45px;
-  }
-  .nextChapter strong {
-    font-size: 15px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -532,66 +441,6 @@
 .componentSection > p {
   max-width: 64ch;
 }
-.catalogue {
-  margin-top: 35px;
-}
-.catalogueJump {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 20px;
-  margin-bottom: 20px;
-}
-.catalogueJump label {
-  color: var(--guide-muted);
-  font-size: 14px;
-}
-.catalogueJump select {
-  max-width: 100%;
-  min-height: 44px;
-  padding: 10px 35px 10px 12px;
-  border: 1px solid var(--guide-line);
-  background: #211b17;
-  color: #e4cbbd;
-  color-scheme: dark;
-  font-size: 16px;
-  cursor: pointer;
-}
-.catalogueTrack {
-  --item-width: min(230px, 100%);
-  display: flex;
-  position: relative;
-  gap: 16px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-  scrollbar-color: #765344 transparent;
-  padding: 0 max(0px, calc(100% - var(--item-width))) 16px 0;
-}
-.catalogueItem {
-  flex: 0 0 var(--item-width);
-  margin: 0;
-  scroll-snap-align: start;
-}
-.catalogueItem > div {
-  position: relative;
-  height: 300px;
-  background: #eeeeec;
-  overflow: hidden;
-}
-.catalogueItem img {
-  object-fit: contain;
-  mix-blend-mode: multiply;
-}
-.catalogueItem figcaption {
-  padding: 20px 10px 5px;
-  text-align: center;
-  font:
-    14px var(--font-mono),
-    monospace;
-  color: #e4cbbd;
-}
 .sourcing {
   display: flex;
   gap: 28px;
@@ -733,9 +582,6 @@
 }
 .timeline > li:last-child {
   padding-bottom: 0;
-}
-.productionTimeline > li {
-  padding-bottom: 45px;
 }
 .stepPoints {
   padding-left: 20px;
@@ -962,12 +808,6 @@
   .componentSection {
     margin-top: 45px;
     padding-top: 30px;
-  }
-  .catalogueTrack {
-    --item-width: min(220px, 100%);
-  }
-  .catalogueItem > div {
-    height: 280px;
   }
   .sourcing {
     gap: 20px;

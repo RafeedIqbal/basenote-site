@@ -8,11 +8,13 @@ import {
   privateLabel,
   privateLabelGuide as content,
   type PrivateLabelGuideChapter,
-  type GuideStep,
 } from "@/data/site-content";
 import { SiteFrame } from "@/components/site/shared";
 import { Packaging, BottleAndCap } from "./GuideProductSections";
 import GuideProjectForm from "./GuideProjectForm";
+import GuideElementCards from "./GuideElementCards";
+import GuideProductionTimeline from "./GuideProductionTimeline";
+import GuideTimeline from "./GuideTimeline";
 import CommercialStats from "./CommercialStats";
 import { FloatingChat } from "./PrivateLabelChrome";
 import common from "./PrivateLabel.module.css";
@@ -52,7 +54,6 @@ function Chapter({
   chapter: PrivateLabelGuideChapter;
   children?: ReactNode;
 }) {
-  const next = content.chapters[Number(chapter.number)];
   return (
     <section
       id={chapter.id}
@@ -75,80 +76,7 @@ function Chapter({
         </div>
       </header>
       {children}
-      {next ? (
-        <a
-          className={styles.nextChapter}
-          href={`#${next.id}`}
-          onClick={navigateChapter}
-        >
-          <span>
-            {content.labels.next}
-            <strong>
-              {next.number} / {next.title}
-            </strong>
-          </span>
-          <span aria-hidden="true">↗</span>
-        </a>
-      ) : null}
     </section>
-  );
-}
-
-function Elements() {
-  return (
-    <div className={styles.elements}>
-      {content.elements.map((element, index) => (
-        <details className={styles.element} key={element.title}>
-          <summary>
-            <span className={styles.eyebrow}>{number(index)}</span>
-            <h3>{element.title}</h3>
-            <p>{element.subtitle}</p>
-            <span className={styles.expand} aria-hidden="true">
-              +
-            </span>
-          </summary>
-          <div className={styles.elementBody}>
-            {element.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
-        </details>
-      ))}
-    </div>
-  );
-}
-
-function Timeline({
-  steps,
-  production = false,
-}: {
-  steps: GuideStep[];
-  production?: boolean;
-}) {
-  return (
-    <ol
-      className={`${styles.timeline} ${production ? styles.productionTimeline : ""}`}
-    >
-      {steps.map((step, index) => (
-        <li key={step.title}>
-          <span className={styles.stepNumber}>{number(index)}</span>
-          <div>
-            <h3>{step.title}</h3>
-            {step.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            {step.points ? (
-              <ul className={styles.stepPoints}>
-                {step.points.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-            ) : null}
-            {step.note ? <p className={styles.stepNote}>{step.note}</p> : null}
-          </div>
-        </li>
-      ))}
-    </ol>
   );
 }
 
@@ -168,10 +96,14 @@ function Fragrance() {
           </article>
         ))}
       </div>
-      <h3 className={styles.timelineTitle}>
+      <h3 id="fragrance-timeline-title" className={styles.timelineTitle}>
         {content.fragrance.timelineTitle}
       </h3>
-      <Timeline steps={content.fragrance.steps} />
+      <GuideTimeline
+        steps={content.fragrance.steps}
+        stepLabel={content.labels.step}
+        labelledBy="fragrance-timeline-title"
+      />
     </>
   );
 }
@@ -179,7 +111,7 @@ function Fragrance() {
 function Production() {
   return (
     <>
-      <Timeline steps={content.production.steps} production />
+      <GuideProductionTimeline steps={content.production.steps} />
       <CommercialStats variant="guide" />
       <p className={styles.qualification}>{content.production.qualification}</p>
     </>
@@ -258,14 +190,6 @@ export default function PrivateLabelGuidePage() {
           <div className={styles.coverCopy}>
             <h1>{content.title}</h1>
             <p>{content.introduction}</p>
-            <a
-              href="#start-here"
-              onClick={navigateChapter}
-              className={styles.roundLink}
-              aria-label="Start the guide"
-            >
-              <span aria-hidden="true">↓</span>
-            </a>
           </div>
           <nav
             className={styles.coverContents}
@@ -293,7 +217,6 @@ export default function PrivateLabelGuidePage() {
       <div ref={root} className={styles.guide}>
         <aside className={styles.rail}>
           <nav aria-label="Chapter navigation" data-lenis-prevent>
-            <span className={styles.eyebrow}>{content.contentsLabel}</span>
             <ol>
               {content.chapters.map((chapter, index) => (
                 <li key={chapter.id}>
@@ -320,7 +243,7 @@ export default function PrivateLabelGuidePage() {
             <Chapter chapter={chapter} key={chapter.id}>
               {
                 [
-                  <Elements key="elements" />,
+                  <GuideElementCards key="elements" />,
                   <Packaging key="packaging" />,
                   <BottleAndCap key="components" />,
                   <Fragrance key="fragrance" />,
