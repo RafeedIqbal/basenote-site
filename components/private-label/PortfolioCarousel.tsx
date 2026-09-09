@@ -28,6 +28,7 @@ type CarouselMotion = {
   startDrag: () => void;
   drag: (distance: number) => void;
   endDrag: () => void;
+  updateAutoplay: () => void;
 };
 
 const wrap = (value: number, length: number) =>
@@ -61,6 +62,7 @@ export default function PortfolioCarousel({
   const selected = useRef(start);
   const onChange = useRef(onActiveChange);
   const hovering = useRef(false);
+  const focused = useRef(false);
   const dragged = useRef(false);
   const pointer = useRef<{
     id: number;
@@ -106,6 +108,7 @@ export default function PortfolioCarousel({
           let dragStart = phase.value;
           let target = phase.value;
           let focusAfterSelection = false;
+          let ticking = false;
 
           const draw = () => {
             const current = phase.value + drift;
@@ -156,16 +159,21 @@ export default function PortfolioCarousel({
               entry.button.style.width = `${entry.size + 0.75}px`;
               entry.button.style.height = `${entry.size / aspectRatio}px`;
               entry.button.style.transform = `translate3d(${entry.x}px, -50%, 0)`;
-              entry.button.style.zIndex = `${Math.round(swell(entry.distance) * 100)}`;
-              entry.button.style.visibility = inView ? "visible" : "hidden";
-              entry.button.dataset.active = String(isActive);
-              entry.button.tabIndex = isActive ? 0 : -1;
-              entry.button.setAttribute(
-                "aria-hidden",
-                String(!representative || !inView),
-              );
-              if (isActive) entry.button.setAttribute("aria-current", "true");
-              else entry.button.removeAttribute("aria-current");
+              const zIndex = `${Math.round(swell(entry.distance) * 100)}`;
+              const visibility = inView ? "visible" : "hidden";
+              const hidden = String(!representative || !inView);
+              if (entry.button.style.zIndex !== zIndex)
+                entry.button.style.zIndex = zIndex;
+              if (entry.button.style.visibility !== visibility)
+                entry.button.style.visibility = visibility;
+              if (entry.button.dataset.active !== String(isActive)) {
+                entry.button.dataset.active = String(isActive);
+                entry.button.tabIndex = isActive ? 0 : -1;
+                if (isActive) entry.button.setAttribute("aria-current", "true");
+                else entry.button.removeAttribute("aria-current");
+              }
+              if (entry.button.getAttribute("aria-hidden") !== hidden)
+                entry.button.setAttribute("aria-hidden", hidden);
             }
 
             const index = wrap(Math.round(current), count);
@@ -234,6 +242,7 @@ export default function PortfolioCarousel({
               }
             },
             endDrag: () => settle(Math.round(phase.value + drift)),
+            updateAutoplay: () => updateAutoplay(),
           };
 
           const resize = new ResizeObserver(() => {
@@ -245,29 +254,42 @@ export default function PortfolioCarousel({
           const visibility = new IntersectionObserver(
             ([entry]) => {
               visible = entry.isIntersecting;
+              updateAutoplay();
             },
             { threshold: 0.1 },
           );
           visibility.observe(track);
 
           const tick = (_time: number, delta: number) => {
-            if (
-              !autoPlay ||
-              count < 2 ||
-              !visible ||
-              document.hidden ||
-              hovering.current
-            )
-              return;
             drift += (Math.min(delta, 64) / 1000) * 0.06;
             draw();
           };
+          // Returning early from a ticker still keeps GSAP's RAF loop awake.
+          // Register it only while the carousel is able to advance unattended.
+          const updateAutoplay = () => {
+            const shouldTick =
+              !reduced &&
+              autoPlay &&
+              count > 1 &&
+              visible &&
+              !document.hidden &&
+              !hovering.current &&
+              !focused.current &&
+              !pointer.current;
+            if (shouldTick === ticking) return;
+            ticking = shouldTick;
+            if (ticking) gsap.ticker.add(tick);
+            else gsap.ticker.remove(tick);
+          };
+          document.addEventListener("visibilitychange", updateAutoplay);
           draw();
-          if (!reduced) gsap.ticker.add(tick);
+          updateAutoplay();
 
           return () => {
+            motion.current = null;
             tween?.kill();
             gsap.ticker.remove(tick);
+            document.removeEventListener("visibilitychange", updateAutoplay);
             resize.disconnect();
             visibility.disconnect();
             const pointerId = pointer.current?.id;
@@ -275,7 +297,6 @@ export default function PortfolioCarousel({
               track.releasePointerCapture(pointerId);
             pointer.current = null;
             track.dataset.dragging = "false";
-            motion.current = null;
           };
         },
       );
@@ -298,11 +319,25 @@ export default function PortfolioCarousel({
       style={{ "--image-aspect-ratio": aspectRatio } as CSSProperties}
       aria-label={label}
       aria-roledescription="carousel"
+      onFocusCapture={() => {
+        focused.current = true;
+        motion.current?.updateAutoplay();
+      }}
+      onBlurCapture={(event) => {
+        focused.current = event.currentTarget.contains(event.relatedTarget);
+        motion.current?.updateAutoplay();
+      }}
       onPointerEnter={(event) => {
-        if (event.pointerType === "mouse") hovering.current = true;
+        if (event.pointerType === "mouse") {
+          hovering.current = true;
+          motion.current?.updateAutoplay();
+        }
       }}
       onPointerLeave={(event) => {
-        if (event.pointerType === "mouse") hovering.current = false;
+        if (event.pointerType === "mouse") {
+          hovering.current = false;
+          motion.current?.updateAutoplay();
+        }
       }}
       onPointerMove={(event) => {
         if (event.pointerType !== "mouse" || !pointer.current) return;
@@ -313,8 +348,10 @@ export default function PortfolioCarousel({
           event.clientX < bounds.right &&
           event.clientY >= bounds.top &&
           event.clientY < bounds.bottom;
+        motion.current?.updateAutoplay();
       }}
       onKeyDown={(event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
         if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
         event.preventDefault();
         motion.current?.select(
@@ -336,6 +373,7 @@ export default function PortfolioCarousel({
             moved: false,
           };
           motion.current?.startDrag();
+          motion.current?.updateAutoplay();
         }}
         onPointerMove={(event) => {
           const start = pointer.current;
@@ -368,20 +406,28 @@ export default function PortfolioCarousel({
               motion.current?.select(event.clientX < start.x ? 1 : -1);
             } else motion.current?.endDrag();
           }
+          motion.current?.updateAutoplay();
         }}
-        onPointerCancel={() => {
+        onPointerCancel={(event) => {
+          if (pointer.current?.id !== event.pointerId) return;
           pointer.current = null;
           dragged.current = false;
           if (viewport.current) viewport.current.dataset.dragging = "false";
           motion.current?.endDrag();
+          motion.current?.updateAutoplay();
         }}
         onLostPointerCapture={(event) => {
           // Touch starts with implicit capture on the image button. Transferring
           // it to the viewport must not cancel the gesture as that event bubbles.
-          if (event.target !== event.currentTarget || !pointer.current) return;
+          if (
+            event.target !== event.currentTarget ||
+            pointer.current?.id !== event.pointerId
+          )
+            return;
           pointer.current = null;
           if (viewport.current) viewport.current.dataset.dragging = "false";
           motion.current?.endDrag();
+          motion.current?.updateAutoplay();
         }}
         onClickCapture={(event) => {
           if (event.detail !== 0 && dragged.current) {

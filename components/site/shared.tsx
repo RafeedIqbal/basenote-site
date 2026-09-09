@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { scrollToPosition } from "@/lib/scroll";
+import { getHashTarget, scrollToAnchor } from "@/lib/scroll";
 import type { FaqItem } from "@/data/site-content";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
@@ -18,38 +18,30 @@ export function SiteFrame({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!window.location.hash) return;
     let alive = true;
     let frame = 0;
     const alignHash = () => {
-      if (!alive) return;
+      if (!alive || !getHashTarget(window.location.hash)) return;
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         ScrollTrigger.refresh();
         frame = requestAnimationFrame(() => {
           if (!alive) return;
-          const target = document.getElementById(
-            decodeURIComponent(window.location.hash.slice(1)),
-          );
+          const target = getHashTarget(window.location.hash);
           if (!target) return;
-          const pin = ScrollTrigger.getAll().find(
-            (item) => item.trigger === target && item.vars.pin,
-          );
-          scrollToPosition(
-            pin
-              ? pin.start
-              : target.getBoundingClientRect().top + window.scrollY - 88,
-          );
+          scrollToAnchor(target);
         });
       });
     };
     // Pin spacers must exist before resolving a hash loaded from another page.
     void document.fonts.ready.then(alignHash);
     window.addEventListener("load", alignHash, { once: true });
+    window.addEventListener("hashchange", alignHash);
     return () => {
       alive = false;
       cancelAnimationFrame(frame);
       window.removeEventListener("load", alignHash);
+      window.removeEventListener("hashchange", alignHash);
     };
   }, []);
   useGSAP(
@@ -83,7 +75,7 @@ export function SiteFrame({
   return (
     <div ref={rootRef} className={`${styles.page} ${className}`}>
       <SiteHeader />
-      <main id="main-content">{children}</main>
+      <main id="main-content" tabIndex={-1}>{children}</main>
       <SiteFooter />
     </div>
   );

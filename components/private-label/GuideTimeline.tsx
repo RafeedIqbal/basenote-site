@@ -29,13 +29,11 @@ export default function GuideTimeline({
 
       media.add("(prefers-reduced-motion: no-preference)", () => {
         let current = -1;
+        let positions: number[] = [];
         const update = () => {
-          const readingLine = window.innerHeight * 0.55;
-          const next = items.reduce(
-            (index, item, candidate) =>
-              item.getBoundingClientRect().top <= readingLine
-                ? candidate
-                : index,
+          const readingLine = window.scrollY + window.innerHeight * 0.55;
+          const next = positions.reduce(
+            (index, top, candidate) => top <= readingLine ? candidate : index,
             0,
           );
           if (next !== current) {
@@ -43,18 +41,25 @@ export default function GuideTimeline({
             setReading(next);
           }
         };
+        const refresh = () => {
+          // Read layout when dimensions change, not on every scrolling frame.
+          positions = items.map(
+            (item) => item.getBoundingClientRect().top + window.scrollY,
+          );
+          update();
+        };
 
         ScrollTrigger.create({
           trigger: element,
           start: "top 75%",
           end: "bottom 20%",
           onUpdate: update,
-          onRefresh: update,
+          onRefresh: refresh,
           onToggle: (self) => {
             element.dataset.inView = String(self.isActive);
           },
         });
-        update();
+        refresh();
 
         return () => {
           delete element.dataset.inView;

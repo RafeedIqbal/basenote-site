@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { navigateToAnchor } from "@/lib/scroll";
 import { privateLabel as content, privateLabelFaqs } from "@/data/site-content";
 import { SiteFrame, FaqList } from "@/components/site/shared";
 import PortfolioCarousel from "./PortfolioCarousel";
@@ -27,7 +28,7 @@ export default function PrivateLabelPage() {
               {content.hero.primary}
               <span aria-hidden="true">↗</span>
             </Link>
-            <Link href="#client-journey" className={styles.textLink}>
+            <Link href="#client-journey" className={styles.textLink} onClick={navigateToAnchor}>
               {content.hero.secondary}
               <span aria-hidden="true">↓</span>
             </Link>

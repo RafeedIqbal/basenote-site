@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { scrollToPosition } from "@/lib/scroll";
+import { navigateToAnchor } from "@/lib/scroll";
 import {
   privateLabel,
   privateLabelGuide as content,
@@ -21,31 +21,6 @@ import common from "./PrivateLabel.module.css";
 import styles from "./PrivateLabelGuide.module.css";
 
 const number = (index: number) => String(index + 1).padStart(2, "0");
-
-function navigateChapter(event: MouseEvent<HTMLAnchorElement>) {
-  if (
-    event.button !== 0 ||
-    event.metaKey ||
-    event.ctrlKey ||
-    event.shiftKey ||
-    event.altKey
-  )
-    return;
-  const hash = event.currentTarget.hash;
-  const target = document.getElementById(hash.slice(1));
-  if (!target) return;
-  event.preventDefault();
-  event.stopPropagation();
-  if (window.location.hash !== hash) window.history.pushState(null, "", hash);
-  const padding = parseFloat(
-    getComputedStyle(document.documentElement).scrollPaddingTop,
-  ) || 0;
-  const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-  scrollToPosition(
-    target.getBoundingClientRect().top + window.scrollY - padding - margin,
-  );
-  target.focus({ preventScroll: true });
-}
 
 function Chapter({
   chapter,
@@ -146,37 +121,87 @@ function MakeItReal() {
   );
 }
 
-export default function PrivateLabelGuidePage() {
-  const root = useRef<HTMLDivElement>(null);
+function ChapterRail() {
+  const root = useRef<HTMLElement>(null);
   const progress = useRef<HTMLProgressElement>(null);
   const [active, setActive] = useState(0);
   useGSAP(
     () => {
+      const guide = root.current?.parentElement;
+      if (!guide) return;
+      let positions: number[] = [];
+      let current = -1;
+      let refreshFrame = 0;
       const update = (self: ScrollTrigger) => {
         if (progress.current) progress.current.value = self.progress * 100;
-        setActive(
-          content.chapters.reduce((current, chapter, index) => {
-            const element = document.getElementById(chapter.id);
-            return element &&
-              element.getBoundingClientRect().top <= window.innerHeight * 0.4
-              ? index
-              : current;
-          }, 0),
+        const readingLine = window.scrollY + window.innerHeight * 0.4;
+        const next = positions.reduce(
+          (index, top, candidate) => top <= readingLine ? candidate : index,
+          0,
         );
+        if (next !== current) {
+          current = next;
+          setActive(next);
+        }
+      };
+      const measure = (self: ScrollTrigger) => {
+        // Chapter positions change with layout, not with ordinary scrolling.
+        positions = content.chapters.map((chapter) => {
+          const element = document.getElementById(chapter.id);
+          return element
+            ? element.getBoundingClientRect().top + window.scrollY
+            : Infinity;
+        });
+        update(self);
       };
       ScrollTrigger.create({
-        trigger: root.current,
+        trigger: guide,
         start: "top 100px",
         end: "bottom bottom",
         onUpdate: update,
-        onRefresh: update,
+        onRefresh: measure,
       });
-      const resize = new ResizeObserver(() => ScrollTrigger.refresh());
-      if (root.current) resize.observe(root.current);
-      return () => resize.disconnect();
+      const resize = new ResizeObserver(() => {
+        cancelAnimationFrame(refreshFrame);
+        refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      });
+      resize.observe(guide);
+      return () => {
+        resize.disconnect();
+        cancelAnimationFrame(refreshFrame);
+      };
     },
     { scope: root },
   );
+  return (
+    <aside ref={root} className={styles.rail}>
+      <nav aria-label="Chapter navigation" data-lenis-prevent>
+        <ol>
+          {content.chapters.map((chapter, index) => (
+            <li key={chapter.id}>
+              <a
+                href={`#${chapter.id}`}
+                onClick={navigateToAnchor}
+                aria-current={active === index ? "location" : undefined}
+              >
+                <span>{chapter.number}</span>
+                <span>{chapter.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <progress
+          ref={progress}
+          value={0}
+          max={100}
+          aria-label={content.progressLabel}
+        />
+      </nav>
+    </aside>
+  );
+}
+
+export default function PrivateLabelGuidePage() {
   return (
     <SiteFrame className={`${common.page} ${styles.page}`}>
       <header id="guide-intro" className={styles.cover} tabIndex={-1}>
@@ -199,7 +224,7 @@ export default function PrivateLabelGuidePage() {
             <ol>
               {content.chapters.map((chapter) => (
                 <li key={chapter.id}>
-                  <a href={`#${chapter.id}`} onClick={navigateChapter}>
+                  <a href={`#${chapter.id}`} onClick={navigateToAnchor}>
                     <span>{chapter.number}</span>
                     {chapter.title}
                     <span aria-hidden="true">↗</span>
@@ -214,30 +239,8 @@ export default function PrivateLabelGuidePage() {
           <span>From the first idea to the finished product</span>
         </div>
       </header>
-      <div ref={root} className={styles.guide}>
-        <aside className={styles.rail}>
-          <nav aria-label="Chapter navigation" data-lenis-prevent>
-            <ol>
-              {content.chapters.map((chapter, index) => (
-                <li key={chapter.id}>
-                  <a
-                    href={`#${chapter.id}`}
-                    onClick={navigateChapter}
-                    aria-current={active === index ? "location" : undefined}
-                  >
-                    <span>{chapter.number}</span>
-                    <span>{chapter.title}</span>
-                  </a>
-                </li>
-              ))}
-            </ol>
-            <progress
-              ref={progress}
-              max={100}
-              aria-label={content.progressLabel}
-            />
-          </nav>
-        </aside>
+      <div className={styles.guide}>
+        <ChapterRail />
         <div className={styles.article}>
           {content.chapters.map((chapter, index) => (
             <Chapter chapter={chapter} key={chapter.id}>

@@ -144,8 +144,10 @@ export default function WebglBackground() {
     }
     configure();
     preference.addEventListener("change", configure);
+    element.addEventListener("webglcontextrestored", configure);
     return () => {
       preference.removeEventListener("change", configure);
+      element.removeEventListener("webglcontextrestored", configure);
       dispose();
       // Defer context release so StrictMode can immediately set up the same canvas again.
       releaseTimer.current = window.setTimeout(

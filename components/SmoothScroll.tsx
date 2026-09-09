@@ -23,7 +23,9 @@ export default function SmoothScroll() {
         smoothWheel: true,
         syncTouch: false,
         lerp: 0.085,
-        anchors: true,
+        // Native/Next links and explicit anchor handlers own URL and focus
+        // changes; Lenis's click handler ignores their offsets and modifiers.
+        anchors: false,
       });
 
       registerSmoothScroll(lenis);

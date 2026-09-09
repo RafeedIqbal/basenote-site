@@ -19,7 +19,7 @@ export default function CapabilityWheel() {
   const root = useRef<HTMLElement>(null);
   const orbit = useRef<HTMLDivElement>(null);
   const trigger = useRef<ScrollTrigger | null>(null);
-  const swipe = useRef<{ x: number; y: number } | null>(null);
+  const swipe = useRef<{ id: number; x: number; y: number } | null>(null);
   const activeIndex = useRef(0);
   const [active, setActive] = useState(0);
   const { contextSafe } = useGSAP(
@@ -127,11 +127,15 @@ export default function CapabilityWheel() {
           aria-hidden="true"
           onPointerDown={(event) => {
             if (!event.isPrimary || event.button !== 0) return;
-            swipe.current = { x: event.clientX, y: event.clientY };
+            swipe.current = {
+              id: event.pointerId,
+              x: event.clientX,
+              y: event.clientY,
+            };
             event.currentTarget.setPointerCapture(event.pointerId);
           }}
           onPointerUp={(event) => {
-            if (!swipe.current) return;
+            if (swipe.current?.id !== event.pointerId) return;
             const dx = event.clientX - swipe.current.x;
             const dy = event.clientY - swipe.current.y;
             if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) {
@@ -139,11 +143,11 @@ export default function CapabilityWheel() {
             }
             swipe.current = null;
           }}
-          onPointerCancel={() => {
-            swipe.current = null;
+          onPointerCancel={(event) => {
+            if (swipe.current?.id === event.pointerId) swipe.current = null;
           }}
-          onLostPointerCapture={() => {
-            swipe.current = null;
+          onLostPointerCapture={(event) => {
+            if (swipe.current?.id === event.pointerId) swipe.current = null;
           }}
         >
           <div className={styles.rings} />
@@ -200,6 +204,7 @@ export default function CapabilityWheel() {
             role="group"
             aria-label={content.selectionLabel}
             onKeyDown={(event) => {
+              if (event.altKey || event.ctrlKey || event.metaKey) return;
               let next: number;
               if (event.key === "ArrowRight") next = activeIndex.current + 1;
               else if (event.key === "ArrowLeft") next = activeIndex.current - 1;

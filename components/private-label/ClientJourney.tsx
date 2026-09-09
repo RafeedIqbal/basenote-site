@@ -245,6 +245,7 @@ export default function ClientJourney() {
         className={styles.section}
         ref={root}
         aria-labelledby="journey-title"
+        tabIndex={-1}
       >
         <div className={styles.heading}>
           <div>

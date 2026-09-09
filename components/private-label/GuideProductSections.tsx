@@ -50,7 +50,7 @@ function UnavailableImage({ title }: { title: string }) {
 
 function Gallery({ images, title }: { images: GuideImage[]; title: string }) {
   const [active, setActive] = useState(0);
-  const pointer = useRef<{ x: number; y: number } | null>(null);
+  const pointer = useRef<{ id: number; x: number; y: number } | null>(null);
   if (!images.length) return <UnavailableImage title={title} />;
   const move = (direction: number) =>
     setActive(
@@ -67,13 +67,17 @@ function Gallery({ images, title }: { images: GuideImage[]; title: string }) {
         className={styles.galleryImage}
         onPointerDown={(event) => {
           if (!event.isPrimary || event.button !== 0) return;
-          pointer.current = { x: event.clientX, y: event.clientY };
+          pointer.current = {
+            id: event.pointerId,
+            x: event.clientX,
+            y: event.clientY,
+          };
           event.currentTarget.setPointerCapture(event.pointerId);
         }}
         onPointerUp={(event) => {
           const start = pointer.current;
+          if (!start || start.id !== event.pointerId) return;
           pointer.current = null;
-          if (!start) return;
           const dx = event.clientX - start.x;
           if (
             Math.abs(dx) > 40 &&
@@ -83,11 +87,11 @@ function Gallery({ images, title }: { images: GuideImage[]; title: string }) {
           if (event.currentTarget.hasPointerCapture(event.pointerId))
             event.currentTarget.releasePointerCapture(event.pointerId);
         }}
-        onPointerCancel={() => {
-          pointer.current = null;
+        onPointerCancel={(event) => {
+          if (pointer.current?.id === event.pointerId) pointer.current = null;
         }}
-        onLostPointerCapture={() => {
-          pointer.current = null;
+        onLostPointerCapture={(event) => {
+          if (pointer.current?.id === event.pointerId) pointer.current = null;
         }}
       >
         <Image

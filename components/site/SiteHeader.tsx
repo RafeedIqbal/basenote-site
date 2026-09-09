@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 import { setScrollLocked } from "@/lib/scroll";
 import { navigation } from "@/data/site-content";
@@ -24,6 +24,22 @@ export default function SiteHeader() {
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
+
+  function closeForNavigation(event: MouseEvent<HTMLAnchorElement>) {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    )
+      return;
+    setOpen(false);
+    // A link to the current route will not remount the page or move focus.
+    // Return focus before making the menu inert, including in that case.
+    menuButtonRef.current?.focus({ preventScroll: true });
+  }
 
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 860px)");
@@ -179,7 +195,8 @@ export default function SiteHeader() {
               href={item.href}
               className={styles.mobileLink}
               tabIndex={open ? 0 : -1}
-              onClick={() => setOpen(false)}
+              onClick={closeForNavigation}
+              aria-current={isActivePath(pathname, item.href) ? "page" : undefined}
             >
               {item.label}
             </Link>
@@ -189,7 +206,7 @@ export default function SiteHeader() {
           href="/contact"
           className={styles.mobileCta}
           tabIndex={open ? 0 : -1}
-          onClick={() => setOpen(false)}
+          onClick={closeForNavigation}
         >
           Get in touch
         </Link>
