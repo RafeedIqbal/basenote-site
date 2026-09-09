@@ -23,17 +23,7 @@ Compared the implementation with the [live design document](https://docs.google.
 - Hero process anchor, guide chapter offsets in both directions, guide-to-parent section navigation and route cleanup were checked. Leaving the page removed its pin spacers and canvas.
 - “Book a call” opened the contact page with Private Label selected. The submitted-at timestamp was populated; the honeypot remained hidden and excluded from tab order. No enquiry was submitted.
 
-Screenshots are from the actual local browser, with its development indicator. They are viewport captures, so longer sections continue below the frame.
-
-- [Desktop audience panels](../output/playwright/private-label-review/audience-desktop.png)
-- [Mobile expanded audience panel](../output/playwright/private-label-review/audience-mobile.png)
-- [Mobile hero](../output/playwright/private-label-review/hero-mobile.png)
-- [Mobile portfolio](../output/playwright/private-label-review/portfolio-mobile.png)
-- [BN capability wheel](../output/playwright/private-label-review/wheel-desktop.png)
-- [Final journey card](../output/playwright/private-label-review/journey-desktop.png)
-- [ALPAC artwork](../output/playwright/private-label-review/alpac-desktop.png)
-- [Guide anchor below the header](../output/playwright/private-label-review/guide-anchor-desktop.png)
-- [Landscape menu scrolled to the contact link](../output/playwright/private-label-review/menu-landscape.png)
+Generated screenshots were removed during Playwright output cleanup on 9 September 2026. The validation results are summarized above.
 
 ## Remaining asset and review limits
 

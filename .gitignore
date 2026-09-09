@@ -10,6 +10,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+# Browser test artifacts
+/output/playwright/
+/.playwright/
+/.playwright-cli/
+/playwright-report/
+/test-results/
+/blob-report/
 # Deformo
 # Website Design
 .vercel

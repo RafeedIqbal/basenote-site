@@ -125,6 +125,25 @@ export function FaqList({
 }) {
   const [open, setOpen] = useState<number | null>(null);
   const id = useId();
+
+  useEffect(() => {
+    if (!exclusive) return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    const refreshWithoutTransition = () => {
+      if (!media.matches) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+    // Instant height changes do not emit the transition event used below.
+    refreshWithoutTransition();
+    media.addEventListener("change", refreshWithoutTransition);
+    return () => {
+      cancelAnimationFrame(frame);
+      media.removeEventListener("change", refreshWithoutTransition);
+    };
+  }, [exclusive, open]);
+
   if (!exclusive)
     return (
       <div>
@@ -158,10 +177,12 @@ export function FaqList({
               id={`${id}-q-${index}`}
               aria-expanded={open === index}
               aria-controls={`${id}-a-${index}`}
-              onClick={() => setOpen(open === index ? null : index)}
+              onClick={() =>
+                setOpen((current) => (current === index ? null : index))
+              }
             >
-              {item.question}
-              <span aria-hidden="true">{open === index ? "−" : "+"}</span>
+              <span className={shared.question}>{item.question}</span>
+              <span className={shared.faqIcon} aria-hidden="true" />
             </button>
           </h3>
           <div

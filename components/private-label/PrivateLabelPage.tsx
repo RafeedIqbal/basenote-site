@@ -43,7 +43,7 @@ export default function PrivateLabelPage() {
           />
         </div>
       </section>
-      <PortfolioCarousel />
+      <PortfolioCarousel {...content.portfolio} />
       <AudiencePanels />
       <CapabilityWheel />
       <ClientJourney />

@@ -127,34 +127,42 @@
 }
 .audienceGrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-flow: dense;
+  align-content: start;
   gap: 1px;
   background: #050403;
   border: 1px solid #ffffff14;
+  isolation: isolate;
 }
 .audiencePanel {
+  position: relative;
+  min-width: 0;
   background: #050403;
   box-shadow: inset 0 0 0 1px #ffffff1a;
   transition: background 0.3s;
 }
 .audiencePanel[data-open="true"] {
   background: var(--pl-canyon);
+  z-index: 1;
 }
-.audiencePanel h3 {
-  font: inherit;
-  margin: 0;
-}
-.audiencePanel button {
-  display: block;
+.panelToggle {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
   width: 100%;
-  min-height: 248px;
-  padding: 28px;
+  height: 100%;
+  padding: 0;
   border: 0;
   background: none;
-  color: white;
   cursor: pointer;
-  text-align: left;
+}
+.panelToggle:focus-visible {
+  outline-offset: -5px;
+}
+.panelSummary {
+  min-height: 248px;
+  padding: 28px;
 }
 .panelNumber {
   display: flex;
@@ -176,6 +184,7 @@
 }
 .panelDescription {
   display: block;
+  margin: 0;
   font-size: 16px;
   line-height: 1.65;
   color: #bdb4af;
@@ -217,6 +226,8 @@
   font-size: 14px;
 }
 .panelDetail a {
+  position: relative;
+  z-index: 2;
   display: inline-block;
   margin-bottom: 30px;
   font:
@@ -274,11 +285,8 @@
     serif;
   color: var(--pl-canyon);
 }
-.faqSection {
-  max-width: 940px;
-}
-.faqSection .sectionHeading {
-  max-width: 650px;
+.section.faqSection {
+  width: min(960px, calc(100% - 48px));
 }
 .finalCta {
   position: relative;
@@ -421,10 +429,7 @@
   .sectionNumber {
     padding-top: 6px;
   }
-  .audienceGrid {
-    grid-template-columns: 1fr;
-  }
-  .audiencePanel button {
+  .panelSummary {
     min-height: 0;
     padding: 26px;
   }
@@ -482,6 +487,33 @@
   .statsGrid > div:nth-child(even) {
     padding-left: 0;
     border-left: 0;
+  }
+}
+@media (min-width: 40rem) {
+  .audienceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(248px, auto);
+  }
+  .audiencePanel[data-open="true"] {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .panelDetail {
+    display: none;
+    transition: none;
+  }
+  .panelDetail[data-open="true"] {
+    display: block;
+  }
+}
+@media (min-width: 64rem) {
+  .audienceGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* Reserve the final card's 2x2 space so dense placement fills the left edge. */
+  .audiencePanel:last-child[data-open="true"] {
+    grid-column: 2 / span 2;
+    grid-row: 2 / span 2;
   }
 }
 @media (prefers-reduced-motion: reduce) {

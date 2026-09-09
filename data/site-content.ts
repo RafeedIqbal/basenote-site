@@ -405,8 +405,6 @@ export type PrivateLabelContent = {
   };
   portfolio: {
     label: string;
-    previous: string;
-    next: string;
     slides: { name: string; image: string; alt: string }[];
   };
   audience: {
@@ -424,7 +422,15 @@ export type PrivateLabelContent = {
     selectionLabel: string;
     items: string[];
   };
-  journey: { title: string; stages: PrivateLabelStage[]; cta: string };
+  journey: {
+    title: string;
+    stages: PrivateLabelStage[];
+    cta: string;
+    navigationLabel: string;
+    scrollHint: string;
+    swipeHint: string;
+    keyboardHint: string;
+  };
   featured: {
     title: string;
     video: string | null;
@@ -519,8 +525,6 @@ export const privateLabel: PrivateLabelContent = {
   },
   portfolio: {
     label: "Private label portfolio",
-    previous: "Previous project",
-    next: "Next project",
     slides: [
       {
         name: "Firmino",
@@ -632,6 +636,11 @@ export const privateLabel: PrivateLabelContent = {
   },
   journey: {
     title: "From idea to market",
+    navigationLabel: "Private label journey stages",
+    scrollHint: "Scroll to explore",
+    swipeHint: "Swipe to explore",
+    keyboardHint:
+      "Use the left and right arrow keys to explore the stages. Home returns to the first stage; End moves to the last.",
     stages: [
       {
         number: "01",

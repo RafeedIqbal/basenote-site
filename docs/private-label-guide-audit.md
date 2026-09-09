@@ -33,11 +33,8 @@ Browser tests used the in-app Chromium browser and simulated viewport sizes. Nat
 
 Temporary repeatable harnesses: `/tmp/basenote-project-form-validation.cjs` and `/tmp/basenote-guide-browser-validation/README.md`. Reference extraction and visual verification intermediates are in `/tmp/basenote-guide-reference-audit/`.
 
-## Screenshots
+## Output cleanup
 
-- [Desktop catalogue](../output/playwright/private-label-guide-audit/catalogue-desktop.png)
-- [Mobile form and keyboard focus](../output/playwright/private-label-guide-audit/form-mobile.png)
-- [Mobile catalogue](../output/playwright/private-label-guide-audit/catalogue-mobile.png)
-- [Desktop packaging](../output/playwright/private-label-guide-audit/packaging-desktop.png)
+Generated screenshots were removed during Playwright output cleanup on 9 September 2026. The validation results are summarized above.
 
 Local changes only. No commit, push or deployment was performed.

@@ -1,213 +1,378 @@
 .section {
   position: relative;
-  min-height: 760px;
+  isolation: isolate;
   min-height: 100svh;
-  display: grid;
-  align-items: center;
-  padding: 74px 0 50px;
-  background:
-    radial-gradient(ellipse at 78% 52%, #943f2d70, transparent 63%),
-    radial-gradient(ellipse at 10% 90%, #8b3a2a30, transparent 60%);
+  padding: 96px 0 40px;
 }
-.inner {
-  width: min(1200px, calc(100% - 80px));
-  margin: auto;
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 40px;
-  align-items: center;
+
+.heading {
+  position: relative;
+  z-index: 1;
+  width: min(1280px, calc(100% - 160px));
+  margin-inline: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 48px;
 }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pl-ochre);
+  box-shadow: 0 0 0 4px #943f2d1c;
+}
+
 .heading h2 {
+  max-width: 11ch;
+  margin: 22px 0 0;
   font:
-    400 clamp(42px, 5vw, 70px) / 1.04 var(--font-serif),
+    400 clamp(44px, 4.4vw, 64px) / 1.04 var(--font-serif),
     serif;
   letter-spacing: -0.045em;
-  max-width: 11ch;
-  margin: 22px 0;
 }
+
 .heading p {
+  flex: 0 1 440px;
+  margin: 0 0 3px;
   color: #c4b4ae;
-  font-size: 17px;
-  line-height: 1.85;
-  max-width: 42ch;
+  font-size: 16px;
+  line-height: 1.8;
+  text-align: right;
 }
-.wheel {
-  --radius: 175px;
-  height: 550px;
+
+.visual {
+  --radius: 460px;
+  --orbit-bottom: 360px;
+  --dial-size: 104px;
+  --capsule-gap: 144px;
   position: relative;
-  touch-action: pan-y;
+  isolation: isolate;
+  margin-top: 48px;
+  overflow: hidden;
 }
+
+.glow {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(transparent, #000 20% 70%, transparent);
+}
+
+.glow::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: -25% -15% -30%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 62% 13% at 42% 53%,
+      color-mix(in srgb, var(--pl-ochre) 66%, transparent),
+      transparent 78%
+    ),
+    radial-gradient(
+      ellipse 65% 20% at 52% 68%,
+      color-mix(in srgb, var(--pl-canyon) 60%, transparent),
+      transparent 80%
+    ),
+    radial-gradient(
+      ellipse 40% 36% at 80% 60%,
+      color-mix(in srgb, var(--pl-varnish) 36%, transparent),
+      transparent 80%
+    );
+  transform: rotate(-24deg);
+  filter: blur(22px);
+}
+
+.wheel {
+  height: calc(var(--orbit-bottom) + var(--dial-size) / 2 + 30px);
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  mask-image: linear-gradient(transparent, #000 24%);
+}
+
 .rings {
   position: absolute;
-  width: 350px;
-  height: 350px;
+  width: calc(var(--radius) * 2);
+  height: calc(var(--radius) * 2);
   left: 50%;
-  top: 45%;
+  top: calc(var(--orbit-bottom) - var(--radius));
   transform: translate(-50%, -50%);
-  border: 1px solid #d29c822b;
+  border: 1px solid #c18b7629;
   border-radius: 50%;
+}
+
+.capsule {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--orbit-bottom) - var(--capsule-gap) - var(--dial-size) / 2 - 18px);
+  width: calc(var(--dial-size) + 36px);
+  height: calc(var(--capsule-gap) + var(--dial-size) + 36px);
+  transform: translateX(-50%);
+  border: 1px solid #c18b76a6;
+  border-radius: 999px;
+  background: linear-gradient(155deg, #943f2d24, #943f2d45 55%, #8b3a2a17);
   box-shadow:
-    0 0 0 50px #ffffff03,
-    0 0 0 51px #d29c8212;
+    0 0 0 6px #943f2d0d,
+    inset 0 0 30px #c18b760a,
+    0 0 44px #943f2d1f;
 }
+
+.capsule::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid #c18b763b;
+  border-radius: inherit;
+}
+
+.logoDisc {
+  position: absolute;
+  left: 50%;
+  top: 17px;
+  width: var(--dial-size);
+  height: var(--dial-size);
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  border: 1px solid #c18b7636;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 20%, #943f2d57, #130d0cdd 75%);
+  box-shadow: inset 0 0 18px #c18b760d;
+}
+
 .logo {
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  transform: translate(-50%, -50%);
+  width: 62%;
+  height: auto;
+  object-fit: contain;
 }
-.alignment {
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  width: 80px;
-  height: calc(var(--radius) + 42px);
-  transform: translate(-50%, -40px);
-  border: 1px solid #ae67564d;
-  border-radius: 48px;
-  background: linear-gradient(180deg, #943f2d05, #943f2d40);
-}
+
 .orbit {
   --rotation: 0deg;
   position: absolute;
   left: 50%;
-  top: 45%;
+  top: calc(var(--orbit-bottom) - var(--radius));
 }
+
 .dial {
   --angle: 0deg;
   position: absolute;
   left: 0;
   top: 0;
-  width: 56px;
-  height: 56px;
+  width: var(--dial-size);
+  height: var(--dial-size);
   display: grid;
-  place-content: center;
-  background: #221310;
-  border: 1px solid #ae67564d;
+  place-items: center;
+  border: 1px solid #c18b761f;
   border-radius: 50%;
-  color: #baa39c;
+  color: #d5b1a1;
+  background: radial-gradient(circle at 40% 25%, #943f2d24, #100c0cd4 76%);
+  box-shadow: inset 0 0 24px #c18b7608;
   transform: translate(-50%, -50%) rotate(calc(var(--angle) + var(--rotation)))
     translateY(var(--radius))
     rotate(calc(-1 * (var(--angle) + var(--rotation))));
-  cursor: pointer;
 }
-.dial svg {
-  opacity: 0.6;
-  filter: blur(1px);
+
+.iconDisc {
+  width: 60%;
+  height: 60%;
+  display: grid;
+  place-items: center;
+  border: 1px solid #c18b7629;
+  border-radius: 50%;
+  background: #943f2d33;
   transition:
-    filter 0.25s,
-    opacity 0.25s;
+    background 0.3s,
+    color 0.3s,
+    box-shadow 0.3s;
 }
-.dial[data-selected="true"] {
+
+.iconDisc svg {
+  width: 56%;
+  height: 56%;
+}
+
+.dial[data-selected="true"] .iconDisc {
+  color: #fff6ee;
   background: var(--pl-canyon);
-  color: #fff;
-  border-color: #b97660;
+  border-color: #c18b768c;
+  box-shadow: 0 0 24px #943f2d66;
 }
-.dial[data-selected="true"] svg,
-.dial:focus-visible svg {
-  opacity: 1;
-  filter: none;
-}
-.dialLabel {
-  position: absolute;
-  width: 105px;
-  left: 50%;
-  top: 65px;
-  transform: translateX(-50%);
-  font-size: 12px;
+
+.selection {
+  position: relative;
+  z-index: 1;
+  padding: 8px 20px 42px;
   text-align: center;
-  filter: blur(1px);
-  opacity: 0.55;
 }
-.dial[data-selected="true"] .dialLabel {
-  opacity: 0;
-}
-.dial:focus-visible .dialLabel {
-  filter: none;
-  opacity: 1;
-}
+
 .selectedLabel {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 16px;
   margin: 0;
   font:
-    400 26px var(--font-serif),
+    400 clamp(24px, 2.1vw, 30px) / 1.25 var(--font-serif),
     serif;
-  text-align: center;
+  letter-spacing: -0.025em;
 }
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.control {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.control::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #c18b7670;
+  transition:
+    width 0.25s,
+    background 0.25s;
+}
+
+.control[aria-pressed="true"]::after {
+  width: 22px;
+  background: #d9a48c;
+}
+
+.control:hover::after,
+.control:focus-visible::after {
+  background: #f1c7b3;
+}
+
 @media (max-width: 1100px) {
-  .wheel {
-    --radius: 144px;
+  .heading {
+    width: calc(100% - 80px);
   }
-  .rings {
-    width: 288px;
-    height: 288px;
+
+  .heading p {
+    flex-basis: 390px;
+  }
+
+  .visual {
+    --radius: 400px;
+    --orbit-bottom: 320px;
+    --dial-size: 88px;
+    --capsule-gap: 124px;
   }
 }
+
 @media (max-width: 859px) {
   .section {
     min-height: auto;
-    padding: 65px 0 45px;
+    padding: 72px 0 24px;
   }
-  .inner {
+
+  .heading {
     width: calc(100% - 40px);
-    grid-template-columns: 1fr;
-    gap: 0;
+    display: block;
   }
+
   .heading h2 {
-    max-width: 12ch;
+    margin-top: 20px;
+    font-size: clamp(44px, 6.8vw, 56px);
   }
+
   .heading p {
-    font-size: 16px;
+    max-width: 46ch;
+    margin: 22px 0 0;
+    font-size: 15px;
+    line-height: 1.8;
+    text-align: left;
   }
-  .wheel {
-    --radius: 112px;
-    height: 405px;
-    margin-inline: 0;
+
+  .visual {
+    --radius: 322px;
+    --orbit-bottom: 284px;
+    --dial-size: 74px;
+    --capsule-gap: 102px;
+    margin-top: 24px;
   }
-  .rings {
-    width: 224px;
-    height: 224px;
-    box-shadow:
-      0 0 0 34px #ffffff03,
-      0 0 0 35px #d29c8212;
+
+  .capsule {
+    top: calc(var(--orbit-bottom) - var(--capsule-gap) - var(--dial-size) / 2 - 14px);
+    width: calc(var(--dial-size) + 28px);
+    height: calc(var(--capsule-gap) + var(--dial-size) + 28px);
   }
-  .dial {
-    width: 44px;
-    height: 44px;
+
+  .logoDisc {
+    top: 13px;
   }
-  .dialLabel {
-    display: none;
-  }
-  .selectedLabel {
-    bottom: 10px;
-    font-size: 25px;
-  }
-  .logo {
-    width: 66px;
-    height: 66px;
-  }
-  .alignment {
-    width: 66px;
+
+  .selection {
+    padding-bottom: 22px;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .orbit {
-    --rotation: 0deg !important;
-  }
-  .dial svg,
-  .dialLabel {
-    filter: none;
-    transition: none;
-  }
-  .alignment {
-    display: none;
+
+@media (max-width: 599px) {
+  .visual {
+    --orbit-bottom: 244px;
   }
 }
-@media (max-height: 699px) {
+
+@media (max-height: 699px) and (min-width: 860px) {
   .section {
     min-height: auto;
+    padding-top: 64px;
+  }
+}
+
+@media (min-width: 860px) and (min-height: 700px) and (max-height: 899px) {
+  .section {
+    padding: 48px 0 24px;
+  }
+
+  .heading h2 {
+    font-size: 44px;
+  }
+
+  .visual {
+    --radius: 400px;
+    --orbit-bottom: calc(100svh - 480px);
+    --dial-size: 84px;
+    --capsule-gap: 110px;
+    margin-top: 24px;
+  }
+
+  .selection {
+    padding-bottom: 18px;
+  }
+
+  .controls {
+    margin-top: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iconDisc,
+  .control::after {
+    transition: none;
   }
 }

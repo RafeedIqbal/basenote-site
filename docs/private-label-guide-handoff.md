@@ -38,18 +38,8 @@ Updated `/private-label/guide` to the [supplied design document](https://docs.go
 - Checked mobile menu opening/Escape/route navigation, form keyboard focus, populated submission timestamp, hidden honeypot, and consultation navigation to the contact page with Private Label selected. No browser console errors in the final checks.
 - Browser automation exercised mouse/pointer gestures at mobile widths. The in-app browser does not support synthetic `Input.dispatchTouchEvent`; native catalogue touch swiping, physical devices, screen readers and Safari/Firefox were not independently tested. SMTP delivery was mocked, not sent to the live inbox.
 
-## Screenshots
+## Output cleanup
 
-Viewport screenshots; long sections continue below the captured frame. Development tools indicator may be visible.
-
-- [Desktop cover](../output/playwright/private-label-guide/cover-desktop.png)
-- [Mobile cover](../output/playwright/private-label-guide/cover-mobile.png)
-- [Desktop packaging](../output/playwright/private-label-guide/packaging-desktop.png)
-- [Mobile packaging gallery](../output/playwright/private-label-guide/packaging-mobile.png)
-- [Caps with printed references](../output/playwright/private-label-guide/caps-desktop.png)
-- [Higher-resolution bottles](../output/playwright/private-label-guide/bottles-desktop.png)
-- [Coating selector](../output/playwright/private-label-guide/finishes-desktop.png)
-- [Desktop project form](../output/playwright/private-label-guide/form-desktop.png)
-- [Mobile project form](../output/playwright/private-label-guide/form-mobile.png)
+Generated screenshots were removed during Playwright output cleanup on 9 September 2026. The validation results are summarized above.
 
 Local implementation only. No commit, push, publishing or deployment was performed.
