@@ -298,7 +298,7 @@ export default function ClientJourney() {
           </ol>
         </div>
         <div className={styles.cta}>
-          <Link href={privateLabel.contactHref} className={styles.ctaButton}>
+          <Link href={privateLabel.contactHref} className={common.primaryButton}>
             {content.cta}
             <span aria-hidden="true">↗</span>
           </Link>

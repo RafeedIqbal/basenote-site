@@ -170,52 +170,9 @@
   line-height: 1.75;
 }
 .cta {
-  position: relative;
-  isolation: isolate;
   display: grid;
   place-items: center;
   padding: 8px 24px 24px;
-}
-.cta::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background: radial-gradient(ellipse at center, #943f2d1a, transparent 65%);
-  pointer-events: none;
-}
-.ctaButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 44px;
-  max-width: 100%;
-  padding: 30px 42px;
-  border: 1px solid #d7987f66;
-  border-radius: 12px;
-  background: var(--pl-canyon);
-  box-shadow: 0 12px 56px #943f2d26;
-  color: #fff6f1;
-  font:
-    400 clamp(28px, 3.4vw, 48px) / 1.15 var(--font-serif),
-    serif;
-  letter-spacing: -0.035em;
-  transition:
-    background 0.2s,
-    box-shadow 0.2s;
-}
-.ctaButton:hover {
-  background: var(--pl-ochre);
-  box-shadow: 0 14px 60px #943f2d40;
-}
-.ctaButton:focus-visible {
-  outline: 3px solid #efc3ab;
-  outline-offset: 6px;
-}
-.ctaButton span {
-  flex: none;
-  font-family: var(--font-body), sans-serif;
-  font-size: 0.85em;
 }
 .srOnly {
   position: absolute;
@@ -295,9 +252,6 @@
   .section[data-pinned="true"] .cardCopy h3 {
     margin-bottom: 16px;
   }
-  .section[data-pinned="true"] .ctaButton {
-    padding-block: 18px;
-  }
 }
 @media (max-width: 859px) {
   .section {
@@ -324,10 +278,6 @@
     font-size: clamp(30px, 5.5vw, 40px);
     margin-bottom: 18px;
   }
-  .ctaButton {
-    gap: 24px;
-    padding: 26px;
-  }
 }
 @media (max-width: 374px) {
   .section {
@@ -344,17 +294,9 @@
   .cardCopy p {
     font-size: 15px;
   }
-  .ctaButton {
-    gap: 18px;
-    padding: 24px 20px;
-    font-size: 26px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .viewport {
     scroll-snap-type: none;
-  }
-  .ctaButton {
-    transition: none;
   }
 }
