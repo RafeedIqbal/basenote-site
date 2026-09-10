@@ -76,6 +76,14 @@ export default function PrivateLabelHero() {
       let progress = 0;
       let size = { width: 0, height: 0 };
       let warmed = false;
+      let settleDelay: ReturnType<typeof gsap.delayedCall> | undefined;
+      let settleTween: ReturnType<typeof gsap.to> | undefined;
+      const cancelSettle = () => {
+        settleDelay?.kill();
+        settleTween?.kill();
+        settleDelay = undefined;
+        settleTween = undefined;
+      };
       const staticView = () => section.dataset.heroStatic === "true";
 
       const layout = (index: number, image?: HeroFrame | null) => {
@@ -158,6 +166,7 @@ export default function PrivateLabelHero() {
       };
 
       const showStatic = () => {
+        cancelSettle();
         section.dataset.heroStatic = "true";
         delete section.dataset.heroReady;
         trigger?.kill(true);
@@ -194,6 +203,7 @@ export default function PrivateLabelHero() {
           showStatic,
         );
         const update = (value: number) => {
+          cancelSettle();
           progress = value;
           if (!mobile) {
             const opacity = 1 - gsap.utils.clamp(0, 1, value / 0.24);
@@ -201,7 +211,27 @@ export default function PrivateLabelHero() {
             heading.style.transform = `translateY(${-18 * (1 - opacity)}px)`;
             buttons.inert = opacity < 0.05;
           }
-          sequence?.request(Math.min(1, value / 0.9) * lastFrame);
+          const frame = Math.min(1, value / 0.9) * lastFrame;
+          sequence?.request(frame);
+          const nearest = Math.round(frame);
+          if (frame !== nearest) {
+            // Leave time for the final sparse momentum events, then finish on
+            // a real source pose. New scrolling cancels this settle immediately.
+            settleDelay = gsap.delayedCall(0.25, () => {
+              settleDelay = undefined;
+              const cursor = { frame };
+              settleTween = gsap.to(cursor, {
+                frame: nearest,
+                duration: 0.14,
+                ease: "power2.out",
+                onUpdate: () => sequence?.request(cursor.frame),
+                onComplete: () => {
+                  sequence?.request(nearest);
+                  settleTween = undefined;
+                },
+              });
+            });
+          }
         };
         trigger = ScrollTrigger.create({
           id: "private-label-hero",
@@ -268,6 +298,7 @@ export default function PrivateLabelHero() {
       resize.observe(figure);
       return () => {
         disposed = true;
+        cancelSettle();
         cancelAnimationFrame(restoreFrame);
         cancelAnimationFrame(resizeFrame);
         resize.disconnect();
