@@ -71,33 +71,43 @@ test("cold scrolling uses the preview immediately and never repaints a stale res
   h.sequence.warm();
   await setImmediate();
   h.sequence.request(79.25);
-  assert.equal(h.paints.at(-1)!.position, 79.25);
-  assert.equal(h.paints.at(-1)!.frame.blend, 0.25);
-  assert.equal(h.paints.at(-1)!.frame.from.x, 640);
-  assert.equal(h.paints.at(-1)!.frame.to.x, 960);
+  assert.equal(h.paints.at(-1)!.position, 79);
+  assert.equal(h.paints.at(-1)!.frame.x, 640);
   assert.equal(h.paints.at(-1)!.frame.preview, true);
   h.respond(0);
   await setImmediate();
-  assert.equal(h.paints.at(-1)!.position, 79.25);
+  assert.equal(h.paints.at(-1)!.position, 79);
   assert.ok(h.requests.some(({ index }) => index === 79), "The new target takes priority");
   h.sequence.request(19.75);
-  assert.equal(h.paints.at(-1)!.position, 19.75, "Reverse scrubbing is immediate too");
+  assert.equal(h.paints.at(-1)!.position, 20, "Reverse scrubbing is immediate too");
 });
 
-test("momentum-sized movements blend adjacent detail frames without rounding", async (t) => {
+test("momentum-sized movements show only source frames and skip unchanged poses", async (t) => {
   const h = setup(t);
   h.sequence.request(40.1);
   h.sequence.warm();
   await setImmediate();
   h.respond(40);
+  await setImmediate();
+  assert.equal(h.paints.at(-1)!.frame.preview, false, "Detail does not wait for the neighboring pose");
+  const source40 = h.paints.at(-1)!.frame.image;
+  const paintCount = h.paints.length;
+  h.sequence.request(40.12);
+  h.sequence.request(40.49);
   h.respond(41);
   await setImmediate();
-  assert.equal(h.paints.at(-1)!.frame.preview, false);
-  h.sequence.request(40.12);
-  h.sequence.request(40.13);
-  assert.deepEqual(h.paints.slice(-2).map(({ position }) => position), [40.12, 40.13]);
-  assert.ok(Math.abs(h.paints.at(-1)!.frame.blend - 0.13) < 1e-10);
-  assert.notEqual(h.paints.at(-1)!.frame.from.image, h.paints.at(-1)!.frame.to.image);
+  assert.equal(h.paints.length, paintCount, "Tiny scroll deltas and adjacent downloads do not repaint");
+  h.sequence.request(40.5);
+  assert.equal(h.paints.at(-1)!.position, 41);
+  assert.notEqual(h.paints.at(-1)!.frame.image, source40);
+  h.sequence.request(40.49);
+  assert.equal(h.paints.at(-1)!.position, 40);
+  assert.equal(h.paints.at(-1)!.frame.image, source40, "Reverse scrolling restores the original bitmap");
+  h.sequence.request(-0.6);
+  assert.equal(h.paints.at(-1)!.position, 0);
+  h.sequence.request(120.8);
+  assert.equal(h.paints.at(-1)!.position, 120);
+  assert.ok(h.paints.every(({ position }) => Number.isInteger(position)));
 });
 
 test("idle loading is bounded to the nearby poses and decoded cache stays small", async (t) => {
@@ -116,7 +126,7 @@ test("idle loading is bounded to the nearby poses and decoded cache stays small"
   assert.ok(h.requests.length < 30, "Three poses should not download 121 images");
 });
 
-test("detail failures retain smooth preview scrubbing", async (t) => {
+test("detail failures retain preview scrubbing", async (t) => {
   const h = setup(t);
   h.sequence.warm();
   await setImmediate();
@@ -124,7 +134,7 @@ test("detail failures retain smooth preview scrubbing", async (t) => {
   await setImmediate();
   h.sequence.request(100.3);
   assert.equal(h.errors(), 0);
-  assert.equal(h.paints.at(-1)!.position, 100.3);
+  assert.equal(h.paints.at(-1)!.position, 100);
   assert.equal(h.paints.at(-1)!.frame.preview, true);
 });
 

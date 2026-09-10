@@ -76,47 +76,25 @@ export default function PrivateLabelHero() {
       let progress = 0;
       let size = { width: 0, height: 0 };
       let warmed = false;
-      let settleDelay: ReturnType<typeof gsap.delayedCall> | undefined;
-      let settleTween: ReturnType<typeof gsap.to> | undefined;
-      const cancelSettle = () => {
-        settleDelay?.kill();
-        settleTween?.kill();
-        settleDelay = undefined;
-        settleTween = undefined;
-      };
       const staticView = () => section.dataset.heroStatic === "true";
 
       const layout = (index: number, image?: HeroFrame | null) => {
-        const frame = motion.frames[Math.floor(index)];
-        const nextFrame = motion.frames[Math.ceil(index)];
-        const blend = index % 1;
-        const interpolate = (from: number, to: number) => from + (to - from) * blend;
+        const frame = motion.frames[index];
         const { width, height } = size;
         if (!width || !height) return;
         const imageHeight = mobile
           ? height * 0.8
           : Math.min(height, width * motion.height / motion.width);
         const imageWidth = imageHeight * motion.width / motion.height;
-        const left = mobile ? width / 2 - interpolate(frame.center, nextFrame.center) * imageWidth : (width - imageWidth) / 2;
+        const left = mobile ? width / 2 - frame.center * imageWidth : (width - imageWidth) / 2;
         const top = mobile ? height * 0.13 : (height - imageHeight) / 2;
         if (image && context) {
           context.clearRect(0, 0, width, height);
-          const draw = (tile: HeroFrame["from"]) => context.drawImage(tile.image, tile.x, tile.y, tile.width, tile.height, left, top, imageWidth, imageHeight);
-          context.globalAlpha = 1 - image.blend;
-          draw(image.from);
-          if (image.blend > 0) {
-            // Add premultiplied contributions so transparent glow keeps its
-            // brightness while poses blend through the final momentum pixels.
-            context.globalCompositeOperation = "lighter";
-            context.globalAlpha = image.blend;
-            draw(image.to);
-            context.globalCompositeOperation = "source-over";
-          }
-          context.globalAlpha = 1;
+          context.drawImage(image.image, image.x, image.y, image.width, image.height, left, top, imageWidth, imageHeight);
         }
         // Every leader uses camera-projected coordinates from this exact frame.
         content.callouts.forEach((callout, i) => {
-          const source = frame.anchors[callout.id].map((value, axis) => interpolate(value, nextFrame.anchors[callout.id][axis]));
+          const source = frame.anchors[callout.id];
           const anchor = [left + source[0] * imageWidth, top + source[1] * imageHeight];
           const position = mobile ? callout.mobileText : callout.text;
           const endpoint = mobile ? callout.mobileEnd : callout.end;
@@ -166,7 +144,6 @@ export default function PrivateLabelHero() {
       };
 
       const showStatic = () => {
-        cancelSettle();
         section.dataset.heroStatic = "true";
         delete section.dataset.heroReady;
         trigger?.kill(true);
@@ -203,7 +180,6 @@ export default function PrivateLabelHero() {
           showStatic,
         );
         const update = (value: number) => {
-          cancelSettle();
           progress = value;
           if (!mobile) {
             const opacity = 1 - gsap.utils.clamp(0, 1, value / 0.24);
@@ -213,25 +189,6 @@ export default function PrivateLabelHero() {
           }
           const frame = Math.min(1, value / 0.9) * lastFrame;
           sequence?.request(frame);
-          const nearest = Math.round(frame);
-          if (frame !== nearest) {
-            // Leave time for the final sparse momentum events, then finish on
-            // a real source pose. New scrolling cancels this settle immediately.
-            settleDelay = gsap.delayedCall(0.25, () => {
-              settleDelay = undefined;
-              const cursor = { frame };
-              settleTween = gsap.to(cursor, {
-                frame: nearest,
-                duration: 0.14,
-                ease: "power2.out",
-                onUpdate: () => sequence?.request(cursor.frame),
-                onComplete: () => {
-                  sequence?.request(nearest);
-                  settleTween = undefined;
-                },
-              });
-            });
-          }
         };
         trigger = ScrollTrigger.create({
           id: "private-label-hero",
@@ -298,7 +255,6 @@ export default function PrivateLabelHero() {
       resize.observe(figure);
       return () => {
         disposed = true;
-        cancelSettle();
         cancelAnimationFrame(restoreFrame);
         cancelAnimationFrame(resizeFrame);
         resize.disconnect();
