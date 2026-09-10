@@ -1,37 +1,66 @@
-// Ported from the supplied animated-webgl-background.html.
+// Cloud noise adapted from the supplied animated-webgl-background.html.
+// Only the cloud field is rendered: no stars, streaks, or looping time reset.
 export const fragmentSource = `#version 300 es
 precision highp float;
-out vec4 O;
+out vec4 color;
 uniform vec2 resolution;
 uniform float time;
-uniform float speed;
-#define FC gl_FragCoord.xy
-#define T (time * speed)
-#define R resolution
-#define MN min(R.x, R.y)
-float rnd(vec2 p) { p=fract(p*vec2(12.9898,78.233)); p+=dot(p,p+34.56); return fract(p.x*p.y); }
-float noise(in vec2 p) { vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f); float a=rnd(i),b=rnd(i+vec2(1,0)),c=rnd(i+vec2(0,1)),d=rnd(i+1.); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y); }
-float fbm(vec2 p) { float t=.0,a=1.; mat2 m=mat2(1.,-.5,.2,1.2); for(int i=0;i<5;i++){ t+=a*noise(p); p*=2.*m; a*=.5; } return t; }
-float clouds(vec2 p) { float d=1.,t=.0; for(float i=.0;i<3.;i++){ float a=d*fbm(i*10.+p.x*.2+.2*(1.+i)*p.y+d+i*i+p); t=mix(t,d,a); d=a; p*=2./(i+1.); } return t; }
-void main(void) {
-  vec2 uv=(FC-.5*R)/MN,st=uv*vec2(2,1);
-  vec3 col=vec3(0);
-  float phase=6.28318530718*T/10.;
-  vec2 loopOffset=vec2(sin(phase),cos(phase))*.42;
-  float bg=clouds(vec2(st.x,-st.y)+loopOffset);
-  uv*=1.-.3*(sin(phase)*.5+.5);
-  for(float i=1.;i<12.;i++) {
-    uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+sin(phase)*.55+cos(phase)*.22+.1*uv.x);
-    vec2 p=uv; float d=length(p);
-    vec3 canyonRed=vec3(0.580,0.247,0.176);
-    vec3 desertVarnish=vec3(0.545,0.227,0.165);
-    vec3 mojaveOchre=vec3(0.627,0.271,0.208);
-    col+=.00125/d*mix(desertVarnish,mojaveOchre,.5+.5*sin(i));
-    float b=noise(i+p+bg*1.731);
-    col+=.002*b/length(max(p,vec2(b*p.x*.02,p.y)));
-    vec3 brandFold=mix(desertVarnish,canyonRed,bg);
-    brandFold=mix(brandFold,mojaveOchre,.18+.18*sin(phase));
-    col=mix(col,brandFold*bg*.72,d);
+
+float random(vec2 p) {
+  p = fract(p * vec2(12.9898, 78.233));
+  p += dot(p, p + 34.56);
+  return fract(p.x * p.y);
+}
+
+float noise(vec2 p) {
+  vec2 cell = floor(p);
+  vec2 fraction = fract(p);
+  vec2 blend = fraction * fraction * (3.0 - 2.0 * fraction);
+  return mix(
+    mix(random(cell), random(cell + vec2(1, 0)), blend.x),
+    mix(random(cell + vec2(0, 1)), random(cell + 1.0), blend.x),
+    blend.y
+  );
+}
+
+float fbm(vec2 p) {
+  float value = 0.0;
+  float amplitude = 1.0;
+  mat2 fold = mat2(1.0, -0.5, 0.2, 1.2);
+  for (int i = 0; i < 5; i++) {
+    value += amplitude * noise(p);
+    p *= 2.0 * fold;
+    amplitude *= 0.5;
   }
-  O=vec4(col,1);
+  return value;
+}
+
+float clouds(vec2 p) {
+  float density = 1.0;
+  float value = 0.0;
+  for (float i = 0.0; i < 3.0; i++) {
+    float fold = density * fbm(
+      i * 10.0 + p.x * 0.2 + 0.2 * (1.0 + i) * p.y + density + i * i + p
+    );
+    value = mix(value, density, fold);
+    density = fold;
+    p *= 2.0 / (i + 1.0);
+  }
+  return value;
+}
+
+void main() {
+  vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+  // Advect the entire field together: increasing sample X moves clouds left.
+  vec2 field = uv * vec2(1.65, -0.95) + vec2(time * 0.055, 0.42);
+  float density = max(clouds(field), 0.0);
+  float body = smoothstep(0.15, 1.45, density);
+  vec3 canyonRed = vec3(0.580, 0.247, 0.176);
+  vec3 desertVarnish = vec3(0.545, 0.227, 0.165);
+  vec3 mojaveOchre = vec3(0.627, 0.271, 0.208);
+  vec3 pigment = mix(desertVarnish, canyonRed, body);
+  pigment = mix(pigment, mojaveOchre, smoothstep(0.85, 1.8, density) * 0.65);
+  // Lift the soft folds while retaining deep shadows and fine wispy detail.
+  vec3 cloudColor = pigment * pow(min(density, 2.4), 0.92) * 0.88;
+  color = vec4(cloudColor, 1.0);
 }`;

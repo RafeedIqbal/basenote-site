@@ -11,13 +11,14 @@ import CapabilityWheel from "./CapabilityWheel";
 import ClientJourney from "./ClientJourney";
 import FeaturedProject from "./FeaturedProject";
 import CommercialStats from "./CommercialStats";
-import WebglBackground from "./WebglBackground";
+import GuideTeaser from "./GuideTeaser";
+import PrivateLabelClosing from "./PrivateLabelClosing";
 import { FloatingChat } from "./PrivateLabelChrome";
 import styles from "./PrivateLabel.module.css";
 
 export default function PrivateLabelPage() {
   return (
-    <SiteFrame className={styles.page}>
+    <SiteFrame className={styles.page} footer={<PrivateLabelClosing />}>
       <section id="hero" className={styles.hero}>
         <div className={styles.heroCopy}>
           <span className={styles.eyebrow}>{content.eyebrow}</span>
@@ -48,26 +49,9 @@ export default function PrivateLabelPage() {
       <AudiencePanels />
       <CapabilityWheel />
       <ClientJourney />
-      <FeaturedProject />
-      <CommercialStats />
-      <section
-        id="private-label-guide"
-        className={`${styles.section} ${styles.teaser}`}
-        aria-labelledby="guide-teaser-title"
-      >
-        <span className={styles.teaserMark} aria-hidden="true">
-          ↗
-        </span>
-        <div data-reveal="">
-          <span className={styles.eyebrow}>{content.eyebrow}</span>
-          <h2 id="guide-teaser-title">{content.guide.title}</h2>
-          <p>{content.guide.description}</p>
-          <Link href={content.guideHref} className={styles.textLink}>
-            {content.guide.cta}
-            <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-      </section>
+      {content.featured.enabled ? <FeaturedProject /> : null}
+      <CommercialStats sectionNumber={content.featured.enabled ? "06" : "05"} />
+      <GuideTeaser />
       <section
         id="faq"
         className={`${styles.section} ${styles.faqSection}`}
@@ -77,21 +61,6 @@ export default function PrivateLabelPage() {
           <h2 id="faq-title">{content.faqTitle}</h2>
         </div>
         <FaqList items={privateLabelFaqs} exclusive />
-      </section>
-      <section
-        id="start-your-fragrance"
-        className={styles.finalCta}
-        aria-labelledby="final-title"
-      >
-        <WebglBackground />
-        <div className={styles.finalCopy}>
-          <h2 id="final-title">{content.final.title}</h2>
-          <p>{content.final.description}</p>
-          <Link href={content.contactHref} className={styles.primaryButton}>
-            {content.final.cta}
-            <span aria-hidden="true">↗</span>
-          </Link>
-        </div>
       </section>
       <FloatingChat heroId="hero" />
     </SiteFrame>

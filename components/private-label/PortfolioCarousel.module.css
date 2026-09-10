@@ -29,6 +29,7 @@
   border-radius: var(--slide-radius, 10px);
   overflow: hidden;
   background: #17110e;
+  transform-origin: 0 50%;
   transform: translate3d(
     calc(
       50vw - var(--slide-size) * var(--image-aspect-ratio, 1) / 2 +
@@ -64,6 +65,12 @@
   clip-path: inset(50%);
   overflow: hidden;
   white-space: nowrap;
+}
+
+@media (min-width: 860px) {
+  .slide {
+    will-change: transform;
+  }
 }
 
 @media (max-width: 859px) {

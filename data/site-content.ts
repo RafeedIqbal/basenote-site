@@ -432,6 +432,7 @@ export type PrivateLabelContent = {
     keyboardHint: string;
   };
   featured: {
+    enabled: boolean;
     title: string;
     video: string | null;
     poster: string;
@@ -706,6 +707,8 @@ export const privateLabel: PrivateLabelContent = {
     cta: "Ready to get started?",
   },
   featured: {
+    // Temporarily hide this section while keeping it available to restore.
+    enabled: false,
     title: "Meet ALPAC.",
     // Enable playback once the project film is supplied.
     video: null,

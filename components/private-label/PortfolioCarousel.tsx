@@ -62,7 +62,6 @@ export default function PortfolioCarousel({
   const selected = useRef(start);
   const onChange = useRef(onActiveChange);
   const hovering = useRef(false);
-  const focused = useRef(false);
   const dragged = useRef(false);
   const pointer = useRef<{
     id: number;
@@ -103,6 +102,7 @@ export default function PortfolioCarousel({
           let drift = 0;
           let size = track.clientHeight;
           let width = track.clientWidth;
+          let desktop = width >= 860;
           let visible = false;
           let tween: gsap.core.Tween | null = null;
           let dragStart = phase.value;
@@ -156,9 +156,27 @@ export default function PortfolioCarousel({
               const inView = entry.x + entry.size > 0 && entry.x < width;
               const representative =
                 entry.distance >= -count / 2 && entry.distance < count / 2;
-              entry.button.style.width = `${entry.size + 0.75}px`;
-              entry.button.style.height = `${entry.size / aspectRatio}px`;
-              entry.button.style.transform = `translate3d(${entry.x}px, -50%, 0)`;
+              if (inView) {
+                const slideWidth = desktop ? size * aspectRatio : entry.size + 0.75;
+                const slideHeight = desktop ? size : entry.size / aspectRatio;
+                if (entry.button.style.width !== `${slideWidth}px`)
+                  entry.button.style.width = `${slideWidth}px`;
+                if (entry.button.style.height !== `${slideHeight}px`)
+                  entry.button.style.height = `${slideHeight}px`;
+                const translate = `translate3d(${entry.x}px, -50%, 0)`;
+                if (desktop) {
+                  // Keep large images at a fixed layout size; swelling only
+                  // changes their transform instead of relaying out each frame.
+                  const scaleX = (entry.size + 0.75) / slideWidth;
+                  const scaleY = entry.size / slideWidth;
+                  entry.button.style.transform = `${translate} scale(${scaleX}, ${scaleY})`;
+                  // Compensate for scaling so the visible corner radius stays fixed.
+                  entry.button.style.borderRadius = `calc(var(--slide-radius, 10px) / ${scaleX}) / calc(var(--slide-radius, 10px) / ${scaleY})`;
+                } else {
+                  entry.button.style.transform = translate;
+                  entry.button.style.removeProperty("border-radius");
+                }
+              }
               const zIndex = `${Math.round(swell(entry.distance) * 100)}`;
               const visibility = inView ? "visible" : "hidden";
               const hidden = String(!representative || !inView);
@@ -248,6 +266,7 @@ export default function PortfolioCarousel({
           const resize = new ResizeObserver(() => {
             size = track.clientHeight;
             width = track.clientWidth;
+            desktop = width >= 860;
             draw();
           });
           resize.observe(track);
@@ -261,7 +280,7 @@ export default function PortfolioCarousel({
           visibility.observe(track);
 
           const tick = (_time: number, delta: number) => {
-            drift += (Math.min(delta, 64) / 1000) * 0.06;
+            drift += (Math.min(delta, 64) / 1000) * (desktop ? 0.14 : 0.06);
             draw();
           };
           // Returning early from a ticker still keeps GSAP's RAF loop awake.
@@ -273,9 +292,7 @@ export default function PortfolioCarousel({
               count > 1 &&
               visible &&
               !document.hidden &&
-              !hovering.current &&
-              !focused.current &&
-              !pointer.current;
+              !hovering.current;
             if (shouldTick === ticking) return;
             ticking = shouldTick;
             if (ticking) gsap.ticker.add(tick);
@@ -319,14 +336,6 @@ export default function PortfolioCarousel({
       style={{ "--image-aspect-ratio": aspectRatio } as CSSProperties}
       aria-label={label}
       aria-roledescription="carousel"
-      onFocusCapture={() => {
-        focused.current = true;
-        motion.current?.updateAutoplay();
-      }}
-      onBlurCapture={(event) => {
-        focused.current = event.currentTarget.contains(event.relatedTarget);
-        motion.current?.updateAutoplay();
-      }}
       onPointerEnter={(event) => {
         if (event.pointerType === "mouse") {
           hovering.current = true;

@@ -34,7 +34,7 @@ export default function CapabilityWheel() {
         (context) => {
           gsap.killTweensOf(orbit.current);
           gsap.set(orbit.current, {
-            "--rotation": `${-activeIndex.current * angleStep}deg`,
+            "--rotation": `${activeIndex.current * angleStep}deg`,
           });
 
           if (context.conditions?.desktop && !context.conditions.reducedMotion) {
@@ -42,7 +42,7 @@ export default function CapabilityWheel() {
               orbit.current,
               { "--rotation": "0deg" },
               {
-                "--rotation": `${-(itemCount - 1) * angleStep}deg`,
+                "--rotation": `${(itemCount - 1) * angleStep}deg`,
                 ease: "none",
                 scrollTrigger: {
                   trigger: root.current,
@@ -85,13 +85,13 @@ export default function CapabilityWheel() {
       const currentRotation =
         parseFloat(String(gsap.getProperty(orbit.current, "--rotation"))) || 0;
       const cycle = itemCount * angleStep;
-      const difference = gsap.utils.wrap(
-        -cycle / 2,
-        cycle / 2,
-        -next * angleStep - currentRotation,
-      );
+      const targetAngle = next * angleStep;
+      // Compute an exact stop: adding a wrapped delta can leave an epsilon at
+      // zero that GSAP serializes with duplicate "deg" units.
+      const targetRotation =
+        targetAngle + Math.round((currentRotation - targetAngle) / cycle) * cycle;
       gsap.to(orbit.current, {
-        "--rotation": `${currentRotation + difference}deg`,
+        "--rotation": `${targetRotation}deg`,
         duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches
           ? 0
           : 0.65,
@@ -170,7 +170,7 @@ export default function CapabilityWheel() {
                 key={`${label}-${index}`}
                 className={styles.dial}
                 data-selected={active === index % itemCount}
-                style={{ "--angle": `${index * angleStep}deg` } as CSSProperties}
+                style={{ "--angle": `${-index * angleStep}deg` } as CSSProperties}
               >
                 <span className={styles.iconDisc}>
                   <svg

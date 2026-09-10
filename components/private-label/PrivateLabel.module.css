@@ -110,8 +110,7 @@
   gap: 24px;
   margin-bottom: 48px;
 }
-.sectionHeading h2,
-.teaser h2 {
+.sectionHeading h2 {
   margin: 0;
   font:
     400 clamp(36px, 4.7vw, 64px) / 1.08 var(--font-serif),
@@ -234,67 +233,25 @@
     13px var(--font-mono),
     monospace;
 }
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-top: 1px solid #69433366;
-}
-.statsGrid > div {
-  padding: 42px 35px 42px 0;
-  border-bottom: 1px solid #69433366;
-}
-.statsGrid > div:nth-child(even) {
-  padding-left: 40px;
-  border-left: 1px solid #69433366;
-}
-.statsGrid strong {
-  font:
-    400 clamp(30px, 3.3vw, 47px) / 1.2 var(--font-serif),
-    serif;
-  letter-spacing: -0.03em;
-}
-.statsGrid p {
-  margin: 16px 0 0;
-  color: #ac9c94;
-  font-size: 15px;
-  line-height: 1.7;
-}
-.teaser {
-  position: relative;
-  border-top: 1px solid #6a413366;
-  border-bottom: 1px solid #6a413366;
-  padding-right: 22%;
-}
-.teaser h2 {
-  margin-top: 24px;
-  max-width: 12ch;
-}
-.teaser p {
-  max-width: 52ch;
-  color: #b8a59c;
-  font-size: 17px;
-  line-height: 1.85;
-  margin: 26px 0;
-}
-.teaserMark {
-  position: absolute;
-  top: 18%;
-  right: 4%;
-  font:
-    200px/1 var(--font-serif),
-    serif;
-  color: var(--pl-canyon);
-}
 .section.faqSection {
   width: min(960px, calc(100% - 48px));
 }
-.finalCta {
+.closing {
   position: relative;
-  min-height: 650px;
-  display: grid;
-  place-items: center;
-  padding: 110px 24px;
+  isolation: isolate;
   overflow: clip;
+  background: #000;
+}
+.closingBackground {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 clamp(180px, 20vw, 300px)
+  );
   background:
     radial-gradient(ellipse at 20% 20%, var(--pl-ochre), transparent 70%),
     linear-gradient(
@@ -304,17 +261,21 @@
       var(--pl-ochre)
     );
 }
-.finalCta::after {
+.closingBackground::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    #000a 0%,
-    #0008 40%,
-    #0002 85%
-  );
+  background:
+    linear-gradient(to bottom, transparent 42%, #0009 100%),
+    radial-gradient(ellipse at 50% 30%, #0008 0%, #0005 40%, #0002 85%);
   pointer-events: none;
+}
+.finalCta {
+  position: relative;
+  min-height: 650px;
+  display: grid;
+  place-items: center;
+  padding: 110px 24px;
 }
 .webgl {
   position: absolute;
@@ -439,29 +400,6 @@
   .panelDetail > div {
     padding-inline: 26px;
   }
-  .statsGrid > div {
-    padding: 30px 15px 30px 0;
-  }
-  .statsGrid > div:nth-child(even) {
-    padding-left: 20px;
-  }
-  .statsGrid strong {
-    font-size: clamp(25px, 5vw, 34px);
-  }
-  .statsGrid p {
-    font-size: 14px;
-  }
-  .teaser {
-    padding-right: 40px;
-  }
-  .teaserMark {
-    right: 0;
-    top: 45px;
-    font-size: 70px;
-  }
-  .teaser p {
-    font-size: 16px;
-  }
   .finalCta {
     min-height: 580px;
     padding: 80px 24px;
@@ -480,13 +418,6 @@
   }
   .heroArt {
     height: 340px;
-  }
-  .statsGrid {
-    grid-template-columns: 1fr;
-  }
-  .statsGrid > div:nth-child(even) {
-    padding-left: 0;
-    border-left: 0;
   }
 }
 @media (min-width: 40rem) {

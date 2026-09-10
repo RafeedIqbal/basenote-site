@@ -163,15 +163,19 @@
 .orbit {
   --rotation: 0deg;
   position: absolute;
+  /* Keep every dial inside the rotating layer's layout bounds. */
+  width: calc(var(--radius) * 2 + var(--dial-size));
+  height: calc(var(--radius) * 2 + var(--dial-size));
   left: 50%;
   top: calc(var(--orbit-bottom) - var(--radius));
+  transform: translate(-50%, -50%) rotate(var(--rotation));
 }
 
 .dial {
   --angle: 0deg;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 50%;
+  top: 50%;
   width: var(--dial-size);
   height: var(--dial-size);
   display: grid;
@@ -181,7 +185,7 @@
   color: #d5b1a1;
   background: radial-gradient(circle at 40% 25%, #943f2d24, #100c0cd4 76%);
   box-shadow: inset 0 0 24px #c18b7608;
-  transform: translate(-50%, -50%) rotate(calc(var(--angle) + var(--rotation)))
+  transform: translate(-50%, -50%) rotate(var(--angle))
     translateY(var(--radius))
     rotate(calc(-1 * (var(--angle) + var(--rotation))));
 }

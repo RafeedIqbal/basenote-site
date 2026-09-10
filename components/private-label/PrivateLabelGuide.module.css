@@ -598,40 +598,6 @@
 .chapter p.stepNote {
   color: #e7b89b;
 }
-.expectations {
-  border-top: 1px solid var(--guide-line);
-  padding-top: 35px;
-  margin-top: 60px;
-}
-.expectations dl {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 35px;
-  margin: 35px 0;
-}
-.expectations dl > div {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 14px;
-  justify-content: end;
-  border-top: 1px solid var(--guide-line);
-  padding: 30px 0;
-}
-.expectations dd {
-  margin: 0;
-  font:
-    400 clamp(25px, 2.4vw, 36px) / 1.15 var(--font-serif),
-    serif;
-  color: #d6a385;
-}
-.expectations dt {
-  font-size: 14px;
-  line-height: 1.7;
-  color: #c6b6ab;
-}
-.expectations > p {
-  font-size: 14px;
-}
 .finalSection {
   margin-bottom: 110px;
 }
@@ -849,12 +815,6 @@
   .stepPoints {
     columns: 1;
   }
-  .expectations dl {
-    gap: 0 20px;
-  }
-  .expectations dd {
-    font-size: 27px;
-  }
   .finalSection {
     margin-bottom: 65px;
   }
@@ -869,9 +829,6 @@
   }
 }
 @media (max-width: 374px) {
-  .expectations dl {
-    grid-template-columns: 1fr;
-  }
   .coverTop {
     gap: 15px;
     flex-wrap: wrap;

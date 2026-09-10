@@ -12,9 +12,11 @@ import shared from "./shared.module.css";
 export function SiteFrame({
   children,
   className = "",
+  footer = <SiteFooter />,
 }: {
   children: ReactNode;
   className?: string;
+  footer?: ReactNode;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -76,7 +78,7 @@ export function SiteFrame({
     <div ref={rootRef} className={`${styles.page} ${className}`}>
       <SiteHeader />
       <main id="main-content" tabIndex={-1}>{children}</main>
-      <SiteFooter />
+      {footer}
     </div>
   );
 }

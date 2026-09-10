@@ -5,9 +5,9 @@ import { footerGroups, socialLinks } from "@/data/site-content";
 
 import styles from "./SiteChrome.module.css";
 
-export default function SiteFooter() {
+export default function SiteFooter({ overlay = false }: { overlay?: boolean }) {
   return (
-    <footer className={styles.footer}>
+    <footer className={`${styles.footer} ${overlay ? styles.footerOverlay : ""}`}>
       <div className={styles.footerInner}>
         <div className={styles.footerGrid}>
           <div className={styles.footerIdentity}>

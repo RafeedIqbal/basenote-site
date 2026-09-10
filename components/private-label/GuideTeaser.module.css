@@ -1,0 +1,229 @@
+.section {
+  width: min(1200px, calc(100% - 80px));
+  margin-inline: auto;
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 32px;
+  padding: 56px;
+  border: 1px solid #ad715533;
+  border-radius: 24px;
+  background: linear-gradient(115deg, #140f0d, #23140f);
+}
+
+.copy {
+  position: relative;
+  z-index: 1;
+}
+
+.copy h2 {
+  max-width: 13ch;
+  margin: 0;
+  font: 400 clamp(38px, 4.3vw, 60px) / 1.06 var(--font-serif), serif;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.copy p {
+  max-width: 40ch;
+  margin: 24px 0 30px;
+  color: #bfaea4;
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.preview {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  padding: 22px 0;
+  perspective: 1400px;
+}
+
+.preview:focus-visible {
+  outline: none;
+}
+
+.preview:focus-visible .book {
+  outline: 2px solid #d28a72;
+  outline-offset: 8px;
+}
+
+.book {
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  width: 100%;
+  max-width: 490px;
+  aspect-ratio: 1.25;
+  transform: rotate(-7deg) rotateY(-12deg);
+  box-shadow: 8px 24px 34px #0006;
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.book::before {
+  content: "";
+  position: absolute;
+  inset: 4px -4px -6px 4px;
+  border: 1px solid #bba894;
+  border-radius: 2px 5px 5px 2px;
+  background: repeating-linear-gradient(0deg, #cebdab 0 1px, #efe4d7 1px 3px);
+  transform: translateZ(-1px);
+}
+
+.cover,
+.pages {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  /* Scale the decorative spread as one object, including its printed type. */
+  font-size: 1.84cqw;
+}
+
+.cover {
+  padding: 2.78em 2.67em 2.33em;
+  border-radius: 3px 0 0 3px;
+  background: linear-gradient(90deg, #8b3a2a, #943f2d 90%, #62291f);
+  color: #f5e7da;
+  box-shadow: inset 1px 1px 0 #f5e7da26;
+}
+
+.brand {
+  font: 1em/1.5 var(--font-mono), monospace;
+  letter-spacing: 0.03em;
+}
+
+.coverTitle {
+  max-width: 9ch;
+  margin-top: 0.68em;
+  font: 400 3.78em/1.04 var(--font-serif), serif;
+  letter-spacing: -0.035em;
+}
+
+.illustration {
+  width: 100%;
+  min-height: 0;
+  max-height: 14.44em;
+  margin-block: auto 1.11em;
+  padding-top: 1.33em;
+  opacity: 0.72;
+}
+
+.coverFooter {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.25em;
+  border-top: 1px solid #f5e7da4d;
+  padding-top: 1.25em;
+  font: 0.89em/1.7 var(--font-mono), monospace;
+}
+
+.pages {
+  padding: 3.22em 2.56em 2.33em;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(90deg, #cbb9a6, #f1e9e2 12%, #f1e9e2 94%, #e5d9cb);
+  color: #43281e;
+}
+
+.pageHeading {
+  font: 400 2.44em/1.1 var(--font-serif), serif;
+  letter-spacing: -0.03em;
+}
+
+.pages ol {
+  list-style: none;
+  margin: auto 0;
+  padding: 2.22em 0;
+}
+
+.pages li {
+  display: grid;
+  grid-template-columns: 1.64em minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.82em;
+  border-top: 1px solid #8b3a2a33;
+  padding-block: 1em;
+  font-size: 1.22em;
+  line-height: 1.45;
+}
+
+.pages li > span:first-child {
+  color: #8b3a2a;
+  font: 0.82em/1.5 var(--font-mono), monospace;
+}
+
+.pageFooter {
+  font: 0.89em/1.5 var(--font-mono), monospace;
+  color: #795646;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .panel:hover .book,
+  .panel:focus-within .book {
+    transform: rotate(-3deg) rotateY(-6deg) translateY(-4px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .panel {
+    gap: 24px;
+    padding: 40px;
+  }
+}
+
+@media (max-width: 859px) {
+  .section {
+    width: calc(100% - 40px);
+  }
+
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding: 40px;
+  }
+
+  .copy h2 {
+    font-size: clamp(38px, 6.7vw, 54px);
+  }
+
+  .copy p {
+    max-width: 48ch;
+  }
+
+  .preview {
+    padding: 12px 12px 24px;
+  }
+
+  .book {
+    max-width: 460px;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel {
+    gap: 24px;
+    padding: 30px 24px 20px;
+    border-radius: 20px;
+  }
+
+  .copy p {
+    margin-block: 20px 26px;
+    font-size: 15px;
+  }
+
+  .preview {
+    padding-inline: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book {
+    transition: none;
+  }
+}

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Basenote Clouds — No Stars</title>
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { background: radial-gradient(ellipse at 20% 20%, #a04535, transparent 70%), linear-gradient(125deg, #943f2d, #8b3a2a, #a04535); }
+    canvas { display: block; width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <canvas aria-hidden="true"></canvas>
+  <!-- Standalone export of components/private-label/private-label-shader.ts. -->
+  <script id="cloud-fragment" type="x-shader/x-fragment">#version 300 es
+precision highp float;
+out vec4 color;
+uniform vec2 resolution;
+uniform float time;
+
+float random(vec2 p) {
+  p = fract(p * vec2(12.9898, 78.233));
+  p += dot(p, p + 34.56);
+  return fract(p.x * p.y);
+}
+
+float noise(vec2 p) {
+  vec2 cell = floor(p);
+  vec2 fraction = fract(p);
+  vec2 blend = fraction * fraction * (3.0 - 2.0 * fraction);
+  return mix(
+    mix(random(cell), random(cell + vec2(1, 0)), blend.x),
+    mix(random(cell + vec2(0, 1)), random(cell + 1.0), blend.x),
+    blend.y
+  );
+}
+
+float fbm(vec2 p) {
+  float value = 0.0;
+  float amplitude = 1.0;
+  mat2 fold = mat2(1.0, -0.5, 0.2, 1.2);
+  for (int i = 0; i < 5; i++) {
+    value += amplitude * noise(p);
+    p *= 2.0 * fold;
+    amplitude *= 0.5;
+  }
+  return value;
+}
+
+float clouds(vec2 p) {
+  float density = 1.0;
+  float value = 0.0;
+  for (float i = 0.0; i < 3.0; i++) {
+    float fold = density * fbm(
+      i * 10.0 + p.x * 0.2 + 0.2 * (1.0 + i) * p.y + density + i * i + p
+    );
+    value = mix(value, density, fold);
+    density = fold;
+    p *= 2.0 / (i + 1.0);
+  }
+  return value;
+}
+
+void main() {
+  vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+  // Advect the entire field together: increasing sample X moves clouds left.
+  vec2 field = uv * vec2(1.65, -0.95) + vec2(time * 0.055, 0.42);
+  float density = max(clouds(field), 0.0);
+  float body = smoothstep(0.15, 1.45, density);
+  vec3 canyonRed = vec3(0.580, 0.247, 0.176);
+  vec3 desertVarnish = vec3(0.545, 0.227, 0.165);
+  vec3 mojaveOchre = vec3(0.627, 0.271, 0.208);
+  vec3 pigment = mix(desertVarnish, canyonRed, body);
+  pigment = mix(pigment, mojaveOchre, smoothstep(0.85, 1.8, density) * 0.65);
+  // Lift the soft folds while retaining deep shadows and fine wispy detail.
+  vec3 cloudColor = pigment * pow(min(density, 2.4), 0.92) * 0.88;
+  color = vec4(cloudColor, 1.0);
+}</script>
+  <script>
+    const canvas = document.querySelector("canvas");
+    const gl = canvas.getContext("webgl2", { alpha: false, antialias: false, depth: false, powerPreference: "low-power" });
+    if (gl) {
+      const compile = (type, source) => {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(shader));
+        return shader;
+      };
+      const program = gl.createProgram();
+      const vertex = compile(gl.VERTEX_SHADER, "#version 300 es\nin vec2 position;\nvoid main() { gl_Position = vec4(position, 0.0, 1.0); }");
+      const fragment = compile(gl.FRAGMENT_SHADER, document.querySelector("#cloud-fragment").textContent);
+      gl.attachShader(program, vertex);
+      gl.attachShader(program, fragment);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+      gl.useProgram(program);
+      gl.deleteShader(vertex);
+      gl.deleteShader(fragment);
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, 1, -1, -1, 1, 1, 1, -1]), gl.STATIC_DRAW);
+      const position = gl.getAttribLocation(program, "position");
+      gl.enableVertexAttribArray(position);
+      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+      const resolution = gl.getUniformLocation(program, "resolution");
+      const time = gl.getUniformLocation(program, "time");
+      const preference = matchMedia("(prefers-reduced-motion: reduce)");
+      let elapsed = 0;
+      let previous = null;
+      let frame = 0;
+      function draw() {
+        gl.uniform2f(resolution, canvas.width, canvas.height);
+        gl.uniform1f(time, elapsed);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      function render(ms) {
+        if (previous !== null) elapsed += Math.min((ms - previous) * 0.001, 0.1);
+        previous = ms;
+        draw();
+        frame = requestAnimationFrame(render);
+      }
+      function update() {
+        cancelAnimationFrame(frame);
+        previous = null;
+        draw();
+        if (!preference.matches && !document.hidden) frame = requestAnimationFrame(render);
+      }
+      function resize() {
+        const scale = Math.min(devicePixelRatio, 1.5, Math.sqrt(1600000 / Math.max(1, innerWidth * innerHeight)));
+        canvas.width = Math.max(1, Math.round(innerWidth * scale));
+        canvas.height = Math.max(1, Math.round(innerHeight * scale));
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        update();
+      }
+      addEventListener("resize", resize);
+      document.addEventListener("visibilitychange", update);
+      preference.addEventListener("change", update);
+      resize();
+    }
+  </script>
+</body>
+</html>

@@ -216,6 +216,23 @@
   background: transparent;
 }
 
+.footerOverlay {
+  border-top-color: transparent;
+  padding-bottom: 104px;
+}
+
+.footerOverlay .footerLink,
+.footerOverlay .footerGroupTitle,
+.footerOverlay .footerBottom,
+.footerOverlay .socialLinks {
+  color: #eddbd2;
+}
+
+.footerOverlay .footerLink:hover,
+.footerOverlay .footerLink:focus-visible {
+  color: #fff;
+}
+
 .footerGrid {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr 1fr;

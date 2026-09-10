@@ -41,7 +41,7 @@ Actual artwork was retrieved from the [supplied Drive portfolio folder](https://
 | 5 | Ingrained Oil | `public/media/private-label/portfolio/ingrained-oil.png` | `1CCylHhPfcgHh7cLnrHnizaZ8DtXcaExo` |
 | 6 | ALPAC | `public/media/private-label/portfolio/alpac.png` | `1wt1dUUn-iK97vVJaeVAhYJ9X-pA9Zz2M` |
 
-The final CTA uses the supplied GLSL shader with a ten-second loop and `max(1, 0.5 * devicePixelRatio)` resolution scale. It does not ship the 14 MB background video or perfume-builder assets. Static fallbacks use Canyon Red `#943F2D`, Desert Varnish `#8B3A2A`, and Mojave Ochre `#A04535`, with a dark text-legibility overlay.
+The final CTA and footer share a continuous cloud background with a soft top fade. The supplied GLSL cloud noise has been refined to drift from right to left without stars or a time-loop reset; rendering is capped at 1.6 million pixels and pauses offscreen or in hidden tabs. A standalone export is available at `public/media/private-label/basenote-clouds-no-stars.html`. It does not ship the 14 MB background video or perfume-builder assets. Static fallbacks use Canyon Red `#943F2D`, Desert Varnish `#8B3A2A`, and Mojave Ochre `#A04535`, with a dark text-legibility overlay.
 
 ## Draft copy for review
 

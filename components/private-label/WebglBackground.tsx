@@ -19,6 +19,7 @@ export default function WebglBackground() {
     const element = canvas.current;
     if (!element) return;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let elapsedSeconds = 0;
     let dispose = () => {};
     function configure() {
       dispose();
@@ -35,6 +36,7 @@ export default function WebglBackground() {
       let program: WebGLProgram | null = null;
       let buffer: WebGLBuffer | null = null;
       let frame = 0;
+      let previousFrame: number | null = null;
       let visible = false;
       let dead = false;
       let visibilityTrigger: ScrollTrigger | undefined;
@@ -42,6 +44,7 @@ export default function WebglBackground() {
       function stop() {
         cancelAnimationFrame(frame);
         frame = 0;
+        previousFrame = null;
       }
       function cleanup() {
         if (dead) return;
@@ -67,11 +70,18 @@ export default function WebglBackground() {
       }
       let resolution: WebGLUniformLocation | null = null;
       let time: WebGLUniformLocation | null = null;
-      function render(ms: number) {
+      function draw() {
         if (!gl || !element || dead) return;
         gl.uniform2f(resolution, element.width, element.height);
-        gl.uniform1f(time, (ms * 0.001) % 10);
+        gl.uniform1f(time, elapsedSeconds);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      function render(ms: number) {
+        if (!gl || !element || dead) return;
+        if (previousFrame !== null)
+          elapsedSeconds += Math.min((ms - previousFrame) * 0.001, 0.1);
+        previousFrame = ms;
+        draw();
         if (visible && !document.hidden) frame = requestAnimationFrame(render);
       }
       try {
@@ -105,13 +115,19 @@ export default function WebglBackground() {
         gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
         resolution = gl.getUniformLocation(program, "resolution");
         time = gl.getUniformLocation(program, "time");
-        gl.uniform1f(gl.getUniformLocation(program, "speed"), 1);
         const fit = () => {
           const bounds = element.getBoundingClientRect();
-          const scale = Math.max(1, 0.5 * window.devicePixelRatio);
+          // The canvas covers both the CTA and footer; cap its total GPU work.
+          const scale = Math.min(
+            window.devicePixelRatio,
+            1.5,
+            Math.sqrt(1_600_000 / Math.max(1, bounds.width * bounds.height)),
+          );
           element.width = Math.max(1, Math.round(bounds.width * scale));
           element.height = Math.max(1, Math.round(bounds.height * scale));
           gl.viewport(0, 0, element.width, element.height);
+          // Resizing clears the drawing buffer, even while animation is paused.
+          draw();
         };
         fit();
         resize = new ResizeObserver(fit);
