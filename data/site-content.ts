@@ -402,6 +402,17 @@ export type PrivateLabelContent = {
     secondary: string;
     image: string;
     imageAlt: string;
+    openImage: string;
+    frames: string;
+    callouts: {
+      id: "cap" | "oil" | "packaging" | "branding";
+      label: string;
+      text: [number, number];
+      end: [number, number];
+      mobileText: [number, number];
+      mobileEnd: [number, number];
+      reveal: number;
+    }[];
   };
   portfolio: {
     label: string;
@@ -521,8 +532,16 @@ export const privateLabel: PrivateLabelContent = {
       "From bespoke fragrance development and packaging to manufacturing and delivery, we handle the full private label process for you.",
     primary: "Start your fragrance",
     secondary: "Explore the process",
-    image: "/media/basenote/private-label-hero.png",
-    imageAlt: "Fragrance bottle with warm amber light",
+    image: "/media/private-label/hero/bottle-closed.webp",
+    openImage: "/media/private-label/hero/bottle-open.webp",
+    imageAlt: "A glowing fragrance bottle with its lid, atomizer and branding separated to reveal the fragrance oil and packaging",
+    frames: "/media/private-label/hero",
+    callouts: [
+      { id: "cap", label: "Lid and atomizer", text: [0.685, 0.17], end: [0.672, 0.17], mobileText: [0.64, 0.03], mobileEnd: [0.74, 0.125], reveal: 0.50 },
+      { id: "oil", label: "Fragrance oil", text: [0.71, 0.53], end: [0.697, 0.53], mobileText: [0.81, 0.49], mobileEnd: [0.79, 0.56], reveal: 0.62 },
+      { id: "packaging", label: "Bottle and packaging", text: [0.68, 0.79], end: [0.667, 0.79], mobileText: [0.57, 0.91], mobileEnd: [0.74, 0.885], reveal: 0.70 },
+      { id: "branding", label: "Branding and marketing", text: [0.218, 0.68], end: [0.231, 0.68], mobileText: [0.02, 0.88], mobileEnd: [0.22, 0.854], reveal: 0.57 },
+    ],
   },
   portfolio: {
     label: "Private label portfolio",

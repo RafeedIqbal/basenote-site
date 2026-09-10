@@ -6,20 +6,6 @@
 .page :focus-visible {
   outline-color: #d28a72;
 }
-.hero {
-  width: min(1320px, 100%);
-  min-height: min(760px, calc(100svh - 72px));
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  margin: auto;
-  padding: 64px 60px 80px;
-  position: relative;
-}
-.heroCopy {
-  position: relative;
-  z-index: 1;
-}
 .eyebrow {
   display: inline-block;
   color: #c18b76;
@@ -28,33 +14,6 @@
     monospace;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-}
-.hero h1 {
-  font:
-    400 clamp(48px, 6.1vw, 84px) / 1.02 var(--font-serif),
-    serif;
-  letter-spacing: -0.05em;
-  margin: 25px 0;
-  max-width: 9ch;
-}
-.heroCopy > p {
-  max-width: 42ch;
-  font-size: 17px;
-  line-height: 1.85;
-  color: #b9aaa3;
-  margin: 0;
-}
-.heroArt {
-  height: 580px;
-  position: relative;
-  margin-right: -20px;
-  mask-image:
-    linear-gradient(90deg, transparent, #000 14% 88%, transparent),
-    linear-gradient(0deg, transparent, #000 15% 90%, transparent);
-  mask-composite: intersect;
-}
-.heroArt img {
-  object-fit: contain;
 }
 .actions {
   display: flex;
@@ -352,33 +311,7 @@
   overflow: hidden;
   white-space: nowrap;
 }
-@media (max-width: 1100px) {
-  .hero {
-    padding-inline: 40px;
-  }
-  .heroArt {
-    height: 490px;
-  }
-  .hero h1 {
-    font-size: 65px;
-  }
-}
 @media (max-width: 859px) {
-  .hero {
-    padding: 58px 20px 0;
-    grid-template-columns: 1fr;
-    min-height: 0;
-  }
-  .hero h1 {
-    font-size: clamp(50px, 11vw, 72px);
-  }
-  .heroCopy > p {
-    font-size: 16px;
-  }
-  .heroArt {
-    height: 400px;
-    margin: -25px 0 0;
-  }
   .section {
     width: calc(100% - 40px);
     padding-block: 65px;
@@ -415,9 +348,6 @@
 @media (max-width: 400px) {
   .actions {
     gap: 18px;
-  }
-  .heroArt {
-    height: 340px;
   }
 }
 @media (min-width: 40rem) {

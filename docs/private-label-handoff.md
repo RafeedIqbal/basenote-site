@@ -4,6 +4,8 @@
 
 **Latest review:** [8 September 2026 design review](private-label-design-review.md) records subsequent fixes and screenshots. It supersedes the original notes below about the blue wheel logo, playable ALPAC stand-in, and width-only pin breakpoint. ALPAC now displays the full supplied artwork until genuine footage is available; pins require 860×700px or larger.
 
+**Hero update (10 September 2026):** The supplied Blender bottle animation now replaces the original hero stand-in, with scroll scrubbing, four callouts, orange gradients, and mobile/reduced-motion layouts. See [hero source and regeneration notes](private-label-hero-animation.md); the hero asset and alt-text entries below describe the original handoff.
+
 Implemented locally on `feat/private-label-page`. No push or deployment was performed. No runtime or development dependencies were added or removed.
 
 ## Delivered
