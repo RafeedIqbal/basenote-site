@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ArrowIcon from "@/components/site/ArrowIcon";
 import SiteFooter from "@/components/site/SiteFooter";
 import { privateLabel as content } from "@/data/site-content";
 import WebglBackground from "./WebglBackground";
@@ -20,7 +21,7 @@ export default function PrivateLabelClosing() {
           <p>{content.final.description}</p>
           <Link href={content.contactHref} className={styles.primaryButton}>
             {content.final.cta}
-            <span aria-hidden="true">↗</span>
+            <ArrowIcon />
           </Link>
         </div>
       </section>

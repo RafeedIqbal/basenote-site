@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState, type ReactNode } from "react";
+import ArrowIcon from "@/components/site/ArrowIcon";
 import { ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { navigateToAnchor } from "@/lib/scroll";
 import {
@@ -106,7 +107,7 @@ function MakeItReal() {
       >
         <summary>
           {content.final.primary}
-          <span aria-hidden="true">↗</span>
+          <ArrowIcon />
         </summary>
         <div className={styles.formPanel}>
           <h3>{content.final.formTitle}</h3>
@@ -115,7 +116,7 @@ function MakeItReal() {
       </details>
       <Link className={styles.consultation} href={privateLabel.contactHref}>
         {content.final.secondary}
-        <span aria-hidden="true">↗</span>
+        <ArrowIcon />
       </Link>
     </div>
   );
@@ -227,7 +228,7 @@ export default function PrivateLabelGuidePage() {
                   <a href={`#${chapter.id}`} onClick={navigateToAnchor}>
                     <span>{chapter.number}</span>
                     {chapter.title}
-                    <span aria-hidden="true">↗</span>
+                    <ArrowIcon />
                   </a>
                 </li>
               ))}

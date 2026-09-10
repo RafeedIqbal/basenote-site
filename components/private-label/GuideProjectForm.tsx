@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import ArrowIcon from "@/components/site/ArrowIcon";
 import { submitPrivateLabelProject } from "@/app/actions/private-label-project";
 import FormGuardFields from "@/components/contact/FormGuardFields";
 import { privateLabelGuide as content } from "@/data/site-content";
@@ -215,7 +216,7 @@ export default function GuideProjectForm() {
           </p>
           <button className={styles.primaryButton} type="submit" disabled={pending}>
             {pending ? content.labels.sending : content.final.submit}
-            <span aria-hidden="true">↗</span>
+            <ArrowIcon />
           </button>
         </form>
       ) : null}

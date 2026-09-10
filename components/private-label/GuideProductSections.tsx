@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
+import ArrowIcon from "@/components/site/ArrowIcon";
 import {
   privateLabel,
   privateLabelGuide as content,
@@ -42,7 +43,7 @@ function UnavailableImage({ title }: { title: string }) {
       <span className={styles.eyebrow}>{title}</span>
       <p>{content.labels.imageUnavailable}</p>
       <Link href={privateLabel.contactHref}>
-        {content.back} <span aria-hidden="true">↗</span>
+        {content.back} <ArrowIcon />
       </Link>
     </aside>
   );
@@ -229,7 +230,7 @@ export function BottleAndCap() {
         </section>
       ))}
       <aside className={styles.sourcing}>
-        <span aria-hidden="true">↗</span>
+        <ArrowIcon />
         <div>
           <h3>{components.sourcingTitle}</h3>
           <p>{components.sourcingDescription}</p>
@@ -266,7 +267,7 @@ export function BottleAndCap() {
                 >
                   <span>{number(index)}</span>
                   {finish.title}
-                  <span aria-hidden="true">↗</span>
+                  <ArrowIcon />
                 </button>
               ))}
             </div>

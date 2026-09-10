@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import ArrowIcon from "@/components/site/ArrowIcon";
 import { ScrollTrigger } from "@/lib/gsap";
 import { privateLabel } from "@/data/site-content";
 import styles from "./PrivateLabel.module.css";
@@ -217,7 +218,7 @@ export default function AudiencePanels() {
       <div className={styles.actions}>
         <Link className={styles.primaryButton} href={privateLabel.contactHref}>
           {content.contact}
-          <span aria-hidden="true">↗</span>
+          <ArrowIcon />
         </Link>
         <Link className={styles.textLink} href={privateLabel.guideHref}>
           {content.learn}

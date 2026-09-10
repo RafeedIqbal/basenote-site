@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
+import ArrowIcon from "@/components/site/ArrowIcon";
 import { privateLabel } from "@/data/site-content";
 import motion from "@/data/private-label-hero-motion.json";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
@@ -286,7 +287,7 @@ export default function PrivateLabelHero() {
           <p>{content.description}</p>
           <div ref={actions} className={common.actions}>
             <Link href={privateLabel.contactHref} className={common.primaryButton}>
-              {content.primary}<span aria-hidden="true">↗</span>
+              {content.primary}<ArrowIcon />
             </Link>
             <Link href="#client-journey" className={common.textLink} onClick={navigateToAnchor}>
               {content.secondary}<span aria-hidden="true">↓</span>

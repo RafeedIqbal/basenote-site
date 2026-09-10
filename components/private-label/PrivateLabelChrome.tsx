@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import ArrowIcon from "@/components/site/ArrowIcon";
 import { privateLabel } from "@/data/site-content";
 import styles from "./PrivateLabel.module.css";
 
@@ -25,7 +26,7 @@ export function FloatingChat({ heroId }: { heroId: string }) {
       aria-hidden={!visible}
     >
       {privateLabel.chat}
-      <span aria-hidden="true">↗</span>
+      <ArrowIcon />
     </Link>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRef, type KeyboardEvent } from "react";
+import ArrowIcon from "@/components/site/ArrowIcon";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { scrollToPosition } from "@/lib/scroll";
 import { privateLabel } from "@/data/site-content";
@@ -257,7 +258,7 @@ export default function ClientJourney() {
               {content.scrollHint} <span aria-hidden="true">↓</span>
             </span>
             <span className={styles.swipeHint}>
-              {content.swipeHint} <span aria-hidden="true">↔</span>
+              {content.swipeHint} <ArrowIcon direction="horizontal" />
             </span>
           </p>
         </div>
@@ -300,7 +301,7 @@ export default function ClientJourney() {
         <div className={styles.cta}>
           <Link href={privateLabel.contactHref} className={common.primaryButton}>
             {content.cta}
-            <span aria-hidden="true">↗</span>
+            <ArrowIcon />
           </Link>
         </div>
       </section>
