@@ -6,7 +6,7 @@ import { useRef } from "react";
 import { privateLabel } from "@/data/site-content";
 import motion from "@/data/private-label-hero-motion.json";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { HeroFrameSequence } from "@/lib/hero-frame-sequence";
+import { HeroFrameSequence, type HeroFrame } from "@/lib/hero-frame-sequence";
 import { navigateToAnchor, scrollToPosition } from "@/lib/scroll";
 import common from "./PrivateLabel.module.css";
 import styles from "./PrivateLabelHero.module.css";
@@ -36,6 +36,8 @@ export default function PrivateLabelHero() {
     if (!section || !viewport || !figure || !surface || !heading || !buttons || !svg || !list) return;
     const context = surface.getContext("2d", { alpha: true });
     const groups = Array.from(svg.querySelectorAll("g"));
+    const paths = groups.map((group) => group.querySelector("path"));
+    const dots = groups.map((group) => group.querySelector("circle"));
     const items = Array.from(list.children) as HTMLLIElement[];
     const media = gsap.matchMedia();
     let activeTrigger: ScrollTrigger | undefined;
@@ -43,8 +45,14 @@ export default function PrivateLabelHero() {
     let resume: { progress: number } | null = null;
     let restoreFrame = 0;
     const rememberPosition = () => {
+      if (activeTrigger) {
+        resume = window.scrollY > activeTrigger.start - window.innerHeight && window.scrollY < activeTrigger.end + window.innerHeight
+          ? { progress: activeIndex / lastFrame }
+          : null;
+        return;
+      }
       const bounds = section.getBoundingClientRect();
-      resume = activeTrigger?.isActive || (bounds.top < window.innerHeight && bounds.bottom > 0)
+      resume = bounds.top < window.innerHeight && bounds.bottom > 0
         ? { progress: activeIndex / lastFrame }
         : null;
     };
@@ -64,29 +72,43 @@ export default function PrivateLabelHero() {
       let trigger: ScrollTrigger | undefined;
       let resizeFrame = 0;
       let current = reduced ? lastFrame : 0;
-      let painted: ImageBitmap | null = null;
+      let painted: HeroFrame | null = null;
       let progress = 0;
       let size = { width: 0, height: 0 };
       let warmed = false;
       const staticView = () => section.dataset.heroStatic === "true";
 
-      const layout = (index: number, image?: ImageBitmap | null) => {
-        const frame = motion.frames[index];
+      const layout = (index: number, image?: HeroFrame | null) => {
+        const frame = motion.frames[Math.floor(index)];
+        const nextFrame = motion.frames[Math.ceil(index)];
+        const blend = index % 1;
+        const interpolate = (from: number, to: number) => from + (to - from) * blend;
         const { width, height } = size;
         if (!width || !height) return;
         const imageHeight = mobile
           ? height * 0.8
           : Math.min(height, width * motion.height / motion.width);
         const imageWidth = imageHeight * motion.width / motion.height;
-        const left = mobile ? width / 2 - frame.center * imageWidth : (width - imageWidth) / 2;
+        const left = mobile ? width / 2 - interpolate(frame.center, nextFrame.center) * imageWidth : (width - imageWidth) / 2;
         const top = mobile ? height * 0.13 : (height - imageHeight) / 2;
         if (image && context) {
           context.clearRect(0, 0, width, height);
-          context.drawImage(image, left, top, imageWidth, imageHeight);
+          const draw = (tile: HeroFrame["from"]) => context.drawImage(tile.image, tile.x, tile.y, tile.width, tile.height, left, top, imageWidth, imageHeight);
+          context.globalAlpha = 1 - image.blend;
+          draw(image.from);
+          if (image.blend > 0) {
+            // Add premultiplied contributions so transparent glow keeps its
+            // brightness while poses blend through the final momentum pixels.
+            context.globalCompositeOperation = "lighter";
+            context.globalAlpha = image.blend;
+            draw(image.to);
+            context.globalCompositeOperation = "source-over";
+          }
+          context.globalAlpha = 1;
         }
         // Every leader uses camera-projected coordinates from this exact frame.
         content.callouts.forEach((callout, i) => {
-          const source = frame.anchors[callout.id];
+          const source = frame.anchors[callout.id].map((value, axis) => interpolate(value, nextFrame.anchors[callout.id][axis]));
           const anchor = [left + source[0] * imageWidth, top + source[1] * imageHeight];
           const position = mobile ? callout.mobileText : callout.text;
           const endpoint = mobile ? callout.mobileEnd : callout.end;
@@ -99,8 +121,8 @@ export default function PrivateLabelHero() {
             ? 1
             : gsap.utils.clamp(0, 1, (index / lastFrame - callout.reveal) / 0.13);
           const group = groups[i];
-          const path = group.querySelector("path");
-          const dot = group.querySelector("circle");
+          const path = paths[i];
+          const dot = dots[i];
           const elbow = mobile && callout.id !== "oil"
             ? [anchor[0], end[1]]
             : [anchor[0] + (end[0] - anchor[0]) * 0.45, end[1]];
@@ -118,7 +140,10 @@ export default function PrivateLabelHero() {
       const measure = () => {
         const rect = figure.getBoundingClientRect();
         size = { width: rect.width, height: rect.height };
-        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+        const imageWidth = mobile ? size.height * 0.8 * motion.width / motion.height : Math.min(size.width, size.height * motion.width / motion.height);
+        // The source has no extra detail above its native pixel width. Keep
+        // text/vector leaders sharp separately without oversizing the canvas.
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.5, (mobile ? 800 : 1280) / Math.max(1, imageWidth));
         surface.width = Math.round(size.width * ratio);
         surface.height = Math.round(size.height * ratio);
         context?.setTransform(ratio, 0, 0, ratio, 0, 0);
@@ -154,12 +179,14 @@ export default function PrivateLabelHero() {
         sequence = new HeroFrameSequence(
           `${content.frames}/${mobile ? "mobile" : "desktop"}`,
           motion.frames.length,
+          content.preview,
           (index, image) => {
             if (disposed) return;
             current = index;
             activeIndex = index;
             painted = image;
             surface.dataset.frame = String(index);
+            surface.dataset.quality = image.preview ? "preview" : "detail";
             section.dataset.heroReady = "true";
             layout(index, image);
             rememberPosition();
@@ -174,7 +201,7 @@ export default function PrivateLabelHero() {
             heading.style.transform = `translateY(${-18 * (1 - opacity)}px)`;
             buttons.inert = opacity < 0.05;
           }
-          sequence?.request(Math.round(Math.min(1, value / 0.9) * lastFrame));
+          sequence?.request(Math.min(1, value / 0.9) * lastFrame);
         };
         trigger = ScrollTrigger.create({
           id: "private-label-hero",
@@ -263,6 +290,7 @@ export default function PrivateLabelHero() {
 
   return (
     <section id="hero" ref={root} className={styles.hero} aria-labelledby="private-label-title">
+      <link rel="preload" as="image" href={content.preview.image} fetchPriority="high" media="(prefers-reduced-motion: no-preference)" />
       <div ref={stage} className={styles.stage}>
         <div className={styles.background} aria-hidden="true" />
         <div ref={copy} className={styles.copy}>

@@ -404,6 +404,7 @@ export type PrivateLabelContent = {
     imageAlt: string;
     openImage: string;
     frames: string;
+    preview: { image: string; width: number; height: number; columns: number };
     callouts: {
       id: "cap" | "oil" | "packaging" | "branding";
       label: string;
@@ -536,6 +537,7 @@ export const privateLabel: PrivateLabelContent = {
     openImage: "/media/private-label/hero/bottle-open.webp",
     imageAlt: "A glowing fragrance bottle with its lid, atomizer and branding separated to reveal the fragrance oil and packaging",
     frames: "/media/private-label/hero",
+    preview: { image: "/media/private-label/hero/scrub-preview.webp", width: 320, height: 180, columns: 11 },
     callouts: [
       { id: "cap", label: "Lid and atomizer", text: [0.685, 0.17], end: [0.672, 0.17], mobileText: [0.64, 0.03], mobileEnd: [0.74, 0.125], reveal: 0.50 },
       { id: "oil", label: "Fragrance oil", text: [0.71, 0.53], end: [0.697, 0.53], mobileText: [0.81, 0.49], mobileEnd: [0.79, 0.56], reveal: 0.62 },

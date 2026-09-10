@@ -4,12 +4,9 @@ import path from "node:path";
 import sharp from "sharp";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const source = process.argv[2] ?? "/private/tmp/basenote-bottle-work/frames";
+const previewOnly = process.argv.includes("--preview-only");
+const source = process.argv.slice(2).find((argument) => !argument.startsWith("--")) ?? "/private/tmp/basenote-bottle-work/frames";
 const destination = path.join(root, "public/media/private-label/hero");
-const frames = (await readdir(source)).filter((name) => /^\d{3}\.png$/.test(name)).sort();
-if (frames.length !== 121) throw new Error(`Expected 121 frames, found ${frames.length}`);
-await mkdir(path.join(destination, "desktop"), { recursive: true });
-await mkdir(path.join(destination, "mobile"), { recursive: true });
 
 let bytes = 0;
 async function transparentRender(input, width) {
@@ -34,14 +31,35 @@ async function transparentRender(input, width) {
   }
   return sharp(rgba, { raw: { width: info.width, height: info.height, channels: 4 } });
 }
-for (const name of frames) {
-  for (const [variant, width, quality] of [["desktop", 1280, 78], ["mobile", 800, 78]]) {
-    const file = path.join(destination, variant, name.replace(".png", ".webp"));
-    await (await transparentRender(path.join(source, name), width)).webp({ quality, alphaQuality: 80, effort: 5 }).toFile(file);
-    bytes += (await stat(file)).size;
+if (!previewOnly) {
+  const frames = (await readdir(source)).filter((name) => /^\d{3}\.png$/.test(name)).sort();
+  if (frames.length !== 121) throw new Error(`Expected 121 frames, found ${frames.length}`);
+  await mkdir(path.join(destination, "desktop"), { recursive: true });
+  await mkdir(path.join(destination, "mobile"), { recursive: true });
+  for (const name of frames) {
+    for (const [variant, width, quality] of [["desktop", 1280, 78], ["mobile", 800, 78]]) {
+      const file = path.join(destination, variant, name.replace(".png", ".webp"));
+      await (await transparentRender(path.join(source, name), width)).webp({ quality, alphaQuality: 80, effort: 5 }).toFile(file);
+      bytes += (await stat(file)).size;
+    }
   }
+  for (const [name, sourceFrame] of [["closed", frames[0]], ["open", frames.at(-1)]]) {
+    await (await transparentRender(path.join(source, sourceFrame), 1920)).webp({ quality: 90, alphaQuality: 80, effort: 6 }).toFile(path.join(destination, `bottle-${name}.webp`));
+  }
+  console.log(`Encoded ${frames.length} frames in two sizes: ${(bytes / 1024 / 1024).toFixed(2)} MiB total.`);
 }
-for (const [name, sourceFrame] of [["closed", frames[0]], ["open", frames.at(-1)]]) {
-  await (await transparentRender(path.join(source, sourceFrame), 1920)).webp({ quality: 90, alphaQuality: 80, effort: 6 }).toFile(path.join(destination, `bottle-${name}.webp`));
+
+// One small request makes every pose available before the full-size frames.
+// Keep these dimensions aligned with privateLabel.hero.preview.
+const tiles = [];
+for (let index = 0; index < 121; index++) {
+  tiles.push({
+    input: await sharp(path.join(destination, "desktop", `${String(index).padStart(3, "0")}.webp`)).resize(320, 180).png().toBuffer(),
+    left: (index % 11) * 320,
+    top: Math.floor(index / 11) * 180,
+  });
 }
-console.log(`Encoded ${frames.length} frames in two sizes: ${(bytes / 1024 / 1024).toFixed(2)} MiB total.`);
+const preview = path.join(destination, "scrub-preview.webp");
+await sharp({ create: { width: 3520, height: 1980, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+  .composite(tiles).webp({ quality: 65, alphaQuality: 65, effort: 6 }).toFile(preview);
+console.log(`Preview sequence: ${((await stat(preview)).size / 1024).toFixed(0)} KiB.`);
