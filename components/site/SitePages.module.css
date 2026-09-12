@@ -329,7 +329,7 @@
 .homeHero h1 {
   margin: 0;
   font-family: var(--font-serif), serif;
-  font-size: clamp(46px, 8vw, 88px);
+  font-size: clamp(38px, 6.4vw, 72px);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 0.98;
@@ -1094,7 +1094,7 @@
 .listingHero h1,
 .contactSection h1 {
   margin: 22px 0 0;
-  font-size: clamp(40px, 7vw, 80px);
+  font-size: clamp(34px, 5.6vw, 64px);
   line-height: 1;
 }
 
@@ -1173,7 +1173,7 @@
 .centerProductHero h1 {
   max-width: 900px;
   margin-inline: auto;
-  font-size: clamp(44px, 8vw, 90px);
+  font-size: clamp(36px, 6.4vw, 72px);
 }
 
 .centerProductHeroInner > p {
@@ -1313,10 +1313,6 @@
   padding: clamp(120px, 14vw, 180px) 0 clamp(40px, 6vw, 60px);
 }
 
-.listingHero h1 {
-  font-size: clamp(40px, 7vw, 80px);
-}
-
 .listingSection {
   padding: clamp(20px, 3vw, 40px) 0 clamp(80px, 10vw, 140px);
 }
@@ -1407,7 +1403,7 @@
 }
 
 .contactSection h1 {
-  font-size: clamp(40px, 7vw, 74px);
+  font-size: clamp(34px, 5.6vw, 60px);
 }
 
 .contactGrid > div:first-child > p {
@@ -1616,7 +1612,7 @@
   }
 
   .homeHero h1 {
-    font-size: clamp(43px, 13.2vw, 64px);
+    font-size: clamp(36px, 10.6vw, 52px);
   }
 
   .homeHeroInner {

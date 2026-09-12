@@ -1,5 +1,25 @@
 # Capability wheel reference update
 
+## Supplied icons and heading update — 12 September 2026
+
+The wheel now uses all eight original PNGs from the [supplied Drive folder](https://drive.google.com/drive/folders/1KFQXvx95hTAeOSh8hmVyCGNRIDLU35tL). They are stored in `public/media/private-label/capabilities/`, with each label and matching icon paired in `privateLabel.capabilities.items` in `data/site-content.ts`. The original image bytes and transparency are preserved; only the `_transparent` filename suffix was removed. `next/image` provides responsive delivery at the existing dial sizes.
+
+The supplied artwork includes the full medallion, so each image fills its dial. Following the requested border cleanup, the dial wrapper is transparent, with no border, background or shadow in either selection state. The selected icon remains brighter. The obsolete inline SVG stand-ins were removed. The “Private Label” tags above “One partner. Every stage.” and the following “From idea to market” heading were removed, along with their heading margins.
+
+Validation used an isolated snapshot of the checkout to preserve the running preview servers. `npm run lint` and `npm run build` passed in that snapshot; `git diff --check` passed in the working checkout. The initial checkout lint encountered two warnings in another task's ignored `output/playwright/audience-hierarchy/` scripts, which were left untouched. Working-source lint passed with `npm run lint -- --ignore-pattern 'output/playwright/**'`. The temporary build config only expanded Turbopack's root to resolve the linked dependencies; no repository build configuration changed. The four edited component/style files and capability content were compared with the tested snapshot before its removal.
+
+- Local production Chromium: all eight capability selections and image mappings, arrow-key wrapping, Home/End, focus, and a touch-emulated tap passed.
+- No horizontal overflow at 320, 390, 859, 860, and 1440 pixels. Wheel and journey pins release below 860 pixels and return at the desktop breakpoint. Scrolling releases the wheel normally.
+- Initial reduced motion and live toggles passed, including removal and restoration of pins.
+- Desktop/mobile navigation, mobile menu Escape/focus restoration, journey keyboard navigation, exact `/private-label#client-journey` navigation after a route change, and Private Label contact preselection passed. No enquiry was submitted.
+- No browser errors were observed. Chromium emitted non-blocking Next.js CSS-preload warnings. This was local Chromium/emulation verification; no hosted deployment or physical-device check was performed.
+
+Screenshots: [wheel desktop](../output/playwright/wheel-icons-2026-09-12/wheel-desktop.png), [wheel mobile](../output/playwright/wheel-icons-2026-09-12/wheel-mobile.png), [journey desktop](../output/playwright/wheel-icons-2026-09-12/journey-desktop.png), [journey mobile](../output/playwright/wheel-icons-2026-09-12/journey-mobile.png). Asset hashes are retained in `output/playwright/wheel-icons-2026-09-12/asset-manifest.json`.
+
+Border cleanup previews: [desktop](../output/playwright/wheel-icons-2026-09-12/wheel-no-container-desktop.png), [detail](../output/playwright/wheel-icons-2026-09-12/wheel-no-container-detail.png), [mobile](../output/playwright/wheel-icons-2026-09-12/wheel-no-container-mobile.png). The production build and source lint were repeated for the CSS cleanup.
+
+## Original reference update — 9 September 2026
+
 Updated `/private-label#why-basenote` ("One partner. Every stage.") in `components/private-label/CapabilityWheel.tsx` and its CSS Module.
 
 The section now follows the composition of [the supplied Framer reference](https://just-cabbage-903205.framer.app/): a heading and description across the top, a broad cropped orbit below, and a central capsule connecting the Basenote logo to the selected capability. On smaller screens the copy stacks and the orbit crops horizontally.

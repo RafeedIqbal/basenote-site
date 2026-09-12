@@ -5,8 +5,6 @@ import { useRef, useState, type CSSProperties } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { scrollToPosition } from "@/lib/scroll";
 import { privateLabel } from "@/data/site-content";
-import { capabilityIconPaths } from "./capability-icons";
-import common from "./PrivateLabel.module.css";
 import styles from "./CapabilityWheel.module.css";
 
 const content = privateLabel.capabilities;
@@ -111,12 +109,7 @@ export default function CapabilityWheel() {
       aria-labelledby="capability-title"
     >
       <div className={styles.heading}>
-        <div>
-          <span className={`${common.eyebrow} ${styles.eyebrow}`}>
-            {privateLabel.eyebrow}
-          </span>
-          <h2 id="capability-title">{content.title}</h2>
-        </div>
+        <h2 id="capability-title">{content.title}</h2>
         <p>{content.description}</p>
       </div>
 
@@ -165,27 +158,22 @@ export default function CapabilityWheel() {
             </div>
           </div>
           <div ref={orbit} className={styles.orbit}>
-            {orbitItems.map((label, index) => (
+            {orbitItems.map(({ label, icon }, index) => (
               <span
                 key={`${label}-${index}`}
                 className={styles.dial}
                 data-selected={active === index % itemCount}
                 style={{ "--angle": `${-index * angleStep}deg` } as CSSProperties}
               >
-                <span className={styles.iconDisc}>
-                  <svg
-                    width="34"
-                    height="34"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.35"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d={capabilityIconPaths[index % itemCount]} />
-                  </svg>
-                </span>
+                <Image
+                  className={styles.capabilityIcon}
+                  src={icon}
+                  alt=""
+                  width={104}
+                  height={104}
+                  sizes="(max-width: 859px) 74px, (max-width: 1100px) 88px, (min-height: 700px) and (max-height: 899px) 84px, 104px"
+                  draggable={false}
+                />
               </span>
             ))}
           </div>
@@ -197,7 +185,7 @@ export default function CapabilityWheel() {
             aria-live="polite"
             aria-atomic="true"
           >
-            {content.items[active]}
+            {content.items[active].label}
           </p>
           <div
             className={styles.controls}
@@ -221,7 +209,7 @@ export default function CapabilityWheel() {
                 ?.focus({ preventScroll: true });
             }}
           >
-            {content.items.map((label, index) => (
+            {content.items.map(({ label }, index) => (
               <button
                 type="button"
                 key={label}

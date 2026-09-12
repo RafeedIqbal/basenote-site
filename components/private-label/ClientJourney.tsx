@@ -249,10 +249,7 @@ export default function ClientJourney() {
         tabIndex={-1}
       >
         <div className={styles.heading}>
-          <div>
-            <span className={common.eyebrow}>{privateLabel.eyebrow}</span>
-            <h2 id="journey-title">{content.title}</h2>
-          </div>
+          <h2 id="journey-title">{content.title}</h2>
           <p className={styles.hint}>
             <span className={styles.scrollHint}>
               {content.scrollHint} <span aria-hidden="true">↓</span>

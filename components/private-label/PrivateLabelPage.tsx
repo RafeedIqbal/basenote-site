@@ -23,7 +23,7 @@ export default function PrivateLabelPage() {
       <CapabilityWheel />
       <ClientJourney />
       {content.featured.enabled ? <FeaturedProject /> : null}
-      <CommercialStats sectionNumber={content.featured.enabled ? "06" : "05"} />
+      <CommercialStats />
       <GuideTeaser />
       <section
         id="faq"

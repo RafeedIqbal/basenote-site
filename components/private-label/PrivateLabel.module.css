@@ -84,25 +84,90 @@
     monospace;
 }
 .audienceGrid {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-auto-flow: dense;
   align-content: start;
-  gap: 1px;
-  background: #050403;
-  border: 1px solid #ffffff14;
+  gap: 12px;
   isolation: isolate;
+}
+.audienceGrid::before {
+  content: "";
+  position: absolute;
+  inset: -96px -16px;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 26%,
+      #ffe8dc59 42%,
+      #ffe8dc1a 54%,
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse 46% 48% at 30% 28%,
+      #ffbea5bf 0%,
+      #c46c5980 34%,
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 64% 64% at 65% 52%,
+      #943f2d 0%,
+      #943f2de6 38%,
+      #943f2d80 62%,
+      transparent 88%
+    ),
+    radial-gradient(
+      ellipse 50% 46% at 28% 76%,
+      #c4745db3 0%,
+      transparent 78%
+    );
+  filter: blur(28px);
+  /* Fade every edge before the layer ends, including on very wide screens. */
+  mask-image: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    #000 38%,
+    #000c 62%,
+    transparent 100%
+  );
 }
 .audiencePanel {
   position: relative;
   min-width: 0;
-  background: #050403;
-  box-shadow: inset 0 0 0 1px #ffffff1a;
-  transition: background 0.3s;
+  border: 1px solid #cfae9e40;
+  border-radius: 26px;
+  background: #100b08b8;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+}
+@media (hover: hover) {
+  .audiencePanel[data-open="false"]:hover {
+    border-color: #d6b1a280;
+    background: #281710cc;
+  }
 }
 .audiencePanel[data-open="true"] {
-  background: var(--pl-canyon);
+  border-color: #ffffff80;
+  background:
+    radial-gradient(ellipse at 12% 0%, #fff8f03d, transparent 62%),
+    linear-gradient(135deg, #fff4eed1 0%, #f1baa7b8 48%, #d8846fad 100%);
+  color: #070707;
+  box-shadow:
+    inset 0 1px 0 #ffffff8c,
+    inset 0 -1px 0 #6f2b1e14,
+    0 18px 50px #4a170f29;
+  -webkit-backdrop-filter: blur(22px) saturate(115%);
+  backdrop-filter: blur(22px) saturate(115%);
   z-index: 1;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .audiencePanel[data-open="true"] {
+    background: linear-gradient(135deg, #fff4ee, #f1baa7 48%, #d8846f);
+  }
 }
 .panelToggle {
   position: absolute;
@@ -112,43 +177,47 @@
   height: 100%;
   padding: 0;
   border: 0;
+  border-radius: inherit;
   background: none;
   cursor: pointer;
 }
 .panelToggle:focus-visible {
   outline-offset: -5px;
 }
+.audiencePanel[data-open="true"] .panelToggle:focus-visible,
+.audiencePanel[data-open="true"] a:focus-visible {
+  outline-color: #6b2b1c;
+}
 .panelSummary {
-  min-height: 248px;
   padding: 28px;
+}
+.audiencePanel[data-open="true"] .panelSummary {
+  padding-bottom: 12px;
 }
 .panelNumber {
   display: flex;
   justify-content: space-between;
   color: #d6b1a2;
   font:
-    13px var(--font-mono),
+    11px/1.5 var(--font-mono),
     monospace;
 }
+.audiencePanel[data-open="true"] .panelNumber {
+  color: #070707;
+}
 .panelNumber > span {
-  font-size: 20px;
+  font: 18px/1 var(--font-body), sans-serif;
 }
 .panelTitle {
   display: block;
   font:
-    400 26px/1.15 var(--font-serif),
+    400 28px/1.15 var(--font-serif),
     serif;
-  margin: 26px 0 14px;
+  margin: 24px 0 0;
+  letter-spacing: -0.02em;
 }
-.panelDescription {
-  display: block;
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.65;
-  color: #bdb4af;
-}
-.audiencePanel[data-open="true"] .panelDescription {
-  color: #f7e7df;
+.audiencePanel[data-open="true"] .panelTitle {
+  font-size: 32px;
 }
 .panelDetail {
   display: grid;
@@ -168,26 +237,31 @@
   padding-inline: 28px;
 }
 .panelDetail p {
-  margin: 0 0 26px;
-  font-size: 16px;
-  line-height: 1.8;
-  color: #fff0e8;
+  max-width: 64ch;
+  margin: 0 0 28px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #070707;
 }
 .bestFor {
+  display: block;
+  color: #070707;
   font:
-    12px var(--font-mono),
+    10px/1.5 var(--font-mono),
     monospace;
-  letter-spacing: 0.13em;
+  letter-spacing: 0.16em;
 }
 .panelDetail .bestForCopy {
-  margin-top: 10px;
+  margin-top: 8px;
   font-size: 14px;
 }
 .panelDetail a {
   position: relative;
   z-index: 2;
   display: inline-block;
-  margin-bottom: 30px;
+  margin-bottom: 28px;
+  padding-block: 8px;
+  border-bottom: 1px solid currentColor;
   font:
     13px var(--font-mono),
     monospace;
@@ -324,14 +398,13 @@
     padding-top: 6px;
   }
   .panelSummary {
-    min-height: 0;
-    padding: 26px;
+    padding: 24px;
   }
   .panelTitle {
     margin-top: 18px;
   }
   .panelDetail > div {
-    padding-inline: 26px;
+    padding-inline: 24px;
   }
   .finalCta {
     min-height: 580px;
@@ -353,7 +426,7 @@
 @media (min-width: 40rem) {
   .audienceGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: minmax(248px, auto);
+    grid-auto-rows: minmax(168px, auto);
   }
   .audiencePanel[data-open="true"] {
     grid-column: span 2;

@@ -432,7 +432,7 @@ export type PrivateLabelContent = {
     logo: string;
     logoAlt: string;
     selectionLabel: string;
-    items: string[];
+    items: { label: string; icon: string }[];
   };
   journey: {
     title: string;
@@ -646,14 +646,38 @@ export const privateLabel: PrivateLabelContent = {
     logoAlt: "Basenote",
     selectionLabel: "Choose a capability",
     items: [
-      "Fragrance development",
-      "Packaging",
-      "Sourcing",
-      "Branding",
-      "Compliance",
-      "Production",
-      "Strategy",
-      "Website dev",
+      {
+        label: "Fragrance development",
+        icon: "/media/private-label/capabilities/fragrance-development.png",
+      },
+      {
+        label: "Packaging",
+        icon: "/media/private-label/capabilities/packaging.png",
+      },
+      {
+        label: "Sourcing",
+        icon: "/media/private-label/capabilities/sourcing.png",
+      },
+      {
+        label: "Branding",
+        icon: "/media/private-label/capabilities/branding.png",
+      },
+      {
+        label: "Compliance",
+        icon: "/media/private-label/capabilities/compliance.png",
+      },
+      {
+        label: "Production",
+        icon: "/media/private-label/capabilities/production.png",
+      },
+      {
+        label: "Strategy",
+        icon: "/media/private-label/capabilities/strategy.png",
+      },
+      {
+        label: "Website dev",
+        icon: "/media/private-label/capabilities/website-dev.png",
+      },
     ],
   },
   journey: {
@@ -760,9 +784,9 @@ export const privateLabel: PrivateLabelContent = {
     ],
   },
   guide: {
-    title: "Your private label guide",
+    title: "See how it all comes together",
     description:
-      "Explore the stages, practical considerations and support available as you shape your own fragrance.",
+      "From packaging and bottle selection to fragrance development, production and delivery, our Private Label Guide walks you through the decisions behind building your product.",
     cta: "Read the guide",
     draft: true,
   },

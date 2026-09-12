@@ -6,7 +6,21 @@
 
 **Hero update (10 September 2026):** The supplied Blender bottle animation now replaces the original hero stand-in, with scroll scrubbing, four callouts, orange gradients, and mobile/reduced-motion layouts. See [hero source and regeneration notes](private-label-hero-animation.md); the hero asset and alt-text entries below describe the original handoff.
 
-Implemented locally on `feat/private-label-page`. No push or deployment was performed. No runtime or development dependencies were added or removed.
+**Wheel update (12 September 2026):** All eight supplied medallion icons now replace the original SVG stand-ins. The tags above the wheel and following journey heading were removed. See [the updated wheel handoff and screenshots](capability-wheel-handoff.md); the icon stand-in entry below is historical.
+
+**Delivery validation (12 September 2026):** The combined changes include the audience card hierarchy and glass styling, supplied capability artwork, simpler section headings, revised statistics spacing, guide teaser copy, and smaller page titles across the site. `npm run lint`, `npm run build`, and `git diff --check` passed in the working checkout.
+
+Fresh local production Chromium checks passed for audience Enter/Escape and focus restoration; eight distinct capability images and Home/End selection; desktop wheel/journey pinning, breakpoint release and restoration, and scroll release; initial and live reduced motion; desktop/mobile navigation, menu focus and Escape; exact journey hashes after route changes; guide navigation; and Private Label contact preselection. No enquiry was submitted and no browser JavaScript errors were recorded. Offscreen duplicate wheel images remain lazy-loaded. All eleven public routes were exercised across desktop and mobile widths, including 320 px overflow checks on the guide and shared page layouts. This does not establish hosted deployment, physical-device, or other browser-engine behavior.
+
+Current screenshots and check logs are retained locally in the ignored `output/playwright/delivery-2026-09-12/` directory:
+
+- Private Label: [desktop](../output/playwright/delivery-2026-09-12/private-label-desktop.png), [mobile](../output/playwright/delivery-2026-09-12/private-label-mobile.png).
+- Audience cards: [desktop](../output/playwright/delivery-2026-09-12/audience-desktop.png), [mobile](../output/playwright/delivery-2026-09-12/audience-mobile.png).
+- [Capability wheel](../output/playwright/delivery-2026-09-12/wheel-desktop.png) and [journey](../output/playwright/delivery-2026-09-12/journey-desktop.png).
+- Guide: [desktop](../output/playwright/delivery-2026-09-12/guide-desktop.png), [mobile](../output/playwright/delivery-2026-09-12/guide-mobile.png).
+- Homepage: [desktop](../output/playwright/delivery-2026-09-12/home-1440.png), [320 px](../output/playwright/delivery-2026-09-12/home-320.png); [mobile contact](../output/playwright/delivery-2026-09-12/contact-mobile.png).
+
+The original implementation below was completed locally on `feat/private-label-page`. No runtime or development dependencies were added or removed.
 
 ## Delivered
 

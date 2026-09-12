@@ -68,9 +68,9 @@
   padding: 74px 0 65px;
 }
 .cover h1 {
-  max-width: 15ch;
+  max-width: 20ch;
   font:
-    400 clamp(48px, 5.45vw, 80px) / 1.05 var(--font-serif),
+    400 clamp(40px, 4.4vw, 64px) / 1.05 var(--font-serif),
     serif;
   letter-spacing: -0.045em;
   margin: 0 0 28px;
@@ -244,7 +244,7 @@
     padding: 60px 0 35px;
   }
   .cover h1 {
-    font-size: clamp(45px, 8vw, 70px);
+    font-size: clamp(36px, 6.4vw, 56px);
   }
   .coverTop > .eyebrow {
     font-size: 11px;

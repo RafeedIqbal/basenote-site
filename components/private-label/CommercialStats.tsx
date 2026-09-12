@@ -19,8 +19,7 @@ const stats = content.stats.map((stat) => {
 
 export default function CommercialStats({
   variant,
-  sectionNumber = "06",
-}: { variant?: "guide"; sectionNumber?: string } = {}) {
+}: { variant?: "guide" } = {}) {
   const root = useRef<HTMLElement>(null);
   const revealed = useRef(false);
   const isGuide = variant === "guide";
@@ -112,9 +111,6 @@ export default function CommercialStats({
           className={`${common.sectionHeading} ${styles.heading}`}
           data-reveal=""
         >
-          <span className={common.sectionNumber} aria-hidden="true">
-            {sectionNumber} /
-          </span>
           <h2 id={titleId} className={styles.title}>
             {content.title}
           </h2>

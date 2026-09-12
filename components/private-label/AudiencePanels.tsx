@@ -168,7 +168,6 @@ export default function AudiencePanels() {
               aria-expanded={open === index}
               aria-controls={`segment-detail-${index}`}
               aria-labelledby={`segment-title-${index}`}
-              aria-describedby={`segment-description-${index}`}
               onClick={() => togglePanel(index)}
             />
             <div className={styles.panelSummary}>
@@ -179,9 +178,6 @@ export default function AudiencePanels() {
               <h3 id={`segment-title-${index}`} className={styles.panelTitle}>
                 {segment.title}
               </h3>
-              <p id={`segment-description-${index}`} className={styles.panelDescription}>
-                {segment.description}
-              </p>
             </div>
             <div
               id={`segment-detail-${index}`}
