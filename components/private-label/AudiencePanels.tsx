@@ -137,7 +137,6 @@ export default function AudiencePanels() {
       aria-labelledby="audience-title"
     >
       <div className={styles.sectionHeading} data-reveal="">
-        <span className={styles.sectionNumber}>02 /</span>
         <h2 id="audience-title">{content.title}</h2>
       </div>
       <div

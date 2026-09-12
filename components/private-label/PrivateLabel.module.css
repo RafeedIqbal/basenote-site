@@ -66,7 +66,6 @@
 .sectionHeading {
   display: flex;
   align-items: flex-start;
-  gap: 24px;
   margin-bottom: 48px;
 }
 .sectionHeading h2 {
@@ -75,13 +74,6 @@
     400 clamp(36px, 4.7vw, 64px) / 1.08 var(--font-serif),
     serif;
   letter-spacing: -0.04em;
-}
-.sectionNumber {
-  padding-top: 12px;
-  color: #a77967;
-  font:
-    12px var(--font-mono),
-    monospace;
 }
 .audienceGrid {
   position: relative;
@@ -391,11 +383,7 @@
     padding-block: 65px;
   }
   .sectionHeading {
-    gap: 15px;
     margin-bottom: 32px;
-  }
-  .sectionNumber {
-    padding-top: 6px;
   }
   .panelSummary {
     padding: 24px;

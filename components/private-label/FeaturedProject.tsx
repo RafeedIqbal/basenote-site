@@ -65,9 +65,6 @@ export default function FeaturedProject() {
       <div ref={dim} className={styles.dim} aria-hidden="true" />
       <div className={styles.content}>
         <div className={common.sectionHeading}>
-          <span className={common.sectionNumber} aria-hidden="true">
-            05 /
-          </span>
           <h2 id="featured-title">{content.title}</h2>
         </div>
         <div className={styles.player} data-has-video={Boolean(content.video)}>
