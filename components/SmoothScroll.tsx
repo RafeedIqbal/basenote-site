@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 import { registerSmoothScroll } from "@/lib/scroll";
@@ -8,7 +9,11 @@ import { registerSmoothScroll } from "@/lib/scroll";
 import { ScrollTrigger } from "@/lib/gsap";
 
 export default function SmoothScroll() {
-  useEffect(() => {
+  const pathname = usePathname();
+
+  // Cancel the previous page's animation during the navigation commit, before
+  // its next frame can overwrite Next's scroll reset or history restoration.
+  useLayoutEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     let stop = () => {};
     const configure = () => {
@@ -53,7 +58,7 @@ export default function SmoothScroll() {
       preference.removeEventListener("change", configure);
       stop();
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

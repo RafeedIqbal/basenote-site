@@ -38,18 +38,13 @@ function Chapter({
       aria-labelledby={`${chapter.id}-title`}
     >
       <header className={styles.chapterHeader}>
-        <span className={styles.chapterNumber} aria-hidden="true">
-          {chapter.number}
+        <span className={styles.eyebrow}>
+          {content.chapterLabel} {chapter.number} / {chapter.title}
         </span>
-        <div>
-          <span className={styles.eyebrow}>
-            {content.chapterLabel} {chapter.number} / {chapter.title}
-          </span>
-          <h2 id={`${chapter.id}-title`}>{chapter.headline}</h2>
-          {chapter.paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
+        <h2 id={`${chapter.id}-title`}>{chapter.headline}</h2>
+        {chapter.paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
       </header>
       {children}
     </section>
@@ -97,7 +92,7 @@ function Production() {
 function MakeItReal() {
   const [formStarted, setFormStarted] = useState(false);
   return (
-    <div className={styles.finalSection}>
+    <div>
       <details
         className={styles.formDisclosure}
         onToggle={(event) => {
@@ -136,10 +131,14 @@ function ChapterRail() {
       const update = (self: ScrollTrigger) => {
         if (progress.current) progress.current.value = self.progress * 100;
         const readingLine = window.scrollY + window.innerHeight * 0.4;
-        const next = positions.reduce(
-          (index, top, candidate) => top <= readingLine ? candidate : index,
-          0,
-        );
+        // A short final chapter can remain below the reading line when the
+        // guide ends. ScrollTrigger stops updating once that end is passed.
+        const next = self.progress === 1
+          ? content.chapters.length - 1
+          : positions.reduce(
+              (index, top, candidate) => top <= readingLine ? candidate : index,
+              0,
+            );
         if (next !== current) {
           current = next;
           setActive(next);
@@ -212,28 +211,9 @@ export default function PrivateLabelGuidePage() {
           </Link>
           <span className={styles.eyebrow}>{content.metadata.title}</span>
         </div>
-        <div className={styles.coverLayout}>
-          <div className={styles.coverCopy}>
-            <h1>{content.title}</h1>
-            <p>{content.introduction}</p>
-          </div>
-          <nav
-            className={styles.coverContents}
-            aria-label={content.contentsLabel}
-          >
-            <span className={styles.eyebrow}>01 — 06</span>
-            <ol>
-              {content.chapters.map((chapter) => (
-                <li key={chapter.id}>
-                  <a href={`#${chapter.id}`} onClick={navigateToAnchor}>
-                    <span>{chapter.number}</span>
-                    {chapter.title}
-                    <ArrowIcon />
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
+        <div className={styles.coverCopy}>
+          <h1>{content.title}</h1>
+          <p>{content.introduction}</p>
         </div>
         <div className={styles.coverBottom}>
           <span>Basenote Solutions</span>

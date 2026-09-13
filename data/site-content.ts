@@ -648,35 +648,35 @@ export const privateLabel: PrivateLabelContent = {
     items: [
       {
         label: "Fragrance development",
-        icon: "/media/private-label/capabilities/fragrance-development.png",
+        icon: "/media/private-label/capabilities/fragrance-development.svg",
       },
       {
         label: "Packaging",
-        icon: "/media/private-label/capabilities/packaging.png",
+        icon: "/media/private-label/capabilities/packaging.svg",
       },
       {
         label: "Sourcing",
-        icon: "/media/private-label/capabilities/sourcing.png",
+        icon: "/media/private-label/capabilities/sourcing.svg",
       },
       {
         label: "Branding",
-        icon: "/media/private-label/capabilities/branding.png",
+        icon: "/media/private-label/capabilities/branding.svg",
       },
       {
         label: "Compliance",
-        icon: "/media/private-label/capabilities/compliance.png",
+        icon: "/media/private-label/capabilities/compliance.svg",
       },
       {
         label: "Production",
-        icon: "/media/private-label/capabilities/production.png",
+        icon: "/media/private-label/capabilities/production.svg",
       },
       {
         label: "Strategy",
-        icon: "/media/private-label/capabilities/strategy.png",
+        icon: "/media/private-label/capabilities/strategy.svg",
       },
       {
         label: "Website dev",
-        icon: "/media/private-label/capabilities/website-dev.png",
+        icon: "/media/private-label/capabilities/website-dev.svg",
       },
     ],
   },
@@ -823,7 +823,6 @@ export type PrivateLabelGuideContent = {
   title: string;
   introduction: string;
   back: string;
-  contentsLabel: string;
   progressLabel: string;
   chapterLabel: string;
   metadata: { title: string; description: string };
@@ -841,7 +840,6 @@ export type PrivateLabelGuideContent = {
     types: { title: string; images: GuideImage[] }[];
   };
   components: {
-    catalogueNote: string;
     cap: { title: string; description: string; items: GuideCatalogueItem[] };
     bottle: { title: string; description: string; items: GuideCatalogueItem[] };
     sourcingTitle: string;
@@ -906,7 +904,6 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
   introduction:
     "From packaging and bottles to fragrance development, production and launch, this guide breaks the process down into simple decisions.",
   back: "Private Label",
-  contentsLabel: "In this guide",
   progressLabel: "Reading progress",
   chapterLabel: "Chapter",
   metadata: {
@@ -1019,7 +1016,6 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
     ],
   },
   components: {
-    catalogueNote: "The catalogue lists one bottle as PB50- without a complete reference. If that is your choice, include its image with your project details.",
     cap: {
       title: "Start with the cap.",
       description:

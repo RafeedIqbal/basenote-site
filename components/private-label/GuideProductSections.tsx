@@ -224,9 +224,6 @@ export function BottleAndCap() {
             title={index === 0 ? "Caps" : "Bottles"}
             items={part.items}
           />
-          {index === 1 ? (
-            <p className={styles.catalogueNote}>{components.catalogueNote}</p>
-          ) : null}
         </section>
       ))}
       <aside className={styles.sourcing}>

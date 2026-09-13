@@ -2,6 +2,8 @@
   --guide-line: #8c6d5e42;
   --guide-muted: #bfaea4;
   --guide-paper: #f1e9e2;
+  --guide-divider-width: clamp(72px, 8vw, 104px);
+  --guide-subsection-space: clamp(48px, 5vw, 72px);
 }
 .page :is(button, input, textarea, select) {
   font: inherit;
@@ -25,7 +27,7 @@
   position: relative;
   isolation: isolate;
   width: 100%;
-  min-height: min(850px, calc(100svh - 72px));
+  min-height: min(680px, calc(100svh - 72px));
   padding: 34px max(40px, calc((100vw - 1320px) / 2));
 }
 .cover::before {
@@ -60,19 +62,15 @@
   font-size: 14px;
   color: #d8c8be;
 }
-.coverLayout {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 70px;
-  align-items: end;
-  padding: 74px 0 65px;
+.coverCopy {
+  padding: clamp(40px, 4.2vw, 60px) 0 clamp(56px, 6vw, 84px);
 }
 .cover h1 {
   max-width: 20ch;
   font:
-    400 clamp(40px, 4.4vw, 64px) / 1.05 var(--font-serif),
+    400 clamp(42px, 4.6vw, 64px) / 1.02 var(--font-serif),
     serif;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.05em;
   margin: 0 0 28px;
   text-wrap: balance;
 }
@@ -82,35 +80,6 @@
   font-size: 17px;
   line-height: 1.85;
   margin: 0;
-}
-.coverContents {
-  padding-bottom: 6px;
-}
-.coverContents ol {
-  list-style: none;
-  margin: 23px 0 0;
-  padding: 0;
-}
-.coverContents a {
-  display: grid;
-  grid-template-columns: 24px 1fr 20px;
-  gap: 17px;
-  align-items: center;
-  padding: 21px 0;
-  border-top: 1px solid #d1a58a4d;
-  font-size: 16px;
-}
-.coverContents a > span:first-child {
-  font:
-    12px var(--font-mono),
-    monospace;
-  color: #d9a58d;
-}
-.coverContents a > span:last-child {
-  transition: transform 0.2s;
-}
-.coverContents a:hover > span:last-child {
-  transform: translate(3px, -3px);
 }
 .coverBottom {
   border-top: 1px solid #bc8b7038;
@@ -179,32 +148,23 @@
 }
 .article {
   min-width: 0;
+  padding-block: clamp(80px, 8vw, 112px) clamp(96px, 10vw, 144px);
 }
 .page .chapter {
   /* The shared canvas already reserves the header through scroll-padding. */
   scroll-margin-top: 16px;
 }
-.chapter {
-  padding: 85px 0 0;
+.chapter + .chapter {
+  margin-top: clamp(112px, 12vw, 176px);
 }
 .chapterHeader {
-  display: grid;
-  grid-template-columns: 76px minmax(0, 1fr);
-  gap: 24px;
-  margin-bottom: 48px;
-}
-.chapterNumber {
-  font:
-    400 68px/1 var(--font-serif),
-    serif;
-  letter-spacing: -0.06em;
-  color: #bc7b60;
+  margin-bottom: clamp(48px, 5.5vw, 80px);
 }
 .chapterHeader h2 {
   font:
-    400 clamp(36px, 3.4vw, 50px) / 1.08 var(--font-serif),
+    400 clamp(36px, 4.7vw, 64px) / 1.08 var(--font-serif),
     serif;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   max-width: 21ch;
   margin: 20px 0 24px;
   text-wrap: balance;
@@ -218,6 +178,9 @@
 .chapterHeader p {
   max-width: 65ch;
 }
+.chapterHeader > :last-child {
+  margin-bottom: 0;
+}
 .chapter h3 {
   font:
     400 31px/1.15 var(--font-serif),
@@ -230,30 +193,23 @@
     grid-template-columns: 170px minmax(0, 1fr);
     gap: 35px;
   }
-  .coverLayout {
-    gap: 45px;
-  }
 }
 @media (max-width: 859px) {
   .cover {
+    min-height: auto;
     padding: 25px 24px;
   }
-  .coverLayout {
-    grid-template-columns: 1fr;
-    gap: 50px;
-    padding: 60px 0 35px;
+  .coverCopy {
+    padding: 36px 0 48px;
   }
   .cover h1 {
-    font-size: clamp(36px, 6.4vw, 56px);
+    font-size: clamp(38px, 8.5vw, 60px);
   }
   .coverTop > .eyebrow {
     font-size: 11px;
   }
   .coverCopy > p {
     font-size: 16px;
-  }
-  .coverContents a {
-    padding: 17px 0;
   }
   .coverBottom {
     align-items: start;
@@ -283,19 +239,7 @@
     font-size: 14px;
     gap: 8px;
   }
-  .chapter {
-    padding-top: 60px;
-  }
-  .chapterHeader {
-    grid-template-columns: 1fr;
-    gap: 17px;
-    margin-bottom: 35px;
-  }
-  .chapterNumber {
-    font-size: 53px;
-  }
   .chapterHeader h2 {
-    font-size: 39px;
     margin-top: 15px;
   }
 }
@@ -313,8 +257,25 @@
   grid-template-columns: 3fr 2fr;
   gap: 36px;
   align-items: start;
-  padding: 48px 0 64px;
-  border-top: 1px solid var(--guide-line);
+  padding-top: var(--guide-subsection-space);
+}
+.productSplit + .productSplit {
+  margin-top: calc(var(--guide-subsection-space) * 2);
+}
+.productSplit,
+.componentSection {
+  position: relative;
+}
+.productSplit::before,
+.componentSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--guide-divider-width);
+  height: 1px;
+  background: var(--guide-line);
+  transform: translateX(-50%);
 }
 .productSplit h3 {
   max-width: 20ch;
@@ -434,9 +395,10 @@
   color: #d3b7a6;
 }
 .componentSection {
-  border-top: 1px solid var(--guide-line);
-  padding-top: 40px;
-  margin-top: 60px;
+  padding-top: var(--guide-subsection-space);
+}
+.componentSection + .componentSection {
+  margin-top: calc(var(--guide-subsection-space) * 2);
 }
 .componentSection > p {
   max-width: 64ch;
@@ -448,7 +410,7 @@
   background: #37251c66;
   border-left: 2px solid #99563d;
   padding: 30px;
-  margin: 55px 0;
+  margin: var(--guide-subsection-space) 0;
 }
 .sourcing > span {
   color: #d6926f;
@@ -536,7 +498,7 @@
 }
 .chapter .timelineTitle {
   font-size: 36px;
-  margin: 75px 0 35px;
+  margin: clamp(88px, 9vw, 128px) 0 48px;
 }
 .timeline {
   list-style: none;
@@ -597,9 +559,6 @@
 }
 .chapter p.stepNote {
   color: #e7b89b;
-}
-.finalSection {
-  margin-bottom: 110px;
 }
 .formDisclosure > summary,
 .primaryButton {
@@ -761,8 +720,7 @@
 @media (max-width: 859px) {
   .productSplit {
     grid-template-columns: 1fr;
-    padding: 35px 0 45px;
-    gap: 30px;
+    gap: 40px;
   }
   .customisation > div {
     grid-template-columns: 1fr 1fr;
@@ -770,10 +728,6 @@
   .mediaNote {
     min-height: 190px;
     padding: 25px;
-  }
-  .componentSection {
-    margin-top: 45px;
-    padding-top: 30px;
   }
   .sourcing {
     gap: 20px;
@@ -815,9 +769,6 @@
   .stepPoints {
     columns: 1;
   }
-  .finalSection {
-    margin-bottom: 65px;
-  }
   .formPanel {
     padding: 25px 20px;
   }
@@ -843,10 +794,4 @@
 
 .chapter p.qualification {
   font-size: 14px;
-}
-.chapter p.catalogueNote {
-  margin: 28px 0 0;
-  max-width: 65ch;
-  font-size: 13px;
-  color: #ba9e8c;
 }

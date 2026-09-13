@@ -23,10 +23,21 @@
 }
 
 .guide {
-  border-top: 1px solid var(--guide-line);
-  margin-top: 48px;
+  position: relative;
+  margin-top: var(--guide-subsection-space);
   margin-bottom: 24px;
-  padding-top: 28px;
+  padding-top: var(--guide-subsection-space);
+}
+
+.guide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--guide-divider-width);
+  height: 1px;
+  background: var(--guide-line);
+  transform: translateX(-50%);
 }
 
 .guide .title {

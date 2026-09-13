@@ -133,10 +133,6 @@
   transform: translateX(-50%);
   display: grid;
   place-items: center;
-  border: 1px solid #c18b7636;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 20%, #943f2d57, #130d0cdd 75%);
-  box-shadow: inset 0 0 18px #c18b760d;
 }
 
 .logo {
