@@ -19,6 +19,7 @@ The contact action uses `GMAIL_USER`, `GMAIL_APP_PASSWORD`, and `DESTINATION_INB
 | Concern | Source |
 | --- | --- |
 | Public routes, site origin, shared metadata | `lib/site.ts`, `app/`, `app/sitemap.ts` |
+| Favicons, social artwork, manifest and structured data | [Brand metadata workflow](docs/brand-metadata.md), `scripts/generate-brand-assets.mjs` |
 | Marketing copy, navigation, links, media and FAQs | `data/site-content.ts` |
 | Main page views | `components/site/SitePages.tsx` and its CSS Module |
 | Shared header, footer, forms and FAQ behavior | `components/site/` |

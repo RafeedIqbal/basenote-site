@@ -1,9 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Lexend_Deca, Source_Serif_4, Space_Mono } from "next/font/google";
 import Script from "next/script";
 
 import SmoothScroll from "@/components/SmoothScroll";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_ORIGIN } from "@/lib/site";
+import {
+  createPageMetadata,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_ORIGIN,
+  SITE_THEME_COLOR,
+  SITE_TITLE
+} from "@/lib/site";
 
 import "./globals.css";
 
@@ -27,42 +34,35 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
+  ...createPageMetadata({
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    path: "/"
+  }),
   metadataBase: new URL(SITE_ORIGIN),
+  applicationName: SITE_NAME,
   title: {
-    default: `Fragrance Brand Consultancy | ${SITE_NAME}`,
-    template: "%s | Basenote Solutions"
+    default: `${SITE_TITLE} | ${SITE_NAME}`,
+    template: `%s | ${SITE_NAME}`
   },
-  description: SITE_DESCRIPTION,
   keywords: [
     "private label perfume",
     "fragrance brand consultancy",
     "AI fragrance technology",
     "wholesale fragrance oils",
     "perfume brand development",
-    "Basenote Solutions"
+    SITE_NAME
   ],
-  openGraph: {
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
-    siteName: SITE_NAME,
-    locale: "en_US",
-    type: "website",
-    images: [
-      {
-        url: "/og.png",
-        width: 1731,
-        height: 909,
-        alt: "Basenote — Where Fragrance Meets Business"
-      }
-    ]
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Basenote Solutions — Fragrance Brand Consultancy",
-    description:
-      "Private label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts.",
-    images: ["/og.png"]
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { "max-image-preview": "large" }
   }
+};
+
+export const viewport: Viewport = {
+  themeColor: SITE_THEME_COLOR,
+  colorScheme: "dark"
 };
 
 export default function RootLayout({
