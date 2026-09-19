@@ -6,7 +6,6 @@ import ArrowIcon from "@/components/site/ArrowIcon";
 import { ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { navigateToAnchor } from "@/lib/scroll";
 import {
-  privateLabel,
   privateLabelGuide as content,
   type PrivateLabelGuideChapter,
 } from "@/data/site-content";
@@ -109,7 +108,7 @@ function MakeItReal() {
           {formStarted ? <GuideProjectForm /> : null}
         </div>
       </details>
-      <Link className={styles.consultation} href={privateLabel.contactHref}>
+      <Link className={styles.consultation} href={content.final.consultationHref}>
         {content.final.secondary}
         <ArrowIcon />
       </Link>
@@ -214,6 +213,19 @@ export default function PrivateLabelGuidePage() {
         <div className={styles.coverCopy}>
           <h1>{content.title}</h1>
           <p>{content.introduction}</p>
+          <nav className={styles.mobileContents} aria-labelledby="guide-contents-title">
+            <h2 id="guide-contents-title">{content.contentsLabel}</h2>
+            <ol>
+              {content.chapters.map((chapter) => (
+                <li key={chapter.id}>
+                  <a href={"#" + chapter.id} onClick={navigateToAnchor}>
+                    <span>{chapter.number}</span>
+                    <span>{chapter.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
         </div>
         <div className={styles.coverBottom}>
           <span>Basenote Solutions</span>

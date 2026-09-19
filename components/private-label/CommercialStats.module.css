@@ -9,9 +9,9 @@
 
 .section .heading {
   align-items: baseline;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 28px;
-  text-align: center;
+  text-align: left;
 }
 
 .section .title {
@@ -20,6 +20,12 @@
     400 clamp(28px, 3.2cqi, 40px) / 1.15 var(--font-serif),
     serif;
   letter-spacing: -0.035em;
+}
+
+.standalone .title {
+  font-size: clamp(36px, 4.7vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
 }
 
 .guide {

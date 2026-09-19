@@ -1,4 +1,3 @@
-import guideCatalogue from "./private-label-catalogue.json";
 import guideOptions from "./private-label-options.json";
 
 export type NavItem = {
@@ -41,6 +40,14 @@ export const navigation: NavItem[] = [
   { label: "Alchemy Engine", href: "/alchemy-engine" },
   { label: "About", href: "/about" },
 ];
+
+const consultationHref = "https://calendly.com/outreach-team-pibp/30min";
+
+export const contactDetails = {
+  emailLabel: "Email",
+  email: "marketing@basenotesolutions.com",
+  booking: { label: "Book a call", href: consultationHref },
+};
 
 export const stats = [
   { value: "$50B+", label: "Global market" },
@@ -372,6 +379,7 @@ export const footerGroups = [
       { label: "Contact", href: "/contact" },
       { label: "Blogs", href: "/blogs" },
       { label: "Case Studies", href: "/case-studies" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
     ],
   },
 ] as const;
@@ -417,7 +425,15 @@ export type PrivateLabelContent = {
   };
   portfolio: {
     label: string;
-    slides: { name: string; image: string; alt: string }[];
+    slides: PortfolioProject[];
+    labels: {
+      pause: string;
+      resume: string;
+      close: string;
+      previousImage: string;
+      nextImage: string;
+      imageUnavailable: string;
+    };
   };
   audience: {
     title: string;
@@ -455,30 +471,15 @@ export type PrivateLabelContent = {
   commercial: { title: string; stats: { value: string; label: string }[] };
   guide: { title: string; description: string; cta: string; draft: boolean };
   faqTitle: string;
-  final: { title: string; description: string; cta: string };
+  final: { title: string; description: string; cta: string; href: string };
   metadata: { title: string; description: string; draft: boolean };
 };
 
 export const privateLabelFaqs: FaqItem[] = [
   {
-    question: "How much does it cost to launch a fragrance?",
-    answer:
-      "Every project is different. As a guide, production typically starts from around 500 units, with indicative unit costs from around £20 per unit. Final cost depends on the fragrance, bottle, packaging, volume, shipping and delivery, and how much support you need.",
-  },
-  {
-    question: "What is the MOQ?",
-    answer:
-      "Our typical minimum order is 500 units per fragrance, although this can vary depending on the product and components selected.",
-  },
-  {
     question: "How long does the process take?",
     answer:
       "A typical project takes around 8-12 weeks, although bespoke fragrance development, custom packaging or more complex projects can take longer.",
-  },
-  {
-    question: "Do I need an existing fragrance?",
-    answer:
-      "No. You can come to us with a finished fragrance, a rough idea, or nothing more than a direction you want to explore.",
   },
   {
     question: "Can Basenote develop the fragrance?",
@@ -496,16 +497,6 @@ export const privateLabelFaqs: FaqItem[] = [
       "Yes. We can support everything from positioning and storytelling through to visual identity, packaging, website and launch assets, depending on what you need.",
   },
   {
-    question: "Can I provide my own components?",
-    answer:
-      "Yes. If you already have a bottle, packaging, fragrance or other components in place, we can build around them, subject to technical and production requirements.",
-  },
-  {
-    question: "Who owns the fragrance?",
-    answer:
-      "That depends on how the fragrance is developed. Bespoke formulations, licensed fragrances and existing formulas can have different ownership arrangements. We’ll make this clear before development begins.",
-  },
-  {
     question: "Do you support international clients?",
     answer:
       "Yes. We work with clients internationally and can support projects across different markets.",
@@ -514,11 +505,6 @@ export const privateLabelFaqs: FaqItem[] = [
     question: "Can I order fragrance oils without a full private label order?",
     answer:
       "Yes. Private Label is not the only way to work with Basenote. We can also supply fragrance oils separately where that is what you need.",
-  },
-  {
-    question: "Do you offer branding as a standalone service?",
-    answer:
-      "Yes. Branding and creative support can be scoped separately, whether you need positioning, identity, packaging or wider launch support.",
   },
 ];
 
@@ -547,31 +533,69 @@ export const privateLabel: PrivateLabelContent = {
   },
   portfolio: {
     label: "Private label portfolio",
+    labels: {
+      pause: "Pause scrolling",
+      resume: "Resume scrolling",
+      close: "Close project",
+      previousImage: "Previous project image",
+      nextImage: "Next project image",
+      imageUnavailable: "Project image unavailable.",
+    },
     slides: [
       {
         name: "Firmino",
-        image: "/media/private-label/portfolio/firmino.png",
-        alt: "Firmino fragrance project",
+        slug: "firmino",
+        logo: { src: "/media/private-label/portfolio/logos/firmino.png", alt: "Firmino" },
+        headline: "A farewell gift for a Liverpool icon.",
+        paragraphs: [
+          "Created to mark Roberto Firmino’s departure from Liverpool FC, this bespoke fragrance project turned a significant sporting moment into a personal commemorative piece.",
+          "We developed the fragrance and presentation as a one-off commemorative piece, designed around the occasion rather than a conventional retail launch.",
+        ],
+        images: [{ src: "/media/private-label/portfolio/firmino.png", alt: "Firmino fragrance project" }],
       },
       {
         name: "Rizla",
-        image: "/media/private-label/portfolio/rizla.png",
-        alt: "Rizla fragrance project",
+        slug: "rizla",
+        logo: { src: "/media/private-label/portfolio/logos/rizla.png", alt: "Rizla" },
+        headline: "From rolling papers to fragrance.",
+        paragraphs: [
+          "For Riz, by Rizla, the brand played on the rise of “rizz” culture and temporarily reimagined itself through scent.",
+          "We helped bring the fragrance concept to life, turning an unexpected brand extension into a physical product that could carry the joke beyond the campaign itself.",
+        ],
+        images: [{ src: "/media/private-label/portfolio/rizla.png", alt: "Rizla fragrance project" }],
       },
       {
         name: "Fashion TV",
-        image: "/media/private-label/portfolio/fashion-tv.png",
-        alt: "Fashion TV fragrance project",
+        slug: "fashion-tv",
+        logo: { src: "/media/private-label/portfolio/logos/fashion-tv.png", alt: "Fashion TV" },
+        headline: "Taking a global fashion brand into fragrance.",
+        paragraphs: [
+          "We worked with FashionTV on fragrance development, translating an established fashion and lifestyle identity into a physical scent product.",
+          "The project demonstrates how fragrance can extend an existing brand into a new category while still feeling recognisably its own.",
+        ],
+        images: [{ src: "/media/private-label/portfolio/fashion-tv.png", alt: "Fashion TV fragrance project" }],
       },
       {
         name: "Ingrained Oil",
-        image: "/media/private-label/portfolio/ingrained-oil.png",
-        alt: "Ingrained Oil fragrance project",
+        slug: "ingrained-oil",
+        logo: { src: "/media/private-label/portfolio/logos/ingrained-oil.png", alt: "Ingrained Oil" },
+        headline: "Built to meet retail standards.",
+        paragraphs: [
+          "For Ingrained Oil, the challenge went beyond creating the product. We handled the compliance work required to prepare the range for retail with John Lewis.",
+          "From documentation through to regulatory requirements, this project shows the less visible side of bringing fragrance products to market.",
+        ],
+        images: [{ src: "/media/private-label/portfolio/ingrained-oil.png", alt: "Ingrained Oil fragrance project" }],
       },
       {
-        name: "ALPAC",
-        image: "/media/private-label/portfolio/alpac.png",
-        alt: "ALPAC fragrance project",
+        name: "ALPAC London",
+        slug: "alpac-london",
+        logo: { src: "/media/private-label/portfolio/logos/alpac-london.png", alt: "ALPAC London" },
+        headline: "From an idea to a fragrance brand.",
+        paragraphs: [
+          "Basenote worked with ALPAC London from the ground up, developing the brand strategy, positioning, packaging, website and go-to-market approach alongside the fragrance launch.",
+          "The result was a complete brand system built around a limited-drop model, with every customer touchpoint designed to support the same proposition.",
+        ],
+        images: [{ src: "/media/private-label/portfolio/alpac.png", alt: "ALPAC London Ewa fragrance" }],
       },
     ],
   },
@@ -792,10 +816,11 @@ export const privateLabel: PrivateLabelContent = {
   },
   faqTitle: "Frequently asked questions",
   final: {
-    title: "Ready to make your fragrance?",
+    title: "Ready to make\nyour fragrance?",
     description:
       "Tell us what you’re looking to create. We’ll talk through the idea, what you need from us and the best route forward. Even if you don’t have an idea yet, we’re here to help.",
     cta: "Book a call",
+    href: consultationHref,
   },
   metadata: {
     title: "Private Label Perfume",
@@ -805,6 +830,19 @@ export const privateLabel: PrivateLabelContent = {
   },
 };
 export type GuideImage = { src: string; alt: string };
+export type PortfolioProject = {
+  name: string;
+  slug: string;
+  headline: string;
+  paragraphs: string[];
+  images: GuideImage[];
+  logo?: GuideImage;
+};
+export type GuideChoiceCard = {
+  title: string;
+  description: string;
+  image: GuideImage;
+};
 export type GuideCatalogueItem = GuideImage & { number: string };
 export type GuideStep = {
   title: string;
@@ -825,6 +863,7 @@ export type PrivateLabelGuideContent = {
   back: string;
   progressLabel: string;
   chapterLabel: string;
+  contentsLabel: string;
   metadata: { title: string; description: string };
   chapters: PrivateLabelGuideChapter[];
   elements: { title: string; subtitle: string; paragraphs: string[] }[];
@@ -840,8 +879,8 @@ export type PrivateLabelGuideContent = {
     types: { title: string; images: GuideImage[] }[];
   };
   components: {
-    cap: { title: string; description: string; items: GuideCatalogueItem[] };
-    bottle: { title: string; description: string; items: GuideCatalogueItem[] };
+    cap: { title: string; description: string; cards: GuideChoiceCard[] };
+    bottle: { title: string; description: string; cards: GuideChoiceCard[] };
     sourcingTitle: string;
     sourcingDescription: string;
     finishTitle: string;
@@ -857,6 +896,7 @@ export type PrivateLabelGuideContent = {
   final: {
     primary: string;
     secondary: string;
+    consultationHref: string;
     formTitle: string;
     detailsTitle: string;
     choicesTitle: string;
@@ -906,6 +946,7 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
   back: "Private Label",
   progressLabel: "Reading progress",
   chapterLabel: "Chapter",
+  contentsLabel: "Contents",
   metadata: {
     title: "Private Label Guide",
     description:
@@ -1020,17 +1061,49 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
       title: "Start with the cap.",
       description:
         "Caps are one of the less flexible parts of the product, so it often makes sense to choose one first and build the bottle around it.",
-      items: guideCatalogue.caps,
+      cards: [
+        {
+          title: "Basic",
+          description: "Simple, lightweight caps, typically in plastic. A practical option for keeping the overall pack cost efficient.",
+          image: { src: "/media/private-label/guide/components/cap-basic.png", alt: "Illustration of a simple cylindrical cap" },
+        },
+        {
+          title: "Premium",
+          description: "More substantial caps with upgraded materials or finishes, including metal or mixed-material options.",
+          image: { src: "/media/private-label/guide/components/cap-premium.png", alt: "Illustration of a premium fragrance cap" },
+        },
+        {
+          title: "Luxe",
+          description: "Heavier, more distinctive caps with elevated materials, detailing and finish for a stronger premium feel.",
+          image: { src: "/media/private-label/guide/components/cap-luxe.png", alt: "Illustration of a distinctive luxe fragrance cap" },
+        },
+      ],
     },
     bottle: {
       title: "Then choose your bottle.",
       description:
         "Shape is only the starting point. Once you have the bottle, coatings, colour, printing and labels can completely change how it feels.",
-      items: guideCatalogue.bottles,
+      cards: [
+        {
+          title: "30ml",
+          description: "Compact and portable. Ideal for gifting, travel or a smaller fragrance format.",
+          image: { src: "/media/private-label/guide/components/bottle-30ml.png", alt: "Square fragrance bottle illustration" },
+        },
+        {
+          title: "50ml",
+          description: "The most versatile everyday size, balancing presence, practicality and price.",
+          image: { src: "/media/private-label/guide/components/bottle-50ml.png", alt: "Faceted fragrance bottle illustration" },
+        },
+        {
+          title: "100ml",
+          description: "A larger format with stronger shelf presence and a more substantial feel.",
+          image: { src: "/media/private-label/guide/components/bottle-100ml.png", alt: "Curved fragrance bottle illustration" },
+        },
+      ],
     },
     sourcingTitle: "Can’t see what you’re looking for?",
     sourcingDescription:
-      "The catalogue is a starting point, not a restriction. If you have another bottle or cap in mind, send us a reference and we can explore sourcing it.",
+      "We also have a wider bottle and cap catalogue available on request, or if you have something specific in mind, send us a reference and we can explore sourcing it for you.",
     finishTitle: "Choose your finish",
     finishDescription:
       "A clear bottle can become almost anything. Coating changes the colour, opacity, texture and overall feel of the finished product.",
@@ -1085,7 +1158,7 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
       },
       {
         title: "Bespoke",
-        subtitle: "Formulate something of your own",
+        subtitle: "Formulate your own.",
         paragraphs: [
           "Work with a chemist to develop a fragrance around your brief, references and creative direction.",
           "You’ll sample and refine the scent until the formula is ready for production.",
@@ -1192,7 +1265,8 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
   },
   final: {
     primary: "Send us your choices",
-    secondary: "New to Basenote? Book your 15-minute consultation",
+    secondary: "New to Basenote? Book a consultation",
+    consultationHref,
     formTitle: "Your project details",
     detailsTitle: "Your details",
     choicesTitle: "What have you chosen so far?",
@@ -1210,8 +1284,8 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
     choose: "Select one",
     undecided: "Not sure yet",
     packaging: "Packaging type",
-    bottle: "Bottle reference",
-    cap: "Cap reference",
+    bottle: "Bottle size / reference",
+    cap: "Cap tier / reference",
     finish: "Finish",
     fragrance: "Fragrance route",
     notes: "Notes / references",

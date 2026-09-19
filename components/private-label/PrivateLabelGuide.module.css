@@ -89,6 +89,9 @@
     monospace;
   color: #c5a995;
 }
+.mobileContents {
+  display: none;
+}
 .guide {
   display: grid;
   grid-template-columns: 200px minmax(0, 1fr);
@@ -221,23 +224,41 @@
     width: calc(100% - 40px);
   }
   .rail {
-    border-bottom: 1px solid var(--guide-line);
+    display: none;
   }
-  .rail nav {
-    position: static;
-    max-height: none;
-    overflow: visible;
-    padding: 35px 0;
+  .mobileContents {
+    display: block;
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--guide-line);
   }
-  .rail ol {
+  .mobileContents h2 {
+    margin: 0 0 16px;
+    font: 400 24px/1.2 var(--font-serif), serif;
+    color: var(--guide-paper);
+  }
+  .mobileContents ol {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4px 20px;
-    margin: 0 0 15px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
-  .rail a {
+  .mobileContents a {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr);
+    align-items: baseline;
+    min-height: 44px;
+    padding-block: 10px;
+    color: #d1c0b5;
     font-size: 14px;
+    line-height: 1.6;
     gap: 8px;
+  }
+  .mobileContents a > span:first-child {
+    color: #d59d84;
+    font: 12px/1.6 var(--font-mono), monospace;
   }
   .chapterHeader h2 {
     margin-top: 15px;
@@ -434,8 +455,16 @@
   display: flex;
   flex-direction: column;
 }
+.finishItem {
+  border-bottom: 1px solid var(--guide-line);
+}
+.finishItem h4 {
+  margin: 0;
+  font: inherit;
+}
 .finishOptions button {
   display: grid;
+  width: 100%;
   grid-template-columns: 28px 1fr 20px;
   align-items: center;
   gap: 15px;
@@ -445,7 +474,6 @@
   color: #cdbbb0;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid var(--guide-line);
   padding: 14px;
   text-transform: uppercase;
   font-size: 14px;
@@ -456,21 +484,22 @@
     monospace;
   color: #b8866e;
 }
-.finishOptions button[aria-pressed="true"] {
+.finishOptions button[aria-expanded="true"] {
   color: white;
   background: #943f2d;
 }
-.finishOptions button[aria-pressed="true"] > span:first-child {
+.finishOptions button[aria-expanded="true"] > span:first-child {
   color: #e4b8a4;
 }
 .finishDescription {
-  padding: 25px 14px 0;
-  min-height: 190px;
+  padding: 18px 14px 24px;
 }
-.finishDescription h4 {
-  font-size: 18px;
-  font-weight: 400;
-  margin: 0 0 12px;
+.finishDescription p {
+  margin: 0;
+}
+.finishToggle {
+  text-align: center;
+  font-size: 20px;
 }
 .fragranceRoutes {
   display: grid;
@@ -784,7 +813,7 @@
     gap: 15px;
     flex-wrap: wrap;
   }
-  .rail ol {
+  .mobileContents ol {
     grid-template-columns: 1fr;
   }
   .customisation > div {

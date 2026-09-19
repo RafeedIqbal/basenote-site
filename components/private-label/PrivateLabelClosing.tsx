@@ -1,4 +1,3 @@
-import Link from "next/link";
 import ArrowIcon from "@/components/site/ArrowIcon";
 import SiteFooter from "@/components/site/SiteFooter";
 import { privateLabel as content } from "@/data/site-content";
@@ -19,10 +18,10 @@ export default function PrivateLabelClosing() {
         <div className={styles.finalCopy}>
           <h2 id="final-title">{content.final.title}</h2>
           <p>{content.final.description}</p>
-          <Link href={content.contactHref} className={styles.primaryButton}>
+          <a href={content.final.href} className={styles.primaryButton}>
             {content.final.cta}
             <ArrowIcon />
-          </Link>
+          </a>
         </div>
       </section>
       <SiteFooter overlay />

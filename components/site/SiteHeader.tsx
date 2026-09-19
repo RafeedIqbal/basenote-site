@@ -122,7 +122,6 @@ export default function SiteHeader() {
               height={30}
               priority={!privateLabel}
             />
-            <span>Basenote</span>
           </Link>
 
           <nav className={styles.desktopNav} aria-label="Primary navigation">
@@ -173,7 +172,9 @@ export default function SiteHeader() {
         inert={!open}
       >
         <div className={styles.mobileTopline}>
-          {privateLabel ? <Image src="/media/basenote-handoff/logo-white.png" alt="Basenote" width={30} height={30} /> : <span className={styles.mobileBrand}>Basenote</span>}
+          <Link href="/" className={styles.brand} aria-label="Basenote home" onClick={closeForNavigation} tabIndex={open ? 0 : -1}>
+            <Image src="/media/basenote-handoff/logo-white.png" alt="" width={30} height={30} />
+          </Link>
           <button
             type="button"
             className={styles.closeButton}

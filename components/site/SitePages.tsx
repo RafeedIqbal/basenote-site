@@ -13,6 +13,7 @@ import {
   blogPosts,
   capabilities,
   caseStudies,
+  contactDetails,
   homeFaqs,
   services,
   stats,
@@ -554,9 +555,11 @@ export function ContactLandingPage({
             <h1>Let&apos;s Talk</h1>
             <p>Tell us what you&apos;re working on and we&apos;ll come back to you within one business day.</p>
             <div className={styles.contactDetails}>
-              <div><Eyebrow>Email</Eyebrow><a href="mailto:hello@basenotesolutions.com">hello@basenotesolutions.com</a></div>
-              <div><Eyebrow>Locations</Eyebrow><span>United Arab Emirates · United Kingdom</span></div>
+              <div><Eyebrow>{contactDetails.emailLabel}</Eyebrow><a href={"mailto:" + contactDetails.email}>{contactDetails.email}</a></div>
             </div>
+            <a href={contactDetails.booking.href} className={`${styles.primaryButton} ${styles.contactBooking}`}>
+              {contactDetails.booking.label}
+            </a>
           </div>
           <div data-reveal="">
             <InquiryForm defaultInterest={defaultInterest} defaultMessage={defaultMessage} />

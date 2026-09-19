@@ -4,13 +4,13 @@
   --timeline-marker-top: 13px;
   --timeline-ease: cubic-bezier(0.4, 0, 0.2, 1);
   list-style: none;
-  padding: 0;
+  padding: 32px 0;
   margin: 0;
 }
 
 .step {
   position: relative;
-  padding: 0 0 36px 74px;
+  padding: 0 0 56px 74px;
 }
 
 .step:last-child {
@@ -170,10 +170,11 @@
 @media (max-width: 859px) {
   .timeline {
     --timeline-axis: 18px;
+    padding-block: 24px;
   }
   .step {
     padding-left: 56px;
-    padding-bottom: 32px;
+    padding-bottom: 48px;
   }
   .title {
     font-size: 25px;

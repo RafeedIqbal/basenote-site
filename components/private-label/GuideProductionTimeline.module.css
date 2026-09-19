@@ -1,12 +1,12 @@
 .timeline {
   --marker-size: 44px;
-  --step-gap: 32px;
+  --step-gap: 56px;
   --timeline-accent: #bc7b60;
   display: grid;
   gap: var(--step-gap);
   list-style: none;
   margin: 0;
-  padding: 0 0 24px;
+  padding: 32px 0 56px;
 }
 
 .step {
@@ -123,6 +123,8 @@
 @media (max-width: 859px) {
   .timeline {
     --marker-size: 38px;
+    --step-gap: 48px;
+    padding-block: 24px 48px;
   }
 
   .step {

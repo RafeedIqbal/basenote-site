@@ -9,7 +9,7 @@ import {
   privateLabelGuide as content,
   type GuideImage,
 } from "@/data/site-content";
-import GuideCatalogue from "./GuideCatalogue";
+import GuideChoiceCards from "./GuideChoiceCards";
 import styles from "./PrivateLabelGuide.module.css";
 
 const number = (value: number) => String(value + 1).padStart(2, "0");
@@ -206,6 +206,7 @@ export function Packaging() {
 
 export function BottleAndCap() {
   const [active, setActive] = useState(0);
+  const [expanded, setExpanded] = useState<number | null>(0);
   const components = content.components;
   return (
     <>
@@ -220,10 +221,7 @@ export function BottleAndCap() {
           </span>
           <h3 id={`component-${index}-title`}>{part.title}</h3>
           <p>{part.description}</p>
-          <GuideCatalogue
-            title={index === 0 ? "Caps" : "Bottles"}
-            items={part.items}
-          />
+          <GuideChoiceCards cards={part.cards} />
         </section>
       ))}
       <aside className={styles.sourcing}>
@@ -241,37 +239,53 @@ export function BottleAndCap() {
         <h3 id="finish-title">{components.finishTitle}</h3>
         <p>{components.finishDescription}</p>
         <div className={styles.finishLayout}>
-          <div>
-            <div
-              className={styles.finishOptions}
-              role="group"
-              aria-label="Bottle finish"
-              onKeyDown={(event) =>
-                switchWithKeys(
-                  event,
-                  active,
-                  components.finishes.length,
-                  setActive,
-                )
-              }
-            >
-              {components.finishes.map((finish, index) => (
-                <button
-                  type="button"
-                  key={finish.title}
-                  aria-pressed={active === index}
-                  onClick={() => setActive(index)}
+          <div
+            className={styles.finishOptions}
+            onKeyDown={(event) => {
+              const buttons = Array.from(event.currentTarget.querySelectorAll("button"));
+              const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+              const next = {
+                ArrowDown: (index + 1) % buttons.length,
+                ArrowUp: (index - 1 + buttons.length) % buttons.length,
+                Home: 0,
+                End: buttons.length - 1,
+              }[event.key];
+              if (next === undefined) return;
+              event.preventDefault();
+              buttons[next]?.focus();
+            }}
+          >
+            {components.finishes.map((finish, index) => (
+              <div className={styles.finishItem} key={finish.title}>
+                <h4>
+                  <button
+                    id={"finish-option-" + index}
+                    type="button"
+                    aria-expanded={expanded === index}
+                    aria-controls={"finish-description-" + index}
+                    onClick={() => {
+                      setActive(index);
+                      setExpanded(expanded === index ? null : index);
+                    }}
+                  >
+                    <span>{number(index)}</span>
+                    {finish.title}
+                    <span className={styles.finishToggle} aria-hidden="true">
+                      {expanded === index ? "−" : "+"}
+                    </span>
+                  </button>
+                </h4>
+                <div
+                  id={"finish-description-" + index}
+                  className={styles.finishDescription}
+                  role="region"
+                  aria-labelledby={"finish-option-" + index}
+                  hidden={expanded !== index}
                 >
-                  <span>{number(index)}</span>
-                  {finish.title}
-                  <ArrowIcon />
-                </button>
-              ))}
-            </div>
-            <div className={styles.finishDescription} aria-live="polite">
-              <h4>{components.finishes[active].title}</h4>
-              <p>{components.finishes[active].description}</p>
-            </div>
+                  <p>{finish.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
           <Gallery
             key={active}
