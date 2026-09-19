@@ -19,7 +19,7 @@
 
 | Component | Behavior to preserve |
 | --- | --- |
-| `PortfolioCarousel` | Slim logo ribbon with one accessible link per project. Click/Enter/Space opens its native case-study dialog; Escape, close, and backdrop dismiss it and return focus. The hash is the selected story, including on direct arrival, reload and Back/Forward. Modified clicks retain native link behavior. Previous/next, arrow keys, and horizontal swipes move through projects with multiple images. The ribbon has a pause/resume control and pauses during hover, keyboard focus, modal reading, offscreen, and hidden-tab states. Reduced motion exposes a static list. Empty collections render nothing; one project does not autoplay. |
+| `PortfolioCarousel` | Full-width logo ribbon with compact 240px slots (216px below 860px). Complete sets repeat as needed to fill the viewport and an offscreen wrapping slot; every visible copy links to its story, while only one set participates in keyboard and screen-reader navigation. Drag horizontally to move the continuous loop; vertical touch gestures remain page scrolling. A drag suppresses link activation, while Click/Enter/Space opens the native case-study dialog. Escape, close, and backdrop dismiss it and return focus. The hash is the selected story, including on direct arrival, reload and Back/Forward. Modified clicks retain native link behavior. Previous/next, arrow keys, and horizontal swipes move through projects with multiple images. There is no play/pause control; automatic scrolling pauses during pointer presses, hover, keyboard focus, modal reading, offscreen, and hidden-tab states. Reduced motion hides the repeats and exposes all projects in a static list. Empty collections render nothing; one project does not autoplay. |
 | `AudiencePanels` | One expanded card at a time; Enter/Space toggles and Escape closes with focus return. Collapsed cards show the number and title; expanded copy and the final contact link remain distinct from the trigger. Three columns start at 1024px, two at 640px, then a stacked disclosure. Refresh downstream scroll geometry after layout settles. |
 | `CapabilityWheel` | Eight named controls with selected state, arrow wrapping and Home/End; a decorative duplicate orbit is hidden from assistive technology. Swipe selection must preserve vertical touch scrolling. The BN positioning wrapper and icon dials have no decorative container; the central outer capsule remains. |
 | `ClientJourney` | Ten informational stages in a horizontal strip, including on small screens and under reduced motion. Left/Right/Home/End expose every stage. The CTA is inside the section, reveals near the final card on pinned desktop, and remains available in normal flow otherwise. |
@@ -30,12 +30,12 @@ Wheel and journey pins require at least 860px width and 700px height. Smaller or
 
 ### Portfolio logos and shareable stories
 
-The original PNGs from the [supplied brand-logo folder](https://drive.google.com/drive/folders/1xs7ycRtz3WNnSsPRNSvsSPKHtaQyzcEv) are copied unchanged into `public/media/private-label/portfolio/logos/`. The horizontal Firmino version is used in the ribbon; its original stacked alternative is retained as `firmino-original.png` (Drive ID `1B51cgZBz4Hrv0QQQTVta7uegpABQd0tf`).
+The original PNGs from the [supplied brand-logo folder](https://drive.google.com/drive/folders/1xs7ycRtz3WNnSsPRNSvsSPKHtaQyzcEv) are copied unchanged into `public/media/private-label/portfolio/logos/`. The horizontal Firmino version is used in the ribbon; its original stacked alternative is retained as `firmino-original.png` (Drive ID `1B51cgZBz4Hrv0QQQTVta7uegpABQd0tf`). Rizla displays `rizla-transparent.png`, a transparent-background derivative created with the built-in image editor to remove the source's grey rectangle; the supplied `rizla.png` remains intact.
 
 | Brand / story URL | Source file / Drive ID | Local filename |
 | --- | --- | --- |
 | Firmino · `/private-label#firmino` | `firmino (1).png` / `1uR-AlTe0sMQIvlHWFliC9-V2MlHzr5U1` | `firmino.png` |
-| Rizla · `/private-label#rizla` | `Rizla.png` / `1PSf2gzde0tnvElQ3BWYm2KgqivIWNaID` | `rizla.png` |
+| Rizla · `/private-label#rizla` | `Rizla.png` / `1PSf2gzde0tnvElQ3BWYm2KgqivIWNaID` | `rizla.png` (source), `rizla-transparent.png` (display) |
 | Fashion TV · `/private-label#fashion-tv` | `FTV.png` / `1hgXnec3Ffmxs1--PIZ9Rz1qIB91gWaoF` | `fashion-tv.png` |
 | Ingrained Oil · `/private-label#ingrained-oil` | `Ingrained Oil.png` / `131Q_rONKv-bpxD_-7IzlRm7evBRYOfTM` | `ingrained-oil.png` |
 | ALPAC London · `/private-label#alpac-london` | `alpac` / `16VfoTrjG-6rYiyi1_4bSATTtt_c0cFn-` | `alpac-london.png` |

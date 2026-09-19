@@ -163,10 +163,12 @@ export default function PortfolioCarousel({
   const viewport = useRef<HTMLDivElement>(null);
   const playback = useRef<(() => void) | null>(null);
   const reveal = useRef<((index: number) => void) | null>(null);
+  const suppressClick = useRef(false);
+  const loopProgress = useRef(0);
+  const [copies, setCopies] = useState(1);
   const hash = useSyncExternalStore(subscribeToPortfolioHash, getPortfolioHash, getServerPortfolioHash);
   const selected = slides.find((project) => project.slug === portfolioSlugFromHash(hash));
   const previousProject = useRef<PortfolioProject | undefined>(undefined);
-  const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
 
@@ -180,7 +182,7 @@ export default function PortfolioCarousel({
     const frame = requestAnimationFrame(() => {
       const section = root.current;
       const link = section?.querySelector<HTMLAnchorElement>(
-        `a[href="#${encodeURIComponent(previous.slug)}"]`,
+        `a[data-portfolio-primary][href="#${encodeURIComponent(previous.slug)}"]`,
       );
       if (!link) return;
       // Direct arrivals may not have reached the ribbon before opening.
@@ -208,12 +210,16 @@ export default function PortfolioCarousel({
       let phase = 0;
       let inView = false;
       let running = false;
+      let pointer: { id: number; x: number; y: number; phase: number; dragging: boolean } | null = null;
       const place = items.map((item) => gsap.quickSetter(item, "x", "px"));
       const wrap = (value: number) => ((value % period) + period) % period;
       const paint = () => {
         place.forEach((set, index) => set(wrap(index * slot - phase + slot) - slot));
       };
       const show = (index: number) => {
+        // A pointer press may focus a partially visible link. Keep the strip
+        // beneath the pointer until we know whether this is a click or a drag.
+        if (pointer) return;
         const x = wrap(index * slot - phase + slot) - slot;
         if (x < 0 || x + slot > width) {
           phase = wrap(index * slot - (width - slot) / 2);
@@ -221,13 +227,17 @@ export default function PortfolioCarousel({
         }
       };
       const resize = () => {
-        const progress = period ? phase / period : 0;
+        if (pointer) finishDrag();
+        const cycle = slot * slides.length;
+        const progress = cycle ? (phase % cycle) / cycle : loopProgress.current;
         width = frame.clientWidth;
-        // An offscreen slot lets one accessible instance of each brand wrap
-        // without a visible jump or duplicate focus targets.
-        slot = Math.max(240, width / (items.length - 1));
+        slot = width < 860 ? 216 : 240;
+        // Repeat complete sets to fill any viewport, plus an offscreen slot
+        // for seamless wrapping. Only the first set is in keyboard/AT order.
+        const nextCopies = Math.max(1, Math.ceil((width + slot) / (slot * slides.length)));
+        if (nextCopies !== copies) setCopies(nextCopies);
         period = slot * items.length;
-        phase = progress * period;
+        phase = progress * slot * slides.length;
         frame.style.setProperty("--slot-width", slot + "px");
         paint();
         const active = links.indexOf(document.activeElement as HTMLAnchorElement);
@@ -238,12 +248,64 @@ export default function PortfolioCarousel({
         paint();
       };
       const sync = () => {
-        const shouldRun = inView && !document.hidden && section.dataset.paused !== "true";
+        const shouldRun = inView && !document.hidden && !pointer && section.dataset.paused !== "true";
         if (shouldRun === running) return;
         running = shouldRun;
         if (running) gsap.ticker.add(tick);
         else gsap.ticker.remove(tick);
       };
+      const finishDrag = () => {
+        const previous = pointer;
+        pointer = null;
+        delete frame.dataset.dragging;
+        if (previous?.dragging) suppressClick.current = true;
+        if (previous && frame.hasPointerCapture(previous.id)) frame.releasePointerCapture(previous.id);
+        sync();
+      };
+      const pointerDown = (event: PointerEvent) => {
+        if (pointer || !event.isPrimary || event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+        pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, phase, dragging: false };
+        sync();
+      };
+      const pointerMove = (event: PointerEvent) => {
+        if (!pointer || pointer.id !== event.pointerId) return;
+        const dx = event.clientX - pointer.x;
+        const dy = event.clientY - pointer.y;
+        if (!pointer.dragging) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
+          if (Math.abs(dy) >= Math.abs(dx)) {
+            // Let a vertical touch gesture scroll the page instead.
+            suppressClick.current = true;
+            finishDrag();
+            return;
+          }
+          pointer.dragging = true;
+          frame.dataset.dragging = "true";
+          frame.setPointerCapture(event.pointerId);
+        }
+        event.preventDefault();
+        phase = wrap(pointer.phase - dx);
+        paint();
+      };
+      const pointerEnd = (event: PointerEvent) => {
+        if (pointer?.id === event.pointerId) finishDrag();
+      };
+      const pointerLeave = () => {
+        if (pointer && !pointer.dragging) finishDrag();
+      };
+      const lostCapture = (event: PointerEvent) => {
+        if (event.target === frame) pointerEnd(event);
+      };
+      const visibilityChanged = () => {
+        if (document.hidden && pointer) finishDrag();
+        sync();
+      };
+      frame.addEventListener("pointerdown", pointerDown);
+      frame.addEventListener("pointermove", pointerMove, { passive: false });
+      frame.addEventListener("pointerup", pointerEnd);
+      frame.addEventListener("pointercancel", pointerEnd);
+      frame.addEventListener("pointerleave", pointerLeave);
+      frame.addEventListener("lostpointercapture", lostCapture);
       frame.dataset.motion = "true";
       resize();
       const bounds = frame.getBoundingClientRect();
@@ -255,16 +317,27 @@ export default function PortfolioCarousel({
       observer.observe(frame);
       const size = new ResizeObserver(resize);
       size.observe(frame);
-      document.addEventListener("visibilitychange", sync);
+      document.addEventListener("visibilitychange", visibilityChanged);
+      window.addEventListener("blur", finishDrag);
       playback.current = sync;
       reveal.current = show;
       sync();
 
       return () => {
+        const cycle = slot * slides.length;
+        if (cycle) loopProgress.current = (phase % cycle) / cycle;
+        finishDrag();
         gsap.ticker.remove(tick);
         observer.disconnect();
         size.disconnect();
-        document.removeEventListener("visibilitychange", sync);
+        document.removeEventListener("visibilitychange", visibilityChanged);
+        window.removeEventListener("blur", finishDrag);
+        frame.removeEventListener("pointerdown", pointerDown);
+        frame.removeEventListener("pointermove", pointerMove);
+        frame.removeEventListener("pointerup", pointerEnd);
+        frame.removeEventListener("pointercancel", pointerEnd);
+        frame.removeEventListener("pointerleave", pointerLeave);
+        frame.removeEventListener("lostpointercapture", lostCapture);
         playback.current = null;
         reveal.current = null;
         delete frame.dataset.motion;
@@ -273,11 +346,11 @@ export default function PortfolioCarousel({
       };
     });
     return () => media.revert();
-  }, { scope: root, dependencies: [slides], revertOnUpdate: true });
+  }, { scope: root, dependencies: [slides, copies], revertOnUpdate: true });
 
   useEffect(() => {
     playback.current?.();
-  }, [paused, hovered, focused, selected]);
+  }, [hovered, focused, selected]);
 
   if (!slides.length) return null;
 
@@ -287,11 +360,19 @@ export default function PortfolioCarousel({
       id={id}
       className={styles.section}
       aria-label={label}
-      data-paused={paused || hovered || focused || Boolean(selected)}
+      data-paused={hovered || focused || Boolean(selected)}
     >
       <div
         ref={viewport}
         className={styles.viewport}
+        onPointerDown={() => { suppressClick.current = false; }}
+        onDragStart={(event) => event.preventDefault()}
+        onClickCapture={(event) => {
+          if (!suppressClick.current || event.detail === 0) return;
+          event.preventDefault();
+          event.stopPropagation();
+          suppressClick.current = false;
+        }}
         onPointerEnter={(event) => { if (event.pointerType === "mouse") setHovered(true); }}
         onPointerLeave={() => setHovered(false)}
         onFocusCapture={() => setFocused(true)}
@@ -300,7 +381,7 @@ export default function PortfolioCarousel({
         }}
         onKeyDown={(event) => {
           if (event.altKey || event.ctrlKey || event.metaKey) return;
-          const links = Array.from(event.currentTarget.querySelectorAll("a"));
+          const links = Array.from(event.currentTarget.querySelectorAll<HTMLAnchorElement>("a[data-portfolio-primary]"));
           const current = links.indexOf(document.activeElement as HTMLAnchorElement);
           const next = {
             ArrowRight: (current + 1) % slides.length,
@@ -314,14 +395,28 @@ export default function PortfolioCarousel({
         }}
       >
         <ul className={styles.wordmarks}>
-          {slides.map((project, index) => (
-            <li key={project.slug}>
+          {Array.from({ length: copies }, (_, copy) => slides.map((project, index) => (
+            <li
+              key={`${copy}-${project.slug}`}
+              className={copy > 0 ? styles.repeat : undefined}
+              aria-hidden={copy > 0 ? true : undefined}
+            >
               <a
                 href={"#" + encodeURIComponent(project.slug)}
                 className={styles.wordmark}
                 aria-haspopup="dialog"
                 aria-label={project.name}
-                onFocus={() => reveal.current?.(index)}
+                draggable={false}
+                tabIndex={copy > 0 ? -1 : undefined}
+                data-portfolio-primary={copy === 0 ? "" : undefined}
+                onFocus={() => { if (copy === 0) reveal.current?.(index); }}
+                onPointerDown={(event) => {
+                  // Keep pointer-operated visual repeats out of the hidden
+                  // accessibility subtree's focus; clicks still open stories.
+                  if (copy > 0 && event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+                    event.preventDefault();
+                  }
+                }}
                 onClick={(event) => {
                   if (event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
                   event.preventDefault();
@@ -335,29 +430,14 @@ export default function PortfolioCarousel({
               >
                 {project.logo ? (
                   <span className={styles.logo}>
-                    <Image src={project.logo.src} alt="" fill sizes="180px" />
+                    <Image src={project.logo.src} alt="" fill sizes="180px" draggable={false} />
                   </span>
                 ) : <span>{project.name}</span>}
               </a>
             </li>
-          ))}
+          )))}
         </ul>
       </div>
-      {slides.length > 1 ? (
-        <div className={styles.controls}>
-          <button
-            type="button"
-            className={styles.pause}
-            aria-pressed={paused}
-            onClick={() => setPaused((current) => !current)}
-          >
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              {paused ? <path d="m5 3 7 5-7 5Z" /> : <path d="M5 3v10M11 3v10" />}
-            </svg>
-            {paused ? labels.resume : labels.pause}
-          </button>
-        </div>
-      ) : null}
       {selected ? (
         <PortfolioStory
           key={selected.slug}

@@ -427,8 +427,6 @@ export type PrivateLabelContent = {
     label: string;
     slides: PortfolioProject[];
     labels: {
-      pause: string;
-      resume: string;
       close: string;
       previousImage: string;
       nextImage: string;
@@ -534,8 +532,6 @@ export const privateLabel: PrivateLabelContent = {
   portfolio: {
     label: "Private label portfolio",
     labels: {
-      pause: "Pause scrolling",
-      resume: "Resume scrolling",
       close: "Close project",
       previousImage: "Previous project image",
       nextImage: "Next project image",
@@ -556,7 +552,7 @@ export const privateLabel: PrivateLabelContent = {
       {
         name: "Rizla",
         slug: "rizla",
-        logo: { src: "/media/private-label/portfolio/logos/rizla.png", alt: "Rizla" },
+        logo: { src: "/media/private-label/portfolio/logos/rizla-transparent.png", alt: "Rizla" },
         headline: "From rolling papers to fragrance.",
         paragraphs: [
           "For Riz, by Rizla, the brand played on the rise of “rizz” culture and temporarily reimagined itself through scent.",
