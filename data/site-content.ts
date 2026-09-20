@@ -1325,7 +1325,7 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
     closeDrawer: "Close details",
     sending: "Sending your project details…",
     error: "Something went wrong. Please try again.",
-    uploadHint: "Up to 3 images (JPG, PNG or WebP), 3 MB in total.",
+    uploadHint: "Up to 3 images (JPG or PNG), 3 MB in total.",
     privacy: "Your details are used to respond to your project enquiry.",
   },
 };

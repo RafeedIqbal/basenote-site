@@ -53,7 +53,7 @@ export default function GuideProjectForm() {
       images.some(
         (file) =>
           !file.size ||
-          !["image/jpeg", "image/png", "image/webp"].includes(file.type),
+          !["image/jpeg", "image/png"].includes(file.type),
       )
     ) {
       reportError(content.labels.uploadHint);
@@ -205,7 +205,7 @@ export default function GuideProjectForm() {
                 name="inspiration"
                 type="file"
                 multiple
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/jpeg,image/png"
                 aria-describedby="upload-hint"
               />
             </label>

@@ -1,7 +1,7 @@
 import { privateLabelGuide } from "../data/site-content";
 
 export const MAX_PROJECT_IMAGE_BYTES = 3 * 1024 * 1024;
-export const PROJECT_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+export const PROJECT_IMAGE_TYPES = ["image/jpeg", "image/png"];
 
 type ProjectResult =
   | { ok: true; fullName: string; email: string; message: string }
@@ -107,7 +107,7 @@ export async function parseProjectImages(formData: FormData) {
   }[] = [];
   for (const [index, file] of files.entries()) {
     if (!file.size || !PROJECT_IMAGE_TYPES.includes(file.type))
-      return { ok: false as const, error: "Use JPG, PNG or WebP images." };
+      return { ok: false as const, error: "Use JPG or PNG images." };
     const bytes = Buffer.from(await file.arrayBuffer());
     const format = bytes
       .subarray(0, 8)
@@ -118,16 +118,12 @@ export async function parseProjectImages(formData: FormData) {
           bytes[1] === 216 &&
           bytes[2] === 255
         ? ["image/jpeg", "jpg"]
-        : bytes.length >= 12 &&
-            bytes.subarray(0, 4).equals(Buffer.from("RIFF")) &&
-            bytes.subarray(8, 12).equals(Buffer.from("WEBP"))
-          ? ["image/webp", "webp"]
-          : null;
+        : null;
     if (!format || format[0] !== file.type)
       return {
         ok: false as const,
         error:
-          "An image could not be read. Please choose a valid JPG, PNG or WebP file.",
+          "An image could not be read. Please choose a valid JPG or PNG file.",
       };
     attachments.push({
       filename: `inspiration-${index + 1}.${format[1]}`,
