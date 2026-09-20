@@ -541,7 +541,11 @@ export const privateLabel: PrivateLabelContent = {
       {
         name: "Firmino",
         slug: "firmino",
-        logo: { src: "/media/private-label/portfolio/logos/firmino.png", alt: "Firmino" },
+        logo: {
+          src: "/media/private-label/portfolio/logos/firmino.png", alt: "Firmino",
+          width: 5579, height: 1914,
+          bounds: { left: 581, top: 675, width: 4527, height: 568 },
+        },
         headline: "A farewell gift for a Liverpool icon.",
         paragraphs: [
           "Created to mark Roberto Firmino’s departure from Liverpool FC, this bespoke fragrance project turned a significant sporting moment into a personal commemorative piece.",
@@ -552,7 +556,11 @@ export const privateLabel: PrivateLabelContent = {
       {
         name: "Rizla",
         slug: "rizla",
-        logo: { src: "/media/private-label/portfolio/logos/rizla-transparent.png", alt: "Rizla" },
+        logo: {
+          src: "/media/private-label/portfolio/logos/rizla-transparent.png", alt: "Rizla",
+          width: 2170, height: 725,
+          bounds: { left: 83, top: 171, width: 1975, height: 410 },
+        },
         headline: "From rolling papers to fragrance.",
         paragraphs: [
           "For Riz, by Rizla, the brand played on the rise of “rizz” culture and temporarily reimagined itself through scent.",
@@ -563,7 +571,11 @@ export const privateLabel: PrivateLabelContent = {
       {
         name: "Fashion TV",
         slug: "fashion-tv",
-        logo: { src: "/media/private-label/portfolio/logos/fashion-tv.png", alt: "Fashion TV" },
+        logo: {
+          src: "/media/private-label/portfolio/logos/fashion-tv.png", alt: "Fashion TV",
+          width: 1864, height: 1374,
+          bounds: { left: 0, top: 0, width: 1864, height: 1374 },
+        },
         headline: "Taking a global fashion brand into fragrance.",
         paragraphs: [
           "We worked with FashionTV on fragrance development, translating an established fashion and lifestyle identity into a physical scent product.",
@@ -574,7 +586,11 @@ export const privateLabel: PrivateLabelContent = {
       {
         name: "Ingrained Oil",
         slug: "ingrained-oil",
-        logo: { src: "/media/private-label/portfolio/logos/ingrained-oil.png", alt: "Ingrained Oil" },
+        logo: {
+          src: "/media/private-label/portfolio/logos/ingrained-oil.png", alt: "Ingrained Oil",
+          width: 1823, height: 204,
+          bounds: { left: 0, top: 0, width: 1823, height: 198 },
+        },
         headline: "Built to meet retail standards.",
         paragraphs: [
           "For Ingrained Oil, the challenge went beyond creating the product. We handled the compliance work required to prepare the range for retail with John Lewis.",
@@ -585,7 +601,11 @@ export const privateLabel: PrivateLabelContent = {
       {
         name: "ALPAC London",
         slug: "alpac-london",
-        logo: { src: "/media/private-label/portfolio/logos/alpac-london.png", alt: "ALPAC London" },
+        logo: {
+          src: "/media/private-label/portfolio/logos/alpac-london.png", alt: "ALPAC London",
+          width: 1701, height: 569,
+          bounds: { left: 0, top: 0, width: 1701, height: 569 },
+        },
         headline: "From an idea to a fragrance brand.",
         paragraphs: [
           "Basenote worked with ALPAC London from the ground up, developing the brand strategy, positioning, packaging, website and go-to-market approach alongside the fragrance launch.",
@@ -832,7 +852,12 @@ export type PortfolioProject = {
   headline: string;
   paragraphs: string[];
   images: GuideImage[];
-  logo?: GuideImage;
+  logo?: GuideImage & {
+    width: number;
+    height: number;
+    /** Visible artwork bounds, excluding transparent padding in the source. */
+    bounds: { left: number; top: number; width: number; height: number };
+  };
 };
 export type GuideChoiceCard = {
   title: string;

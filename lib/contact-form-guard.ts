@@ -4,6 +4,7 @@ import {
   MAX_SUBMISSION_AGE_MS,
   MIN_SUBMISSION_AGE_MS
 } from "@/lib/form-guard-constants";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 type GuardResult =
   | { ok: true }
@@ -50,6 +51,11 @@ export async function guardPublicSubmission(
 
   if (submissionAge < MIN_SUBMISSION_AGE_MS) {
     return { ok: false, reason: "spam" };
+  }
+
+  const verification = await verifyTurnstile(formData);
+  if (!verification.ok) {
+    return { ok: false, reason: "invalid", error: verification.error };
   }
 
   return { ok: true };

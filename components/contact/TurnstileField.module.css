@@ -1,0 +1,38 @@
+.field {
+  /* Let the form determine its width before selecting the provider's fixed size. */
+  contain: inline-size;
+  min-width: 0;
+  width: 100%;
+  margin: 12px 0;
+}
+
+.status {
+  margin: 10px 0 0;
+  color: #c5bfb9;
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.retry {
+  margin-top: 10px;
+  padding: 10px 14px;
+  min-height: 44px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.retry:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.retry:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

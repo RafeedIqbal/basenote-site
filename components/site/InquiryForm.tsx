@@ -4,6 +4,8 @@ import { useRef, useState, type FormEvent } from "react";
 
 import { submitContactForm } from "@/app/actions/contact";
 import FormGuardFields from "@/components/contact/FormGuardFields";
+import TurnstileField, { type TurnstileHandle } from "@/components/contact/TurnstileField";
+import { TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
 
 import styles from "./InquiryForm.module.css";
 
@@ -30,6 +32,9 @@ export default function InquiryForm({
   variant = "full"
 }: InquiryFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
+  const busy = useRef(false);
+  const [verified, setVerified] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
@@ -38,16 +43,22 @@ export default function InquiryForm({
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isSubmitting) {
+    if (busy.current) {
       return;
     }
+
+    const token = turnstileRef.current?.getToken();
+    if (!token) return;
+    const data = new FormData(event.currentTarget);
+    data.set(TURNSTILE_RESPONSE_FIELD, token);
+    busy.current = true;
 
     setError(null);
     setStatus("Sending your enquiry…");
     setIsSubmitting(true);
 
     try {
-      const result = await submitContactForm(new FormData(event.currentTarget));
+      const result = await submitContactForm(data);
 
       if (!result.success) {
         setError(result.error);
@@ -63,6 +74,8 @@ export default function InquiryForm({
       setError("Something went wrong. Please try again.");
       setStatus(null);
     } finally {
+      turnstileRef.current?.reset();
+      busy.current = false;
       setIsSubmitting(false);
     }
   };
@@ -81,6 +94,7 @@ export default function InquiryForm({
       ref={formRef}
       className={`${styles.form} ${variant === "compact" ? styles.compact : ""}`}
       onSubmit={handleSubmit}
+      aria-busy={isSubmitting}
     >
       <FormGuardFields />
       <div className={styles.field}>
@@ -147,7 +161,8 @@ export default function InquiryForm({
       </div>
       {status ? <p className={styles.status} aria-live="polite">{status}</p> : null}
       {error ? <p className={styles.error} role="alert">{error}</p> : null}
-      <button className={styles.submit} type="submit" disabled={isSubmitting}>
+      <TurnstileField ref={turnstileRef} onVerifiedChange={setVerified} disabled={isSubmitting} />
+      <button className={styles.submit} type="submit" disabled={isSubmitting || !verified}>
         {isSubmitting ? "Sending…" : "Send enquiry"}
       </button>
     </form>

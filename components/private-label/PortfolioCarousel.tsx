@@ -205,7 +205,9 @@ export default function PortfolioCarousel({
 
     media.add("(prefers-reduced-motion: no-preference)", () => {
       let width = 0;
-      let slot = 0;
+      let widths: number[] = [];
+      let offsets: number[] = [];
+      let cycle = 0;
       let period = 0;
       let phase = 0;
       let inView = false;
@@ -213,32 +215,38 @@ export default function PortfolioCarousel({
       let pointer: { id: number; x: number; y: number; phase: number; dragging: boolean } | null = null;
       const place = items.map((item) => gsap.quickSetter(item, "x", "px"));
       const wrap = (value: number) => ((value % period) + period) % period;
+      const position = (index: number) => wrap(offsets[index] - phase + widths[index]) - widths[index];
       const paint = () => {
-        place.forEach((set, index) => set(wrap(index * slot - phase + slot) - slot));
+        place.forEach((set, index) => set(position(index)));
       };
       const show = (index: number) => {
         // A pointer press may focus a partially visible link. Keep the strip
         // beneath the pointer until we know whether this is a click or a drag.
         if (pointer) return;
-        const x = wrap(index * slot - phase + slot) - slot;
-        if (x < 0 || x + slot > width) {
-          phase = wrap(index * slot - (width - slot) / 2);
+        const x = position(index);
+        if (x < 0 || x + widths[index] > width) {
+          phase = wrap(offsets[index] - (width - widths[index]) / 2);
           paint();
         }
       };
       const resize = () => {
         if (pointer) finishDrag();
-        const cycle = slot * slides.length;
         const progress = cycle ? (phase % cycle) / cycle : loopProgress.current;
         width = frame.clientWidth;
-        slot = width < 860 ? 216 : 240;
-        // Repeat complete sets to fill any viewport, plus an offscreen slot
-        // for seamless wrapping. Only the first set is in keyboard/AT order.
-        const nextCopies = Math.max(1, Math.ceil((width + slot) / (slot * slides.length)));
+        widths = items.map((item) => item.getBoundingClientRect().width);
+        let offset = 0;
+        offsets = widths.map((itemWidth) => {
+          const start = offset;
+          offset += itemWidth;
+          return start;
+        });
+        cycle = widths.slice(0, slides.length).reduce((sum, itemWidth) => sum + itemWidth, 0);
+        // Natural logo widths plus equal padding form each slot. Keep a full
+        // extra slot offscreen so even the widest logo wraps without a gap.
+        const nextCopies = Math.max(1, Math.ceil((width + Math.max(...widths)) / cycle));
         if (nextCopies !== copies) setCopies(nextCopies);
-        period = slot * items.length;
-        phase = progress * slot * slides.length;
-        frame.style.setProperty("--slot-width", slot + "px");
+        period = offset;
+        phase = progress * cycle;
         paint();
         const active = links.indexOf(document.activeElement as HTMLAnchorElement);
         if (active >= 0) show(active);
@@ -317,6 +325,7 @@ export default function PortfolioCarousel({
       observer.observe(frame);
       const size = new ResizeObserver(resize);
       size.observe(frame);
+      items.slice(0, slides.length).forEach((item) => size.observe(item));
       document.addEventListener("visibilitychange", visibilityChanged);
       window.addEventListener("blur", finishDrag);
       playback.current = sync;
@@ -324,7 +333,6 @@ export default function PortfolioCarousel({
       sync();
 
       return () => {
-        const cycle = slot * slides.length;
         if (cycle) loopProgress.current = (phase % cycle) / cycle;
         finishDrag();
         gsap.ticker.remove(tick);
@@ -341,7 +349,6 @@ export default function PortfolioCarousel({
         playback.current = null;
         reveal.current = null;
         delete frame.dataset.motion;
-        frame.style.removeProperty("--slot-width");
         gsap.set(items, { clearProps: "transform" });
       };
     });
@@ -429,8 +436,24 @@ export default function PortfolioCarousel({
                 }}
               >
                 {project.logo ? (
-                  <span className={styles.logo}>
-                    <Image src={project.logo.src} alt="" fill sizes="180px" draggable={false} />
+                  <span
+                    className={styles.logo}
+                    style={{ aspectRatio: `${project.logo.bounds.width} / ${project.logo.bounds.height}` }}
+                  >
+                    <Image
+                      src={project.logo.src}
+                      alt=""
+                      width={project.logo.width}
+                      height={project.logo.height}
+                      sizes={`(max-width: 859px) ${Math.ceil(28 * project.logo.width / project.logo.bounds.height)}px, ${Math.ceil(36 * project.logo.width / project.logo.bounds.height)}px`}
+                      draggable={false}
+                      style={{
+                        width: `${100 * project.logo.width / project.logo.bounds.width}%`,
+                        height: `${100 * project.logo.height / project.logo.bounds.height}%`,
+                        left: `${-100 * project.logo.bounds.left / project.logo.bounds.width}%`,
+                        top: `${-100 * project.logo.bounds.top / project.logo.bounds.height}%`,
+                      }}
+                    />
                   </span>
                 ) : <span>{project.name}</span>}
               </a>

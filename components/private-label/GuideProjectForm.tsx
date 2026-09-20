@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import ArrowIcon from "@/components/site/ArrowIcon";
 import { submitPrivateLabelProject } from "@/app/actions/private-label-project";
 import FormGuardFields from "@/components/contact/FormGuardFields";
+import TurnstileField, { type TurnstileHandle } from "@/components/contact/TurnstileField";
+import { TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
 import { privateLabelGuide as content } from "@/data/site-content";
 import styles from "./PrivateLabelGuide.module.css";
 
@@ -12,6 +14,8 @@ export default function GuideProjectForm() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState({ message: "", attempt: 0 });
   const [success, setSuccess] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const turnstileRef = useRef<TurnstileHandle>(null);
   const busy = useRef(false);
   const errorRef = useRef<HTMLParagraphElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
@@ -29,7 +33,10 @@ export default function GuideProjectForm() {
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (busy.current) return;
+    const token = turnstileRef.current?.getToken();
+    if (!token) return;
     const data = new FormData(event.currentTarget);
+    data.set(TURNSTILE_RESPONSE_FIELD, token);
     const images = data
       .getAll("inspiration")
       .filter(
@@ -62,6 +69,7 @@ export default function GuideProjectForm() {
     } catch {
       reportError(content.labels.error);
     } finally {
+      turnstileRef.current?.reset();
       busy.current = false;
       setPending(false);
     }
@@ -214,7 +222,8 @@ export default function GuideProjectForm() {
           <p className={styles.formStatus} role="status">
             {pending ? content.labels.sending : ""}
           </p>
-          <button className={styles.primaryButton} type="submit" disabled={pending}>
+          <TurnstileField ref={turnstileRef} onVerifiedChange={setVerified} disabled={pending} />
+          <button className={styles.primaryButton} type="submit" disabled={pending || !verified}>
             {pending ? content.labels.sending : content.final.submit}
             <ArrowIcon />
           </button>
