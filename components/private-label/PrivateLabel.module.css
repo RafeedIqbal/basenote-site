@@ -39,8 +39,10 @@
   text-transform: uppercase;
   transition: background 0.2s;
 }
-.primaryButton:hover {
-  background: var(--pl-ochre);
+@media (hover: hover) and (pointer: fine) {
+  .primaryButton:hover {
+    background: var(--pl-ochre);
+  }
 }
 .primaryButton span {
   font: 19px/1 sans-serif;
@@ -55,8 +57,10 @@
     13px/1.5 var(--font-mono),
     monospace;
 }
-.textLink:hover {
-  border-color: var(--pl-ochre);
+@media (hover: hover) and (pointer: fine) {
+  .textLink:hover {
+    border-color: var(--pl-ochre);
+  }
 }
 .section {
   width: min(1200px, calc(100% - 80px));
@@ -136,7 +140,7 @@
     border-color 0.3s,
     color 0.3s;
 }
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .audiencePanel[data-open="false"]:hover {
     border-color: #d6b1a280;
     background: #281710cc;
@@ -367,8 +371,10 @@
   visibility: visible;
   transform: none;
 }
-.chat:hover {
-  background: var(--pl-canyon);
+@media (hover: hover) and (pointer: fine) {
+  .chat:hover {
+    background: var(--pl-canyon);
+  }
 }
 .srOnly {
   position: absolute;

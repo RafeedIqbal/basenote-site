@@ -243,10 +243,16 @@
   color: #000;
 }
 
-.primaryButton:hover,
 .primaryButton:focus-visible {
   background: #b2b2b2;
   color: #000;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primaryButton:hover {
+    background: #b2b2b2;
+    color: #000;
+  }
 }
 
 .secondaryButton {
@@ -255,10 +261,16 @@
   color: #fff;
 }
 
-.secondaryButton:hover,
 .secondaryButton:focus-visible {
   border-color: #fff;
   background: rgba(255, 255, 255, 0.06);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .secondaryButton:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+  }
 }
 
 .blueButton,
@@ -271,10 +283,16 @@
   background: #5ba3c6;
 }
 
-.blueButton:hover,
 .blueButton:focus-visible {
   background: #7fc6e6;
   color: #04121a;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .blueButton:hover {
+    background: #7fc6e6;
+    color: #04121a;
+  }
 }
 
 .amberButton {
@@ -282,10 +300,16 @@
   color: #140f02;
 }
 
-.amberButton:hover,
 .amberButton:focus-visible {
   background: #e6c04a;
   color: #140f02;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .amberButton:hover {
+    background: #e6c04a;
+    color: #140f02;
+  }
 }
 
 .homeHero {
@@ -593,10 +617,16 @@
   color: #f0e6c4;
 }
 
-.serviceCard:hover,
 .serviceCard:focus-visible {
   border-color: rgba(255, 255, 255, 0.7);
   transform: translateY(-6px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .serviceCard:hover {
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-6px);
+  }
 }
 
 .serviceNumber,
@@ -951,8 +981,10 @@
   transition: border-color 180ms ease;
 }
 
-.editorialCard:hover {
-  border-color: rgba(255, 255, 255, 0.3);
+@media (hover: hover) and (pointer: fine) {
+  .editorialCard:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
 }
 
 .editorialImage {

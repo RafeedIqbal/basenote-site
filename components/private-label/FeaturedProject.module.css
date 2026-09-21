@@ -50,8 +50,10 @@
   place-items: center;
   cursor: pointer;
 }
-.play:hover {
-  background: var(--pl-canyon);
+@media (hover: hover) and (pointer: fine) {
+  .play:hover {
+    background: var(--pl-canyon);
+  }
 }
 .error {
   color: #dfb19e;

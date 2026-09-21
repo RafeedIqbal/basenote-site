@@ -74,10 +74,15 @@
   transition: transform 180ms ease;
 }
 
-.navLink:hover,
 .navLink:focus-visible,
 .navLinkActive {
   color: #fff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover {
+    color: #fff;
+  }
 }
 
 .navLinkActive::after {
@@ -100,12 +105,18 @@
   padding: 11px 20px;
 }
 
-.headerCta:hover,
 .headerCta:focus-visible,
-.mobileCta:hover,
 .mobileCta:focus-visible {
   background: #b2b2b2;
   color: #000;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .headerCta:hover,
+  .mobileCta:hover {
+    background: #b2b2b2;
+    color: #000;
+  }
 }
 
 .menuButton {
@@ -228,9 +239,14 @@
   color: #eddbd2;
 }
 
-.footerOverlay .footerLink:hover,
 .footerOverlay .footerLink:focus-visible {
   color: #fff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footerOverlay .footerLink:hover {
+    color: #fff;
+  }
 }
 
 .footerGrid {
@@ -268,9 +284,14 @@
   transition: color 180ms ease;
 }
 
-.footerLink:hover,
 .footerLink:focus-visible {
   color: #fff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footerLink:hover {
+    color: #fff;
+  }
 }
 
 .footerBottom {

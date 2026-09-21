@@ -39,7 +39,9 @@
   -webkit-user-select: none;
   transition: color 180ms;
 }
-.wordmark:hover { color: #e9aa8e; }
+@media (hover: hover) and (pointer: fine) {
+  .wordmark:hover { color: #e9aa8e; }
+}
 .wordmark:focus-visible {
   outline: 2px solid #d28a72;
   outline-offset: -6px;
@@ -136,7 +138,9 @@
   background: #211a16ed;
   cursor: pointer;
 }
-.close:hover { background: #943f2d; }
+@media (hover: hover) and (pointer: fine) {
+  .close:hover { background: #943f2d; }
+}
 .dialog :focus-visible { outline: 2px solid #e2a38a; outline-offset: 4px; }
 .gallery { min-width: 0; align-self: stretch; }
 .projectImage {

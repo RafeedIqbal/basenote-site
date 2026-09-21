@@ -57,6 +57,17 @@ a {
   text-decoration: none;
 }
 
+/* Use brief press feedback instead of the browser's persistent tap overlay. */
+:where(a, button, summary) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: none) {
+  :where(a, button:enabled, summary):active {
+    opacity: 0.75;
+  }
+}
+
 section[id],
 main[id] {
   scroll-margin-top: calc(var(--header-height) + 1rem);

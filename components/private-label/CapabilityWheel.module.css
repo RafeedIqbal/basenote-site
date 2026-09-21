@@ -231,9 +231,14 @@
   background: #d9a48c;
 }
 
-.control:hover::after,
 .control:focus-visible::after {
   background: #f1c7b3;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .control:hover::after {
+    background: #f1c7b3;
+  }
 }
 
 @media (max-width: 1100px) {

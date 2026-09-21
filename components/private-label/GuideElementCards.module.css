@@ -62,7 +62,7 @@
   transition: transform 300ms;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .card:hover {
     border-color: #b7795e;
     background: #362219;
@@ -172,8 +172,10 @@
   transition: background 200ms;
 }
 
-.drawer .close:hover {
-  background: #943f2d;
+@media (hover: hover) and (pointer: fine) {
+  .drawer .close:hover {
+    background: #943f2d;
+  }
 }
 
 .drawer .close:focus-visible {

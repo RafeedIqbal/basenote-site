@@ -1070,9 +1070,9 @@ export const privateLabelGuide: PrivateLabelGuideContent = {
     paperImages: guideOptions["Paper / Flat box with card insert"],
     rigidTitle: "Rigid box",
     types: [
-      { title: "Two Part Hard box", images: guideOptions["Two Part Hard box"] },
+      { title: "Lid & base box", images: guideOptions["Two Part Hard box"] },
       {
-        title: "Foldable Rigid Box",
+        title: "Fold-flat box",
         images: guideOptions["Foldable Rigid Box"],
       },
     ],

@@ -402,8 +402,10 @@
   min-height: 44px;
   font-size: 22px;
 }
-.galleryControls button:hover:enabled {
-  background: var(--pl-canyon);
+@media (hover: hover) and (pointer: fine) {
+  .galleryControls button:hover:enabled {
+    background: var(--pl-canyon);
+  }
 }
 .galleryControls button:disabled {
   opacity: 0.3;

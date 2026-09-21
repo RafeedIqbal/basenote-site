@@ -99,9 +99,14 @@
   transition: background-color 180ms ease;
 }
 
-.submit:hover,
 .submit:focus-visible {
   background: #b2b2b2;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .submit:hover {
+    background: #b2b2b2;
+  }
 }
 
 .submit:disabled {
