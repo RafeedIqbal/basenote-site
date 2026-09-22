@@ -27,13 +27,6 @@ export type EditorialCard = {
   title: string;
 };
 
-export type CaseStudy = EditorialCard & {
-  metrics: ReadonlyArray<{
-    label: string;
-    value: string;
-  }>;
-};
-
 export const navigation: NavItem[] = [
   { label: "Private Label", href: "/private-label" },
   { label: "Blend Engine", href: "/blend-engine" },
@@ -241,48 +234,6 @@ export const blogPosts: EditorialCard[] = [
       "Inside a full private-label launch delivered with TAC Perfumes.",
     image: "/media/basenote-handoff/editorial-3.png",
     href: "/case-studies",
-  },
-];
-
-export const caseStudies: CaseStudy[] = [
-  {
-    category: "Private Label · Beauty",
-    date: "",
-    title: "From Idea to 5,000 Units",
-    description:
-      "A first-time founder taken from concept to a shelf-ready private-label line — bespoke fragrance, packaging and brand identity.",
-    image: "/media/basenote-handoff/editorial-3.png",
-    href: "/case-studies",
-    metrics: [
-      { value: "12 wk", label: "Idea to launch" },
-      { value: "5,000", label: "First run" },
-    ],
-  },
-  {
-    category: "Brand + Tech",
-    date: "",
-    title: "A Signature Scent For A Creator",
-    description:
-      "Turning an influencer’s audience trust into a sell-out signature fragrance, end to end.",
-    image: "/media/basenote-handoff/editorial-2.png",
-    href: "/case-studies",
-    metrics: [
-      { value: "48h", label: "Sold out" },
-      { value: "100%", label: "Owned brand" },
-    ],
-  },
-  {
-    category: "Wholesale",
-    date: "",
-    title: "Oils, Direct & At Volume",
-    description:
-      "Reliable direct-from-source fragrance oil supply for a growing multi-market retailer.",
-    image: "/media/basenote-handoff/editorial-1.png",
-    href: "/case-studies",
-    metrics: [
-      { value: "6", label: "Markets" },
-      { value: "-22%", label: "Cost per unit" },
-    ],
   },
 ];
 
@@ -845,6 +796,8 @@ export const privateLabel: PrivateLabelContent = {
     draft: true,
   },
 };
+export const caseStudies: PortfolioProject[] = privateLabel.portfolio.slides;
+
 export type GuideImage = { src: string; alt: string };
 export type PortfolioProject = {
   name: string;

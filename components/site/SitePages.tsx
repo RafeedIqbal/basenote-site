@@ -515,19 +515,27 @@ export function CaseStudiesPage() {
       <section className={`${styles.listingSection} ${styles.toneBlack}`}>
         <div className={`${styles.container} ${styles.caseList}`}>
           {caseStudies.map((study) => (
-            <article key={study.title} className={styles.caseCard} data-reveal="">
+            <article
+              key={study.slug}
+              id={study.slug}
+              aria-labelledby={`${study.slug}-title`}
+              className={styles.caseCard}
+              data-reveal=""
+            >
               <div className={styles.caseImage}>
-                <Image src={study.image} alt="" fill sizes="(max-width: 860px) 100vw, 45vw" />
+                <Image
+                  src={study.images[0].src}
+                  alt={study.images[0].alt}
+                  fill
+                  sizes="(max-width: 600px) calc(100vw - 32px), (max-width: 859px) calc(100vw - 48px), (max-width: 1248px) 44vw, 522px"
+                />
               </div>
               <div className={styles.caseCopy}>
-                <span className={styles.articleMeta}>{study.category}</span>
-                <h2>{study.title}</h2>
-                <p>{study.description}</p>
-                <div className={styles.caseMetrics}>
-                  {study.metrics.map((metric) => (
-                    <span key={metric.label}><strong>{metric.value}</strong><small>{metric.label}</small></span>
-                  ))}
-                </div>
+                <span className={styles.caseClient}>{study.name}</span>
+                <h2 id={`${study.slug}-title`}>{study.headline}</h2>
+                {study.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
               </div>
             </article>
           ))}
