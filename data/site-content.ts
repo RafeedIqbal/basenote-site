@@ -39,6 +39,7 @@ const consultationHref = "https://calendly.com/outreach-team-pibp/30min";
 export const contactDetails = {
   emailLabel: "Email",
   email: "marketing@basenotesolutions.com",
+  emailFallbackPrefix: "You can also email us at",
   booking: { label: "Book a call", href: consultationHref },
 };
 

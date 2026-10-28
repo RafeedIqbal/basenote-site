@@ -2,6 +2,7 @@
 
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from "react";
 
+import { contactDetails } from "@/data/site-content";
 import { loadTurnstile, type TurnstileApi } from "@/lib/turnstile-client";
 import { TURNSTILE_ACTION, TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
 
@@ -150,6 +151,12 @@ export default function TurnstileField({ ref, onVerifiedChange, disabled = false
       <div ref={widgetRef} />
       <p className={styles.status} role="status" aria-live="polite" aria-atomic="true">
         {siteKey ? messages[status] : "The security check is unavailable. Please try again later."}
+      </p>
+      <p className={styles.status}>
+        {contactDetails.emailFallbackPrefix}{" "}
+        <a className={styles.emailLink} href={`mailto:${contactDetails.email}`}>
+          {contactDetails.email}
+        </a>
       </p>
       {siteKey && status !== "loading" && status !== "verified" ? (
         <button className={styles.retry} type="button" disabled={disabled} onClick={() => controllerRef.current?.retry()}>

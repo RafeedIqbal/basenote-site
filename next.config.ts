@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { validateProductionContactConfig } from "@/lib/contact-configuration";
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -9,4 +10,7 @@ const nextConfig: NextConfig = {
   }
 };
 
-export default nextConfig;
+export default function createNextConfig(phase: string): NextConfig {
+  validateProductionContactConfig(phase, process.env);
+  return nextConfig;
+}

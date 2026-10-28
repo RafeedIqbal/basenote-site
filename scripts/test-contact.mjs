@@ -7,7 +7,7 @@ import ts from "typescript";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const output = await mkdtemp(path.join(os.tmpdir(), "basenote-contact-tests-"));
-const tests = ["lib/turnstile.test.ts", "app/actions/contact.test.ts"];
+const tests = ["lib/contact-configuration.test.ts", "lib/turnstile.test.ts", "app/actions/contact.test.ts"];
 
 try {
   const program = ts.createProgram(tests.map((file) => path.join(root, file)), {
