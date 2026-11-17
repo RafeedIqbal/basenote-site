@@ -42,6 +42,9 @@ export default function GuideProjectForm() {
       .filter(
         (entry): entry is File => entry instanceof File && Boolean(entry.name),
       );
+    // An unselected file input contributes an empty File. Do not serialize that
+    // placeholder through the server action as if it were an uploaded image.
+    if (!images.length) data.delete("inspiration");
     if (
       images.length > 3 ||
       images.reduce((sum, file) => sum + file.size, 0) > 3 * 1024 * 1024
