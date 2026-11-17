@@ -14,14 +14,14 @@ npm run start
 
 ### Enquiry delivery
 
-Both the contact page and private-label guide use the same server-only submission service. After validation and Turnstile verification, it independently sends a Brevo transactional email, appends a Google Sheets row and, when configured, posts the enquiry to Base Note ERP's lead intake. Keep credentials out of Git. Do not send real enquiries during validation.
+Both the contact page and private-label guide use the same server-only submission service. After validation and Turnstile verification, it independently sends a Resend transactional email, appends a Google Sheets row and, when configured, posts the enquiry to Base Note ERP's lead intake. Keep credentials out of Git. Do not send real enquiries during validation.
 
 Configure these in the ignored `.env` locally and in the hosting environment for each deployment:
 
 | Variable | Purpose |
 | --- | --- |
-| `BREVO_API_KEY` | Brevo API key (not an SMTP key) |
-| `BREVO_SENDER_EMAIL` | An active, verified Brevo sender |
+| `RESEND_API_KEY` | Sending-only Resend API key restricted to the verified Basenote domain |
+| `RESEND_SENDER_EMAIL` | `enquiries@basenotesolutions.com` on the verified Resend domain |
 | `DESTINATION_INBOX` | `marketing@basenotesolutions.com` |
 | `GOOGLE_SHEETS_CLIENT_EMAIL` | Service-account email with Editor access to the spreadsheet |
 | `GOOGLE_SHEETS_PRIVATE_KEY` | Service-account PEM key; real line breaks and escaped `\n` are supported |
@@ -33,7 +33,7 @@ The ERP is an optional third destination: with both ERP variables set, each enqu
 
 Enable the Google Sheets API in the service account's project. The integration uses the `spreadsheets` scope and writes only to `Sheet1`. Before using a different spreadsheet, initialize its blank `A1:I1` header row in this exact order: **Received at (UTC), Submission ID, Form, Full name, Email, Company / brand, Area of interest, Message / project details, Attachment filenames**. Existing headers are checked before each append; mismatches fail the Sheets destination without modifying cells. The app does not create tabs or overwrite headers. Appends use `RAW` values and `INSERT_ROWS`, so submitted text cannot become a spreadsheet formula.
 
-Email uses the configured sender, the visitor as Reply-To, and the complete enquiry in HTML and plain text. Rows contain the server-generated UTC timestamp, submission ID, and form path. Guide choices, phone number, and notes remain together in the project-details cell. Up to three JPG/PNG files totalling 3 MiB are sent as email attachments with generated safe filenames; Sheets stores filenames only. WebP uploads are not accepted.
+Email is sent through the Resend API with a submission-specific idempotency key. It uses the configured sender, the visitor as Reply-To, and the complete enquiry in HTML and plain text. Rows contain the server-generated UTC timestamp, submission ID, and form path. Guide choices, phone number, and notes remain together in the project-details cell. Up to three JPG/PNG files totalling 3 MiB are sent as email attachments with generated safe filenames; Sheets stores filenames only. WebP uploads are not accepted.
 
 Every configured destination is awaited, each with a 10-second network deadline (including Google authentication). A submission succeeds if any destination confirms receipt. If all fail, the forms retain their draft and offer a retry. Missing provider configuration only disables that destination. Failure logs contain the submission ID, destination, and sanitized category/status, never enquiry contents or credentials. Delivery writes are not automatically retried because timed-out requests may already have succeeded. There is no background retry or attachment storage: when only Sheets succeeds, the text is retained but the uploaded files are not. API acceptance does not establish inbox delivery.
 
@@ -55,7 +55,7 @@ Vercel production builds (`VERCEL_ENV=production`) run a configuration check fro
 
 For a production configuration change, set the values in the linked Vercel project's **Production** environment, then create a new production build/deployment. Editing settings without rebuilding leaves the previous public key embedded in the browser bundle. Keep credentials out of Git, command arguments, logs and screenshots; leave unrelated variables and other environments unchanged. Both forms also offer a persistent direct email link beside the security status, including when the widget cannot load, without clearing the visitor's draft or bypassing verification.
 
-Run `npm run test:contact` for isolated Node tests of production configuration, verification and both real server actions. The runner compiles into a temporary directory and stubs Google authentication and every Brevo, Sheets, ERP, and Siteverify request; it sends no enquiries and never loads `.env`. Tests cover missing configuration, test keys, hostname restrictions, build-phase/environment scoping, every destination, ERP configuration and visitor matching, partial failures, timeouts, field mapping, uploads, and verification guards. Run `npm run lint` and `npm run build` afterward.
+Run `npm run test:contact` for isolated Node tests of production configuration, verification and both real server actions. The runner compiles into a temporary directory and stubs Google authentication and every Resend, Sheets, ERP, and Siteverify request; it sends no enquiries and never loads `.env`. Tests cover missing configuration, test keys, hostname restrictions, build-phase/environment scoping, every destination, ERP configuration and visitor matching, partial failures, timeouts, field mapping, uploads, and verification guards. Run `npm run lint` and `npm run build` afterward.
 
 For local browser checks, explicitly override the public key with a [Cloudflare test sitekey](https://developers.cloudflare.com/turnstile/troubleshooting/testing/) in the test process before building/starting the app. Never put test keys into production or automatically bypass verification in development. Test-key Siteverify responses use a synthetic action (`test`), so successful action tests must mock Siteverify with action `contact` and an explicitly configured test hostname rather than weakening the real action/hostname checks. Intercept browser submissions or stub Google authentication and both delivery providers in an isolated server test harness; do not submit to the live enquiry endpoint.
 

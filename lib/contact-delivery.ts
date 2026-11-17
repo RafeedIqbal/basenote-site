@@ -67,8 +67,8 @@ function sanitizeHeaderValue(value: string) {
 }
 
 async function sendEmail(enquiry: ContactEnquiry) {
-  const apiKey = process.env.BREVO_API_KEY?.trim();
-  const sender = process.env.BREVO_SENDER_EMAIL?.trim();
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const sender = process.env.RESEND_SENDER_EMAIL?.trim();
   const recipient = process.env.DESTINATION_INBOX?.trim();
   if (!apiKey || !sender || !recipient || !EMAIL_RE.test(sender) || !EMAIL_RE.test(recipient)) {
     throw new DeliveryError("configuration");
@@ -99,19 +99,19 @@ async function sendEmail(enquiry: ContactEnquiry) {
       <strong>Submission ID:</strong> ${escapeHtml(enquiry.id)}</p>
     </div>
   `;
-  const result = await readResponse(await fetch("https://api.brevo.com/v3/smtp/email", {
+  const result = await readResponse(await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: { "api-key": apiKey, "Content-Type": "application/json", Accept: "application/json" },
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", Accept: "application/json", "Idempotency-Key": `enquiry/${enquiry.id}` },
     body: JSON.stringify({
-      sender: { name: "Basenote Contact", email: sender },
-      to: [{ email: recipient }],
-      replyTo: { email, name: sanitizeHeaderValue(fullName) },
+      from: `Basenote Contact <${sender}>`,
+      to: [recipient],
+      reply_to: email,
       subject: `[Basenote] ${sanitizeHeaderValue(interest)} enquiry from ${sanitizeHeaderValue(fullName)}`,
-      textContent,
-      htmlContent,
+      text: textContent,
+      html: htmlContent,
       ...(enquiry.attachments.length ? {
-        attachment: enquiry.attachments.map(({ filename, content }) => ({
-          name: filename,
+        attachments: enquiry.attachments.map(({ filename, content }) => ({
+          filename,
           content: content.toString("base64"),
         })),
       } : {}),
@@ -119,7 +119,7 @@ async function sendEmail(enquiry: ContactEnquiry) {
     signal: AbortSignal.timeout(DELIVERY_TIMEOUT_MS),
     cache: "no-store",
   }));
-  if (typeof result.messageId !== "string" || !result.messageId.trim()) {
+  if (typeof result.id !== "string" || !result.id.trim()) {
     throw new DeliveryError("response");
   }
 }
@@ -207,7 +207,7 @@ export async function deliverContactEnquiry(
   // No destination may prevent another from receiving the enquiry.
   // Delivery writes are not retried: a timed-out write may already have succeeded.
   const results = await Promise.allSettled([sendEmail(enquiry), appendSheetRow(enquiry), sendToErp(enquiry, visitor)]);
-  const destinations = ["brevo", "google_sheets", "erp"] as const;
+  const destinations = ["resend", "google_sheets", "erp"] as const;
   results.forEach((result, index) => {
     if (result.status !== "rejected") return;
     const error: unknown = result.reason;
