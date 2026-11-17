@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { socialLinks } from "@/data/site-content";
+
 export const SITE_NAME = "Basenote Solutions";
 export const SITE_SHORT_NAME = "Basenote";
 export const SITE_ORIGIN = "https://www.basenotesolutions.com";
@@ -89,7 +91,8 @@ export function createSiteStructuredData() {
           width: 512,
           height: 512,
           caption: SITE_NAME
-        }
+        },
+        sameAs: socialLinks.map((link) => link.href)
       },
       {
         "@type": "WebSite",

@@ -42,11 +42,13 @@ export default function SiteFooter({ overlay = false }: { overlay?: boolean }) {
         <div className={styles.footerBottom}>
           <span>© <CurrentYear buildYear={new Date().getFullYear()} /> Base Note Solutions. All rights reserved.</span>
           <CookieSettings />
-          <div className={styles.socialLinks}>
+          <nav className={styles.socialLinks} aria-label="Social media">
             {socialLinks.map((social) => (
-              <span key={social}>{social}</span>
+              <a key={social.href} href={social.href}>
+                {social.label}
+              </a>
             ))}
-          </div>
+          </nav>
         </div>
       </div>
     </footer>

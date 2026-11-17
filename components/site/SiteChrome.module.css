@@ -327,6 +327,22 @@
   letter-spacing: 0.08em;
 }
 
+.socialLinks a {
+  display: inline-block;
+  padding-block: 4px;
+  transition: color 180ms ease;
+}
+
+.socialLinks a:focus-visible {
+  color: #fff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .socialLinks a:hover {
+    color: #fff;
+  }
+}
+
 @media (max-width: 859px) {
   .desktopNav {
     display: none;
@@ -346,7 +362,8 @@
   .navLink::after,
   .headerCta,
   .mobileCta,
-  .footerLink {
+  .footerLink,
+  .socialLinks a {
     transition: none;
   }
 }

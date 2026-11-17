@@ -336,7 +336,10 @@ export const footerGroups = [
   },
 ] as const;
 
-export const socialLinks = ["Instagram", "LinkedIn", "X", "YouTube"] as const;
+export const socialLinks = [
+  { label: "Instagram", href: "https://www.instagram.com/basenotesolutions/" },
+  { label: "LinkedIn", href: "https://uk.linkedin.com/company/basenote-solutions" },
+] as const;
 
 export type PrivateLabelSegment = {
   number: string;
