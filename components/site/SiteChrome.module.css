@@ -142,19 +142,30 @@
 }
 
 .mobilePanel {
-  position: fixed;
   inset: 0;
-  z-index: 200;
-  display: none;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
   flex-direction: column;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: clamp(20px, 5vw, 60px);
   background: #050505;
+  color: var(--white);
 }
 
-.mobilePanelOpen {
+.mobilePanel[open] {
   display: flex;
+}
+
+/* Scroll gestures over the backdrop must not chain to the page underneath. */
+.mobilePanel::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: #050505;
 }
 
 .mobileTopline {

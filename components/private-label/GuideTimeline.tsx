@@ -108,7 +108,7 @@ export default function GuideTimeline({
             <button
               type="button"
               className={styles.stepButton}
-              aria-pressed={index === active}
+              aria-current={index === reading ? "step" : undefined}
               onClick={() => setReading(index)}
               onFocus={(event) => {
                 if (event.currentTarget.matches(":focus-visible")) {

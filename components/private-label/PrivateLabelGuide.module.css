@@ -491,7 +491,7 @@
   background: #943f2d;
 }
 .finishOptions button[aria-expanded="true"] > span:first-child {
-  color: #e4b8a4;
+  color: #f0cfc0;
 }
 .finishDescription {
   padding: 18px 14px 24px;
@@ -707,8 +707,13 @@
   border-left: 2px solid #de8a5d;
   padding-left: 15px;
 }
+/* Stay in the accessibility tree while empty so "Sending" is announced. */
 .formStatus:empty {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 .primaryButton:disabled {
   opacity: 0.6;

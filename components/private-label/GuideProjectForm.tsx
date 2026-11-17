@@ -88,7 +88,7 @@ export default function GuideProjectForm() {
         ) : null}
       </div>
       {!success ? (
-        <form className={styles.projectForm} onSubmit={submit} aria-busy={pending}>
+        <form className={styles.projectForm} onSubmit={submit}>
           <FormGuardFields />
           <p className={styles.formHint}>{content.formFields.requiredHint}</p>
           <fieldset disabled={pending}>

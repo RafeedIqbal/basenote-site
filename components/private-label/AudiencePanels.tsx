@@ -183,7 +183,7 @@ export default function AudiencePanels() {
               className={styles.panelDetail}
               data-open={open === index}
               role="region"
-              aria-labelledby={`segment-${index}`}
+              aria-labelledby={`segment-title-${index}`}
               aria-hidden={open !== index}
               inert={open !== index}
               onTransitionEnd={(event) => {

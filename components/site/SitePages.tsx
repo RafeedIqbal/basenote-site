@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { type CSSProperties, type ReactNode } from "react";
@@ -129,7 +127,16 @@ function AlchemyInterface({ detailed = false }: { detailed?: boolean }) {
   );
 }
 
-function EditorialGrid({ cards, showDates = false }: { cards: EditorialCard[]; showDates?: boolean }) {
+function EditorialGrid({
+  cards,
+  headingLevel = 3,
+  showDates = false
+}: {
+  cards: EditorialCard[];
+  headingLevel?: 2 | 3;
+  showDates?: boolean;
+}) {
+  const Heading = headingLevel === 2 ? "h2" : "h3";
   return (
     <div className={styles.editorialGrid}>
       {cards.map((card) => (
@@ -146,7 +153,7 @@ function EditorialGrid({ cards, showDates = false }: { cards: EditorialCard[]; s
             <span className={styles.articleMeta}>
               {card.category}{showDates && card.date ? ` · ${card.date}` : ""}
             </span>
-            <h3>{card.title}</h3>
+            <Heading>{card.title}</Heading>
             <p>{card.description}</p>
           </div>
         </article>
@@ -406,7 +413,7 @@ export function AboutPage() {
       <SectionDivider />
       <section className={`${styles.sectionCompact} ${styles.toneBlack}`}>
         <div className={styles.container}>
-          <Eyebrow>The Team</Eyebrow>
+          <h2 className={styles.eyebrowHeading}><Eyebrow>The Team</Eyebrow></h2>
           <div className={styles.teamGrid}>
             {teamMembers.map((member) => (
               <article key={member.name} data-reveal="">
@@ -438,7 +445,8 @@ export function BlendEnginePage() {
         </div>
       </section>
       <SectionDivider tone="blue" />
-      <section className={`${styles.sectionCompact} ${styles.toneBlue}`}>
+      <section className={`${styles.sectionCompact} ${styles.toneBlue}`} aria-labelledby="blend-studio-title">
+        <h2 id="blend-studio-title" className={styles.srOnly}>Blend Studio</h2>
         <div className={styles.productDemoContainer}>
           <BlendInterface detailed />
           <div className={styles.featureGrid}>
@@ -493,7 +501,7 @@ export function BlogsPage() {
       <SectionDivider />
       <section className={`${styles.listingSection} ${styles.toneBlack}`}>
         <div className={styles.container}>
-          <EditorialGrid cards={blogPosts} showDates />
+          <EditorialGrid cards={blogPosts} headingLevel={2} showDates />
         </div>
       </section>
       <SectionDivider tone="red" />
@@ -608,11 +616,11 @@ export function LegalPage({
       <SectionDivider />
       <section className={`${styles.section} ${styles.toneBlack}`}>
         <div className={`${styles.container} ${styles.legalLayout}`}>
-          <aside className={styles.legalMeta}>
+          <div className={styles.legalMeta}>
             <Eyebrow>Last updated</Eyebrow>
             <strong>{lastUpdated}</strong>
             {draft && <p>This page is a launch-preparation draft and should be reviewed with legal counsel before final publication.</p>}
-          </aside>
+          </div>
           <div className={styles.legalSections}>
             {sections.map((section) => (
               <section key={section.title} data-reveal="">

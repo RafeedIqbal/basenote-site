@@ -17,17 +17,20 @@ function subscribe(onChange: () => void) {
   return () => window.removeEventListener(PRIVACY_CHANGE_EVENT, onChange);
 }
 
-const serverChoice = () => "";
+// Unknown until hydration, so returning visitors are not shown the banner from server HTML.
+const serverChoice = () => null;
 
 export function CookieSettings() {
   return <button id="cookie-settings" type="button" className={styles.settings} onClick={() => window.dispatchEvent(new Event("basenote:privacy-open"))}>Cookie settings</button>;
 }
 
 export default function PrivacyChoices() {
-  const saved = useSyncExternalStore(subscribe, readChoice, serverChoice);
+  const saved = useSyncExternalStore<string | null>(subscribe, readChoice, serverChoice);
   const choice = privacyChoice(saved);
   const [open, setOpen] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
+  const panel = useRef<HTMLElement>(null);
+  const showPanel = saved !== null && (!choice.chosen || open);
 
   useEffect(() => {
     const show = () => setOpen(true);
@@ -39,9 +42,27 @@ export default function PrivacyChoices() {
     if (open) heading.current?.focus();
   }, [open]);
 
+  // Keep keyboard focus from scrolling under the fixed panel (WCAG 2.4.11).
+  useEffect(() => {
+    const element = panel.current;
+    if (!showPanel || !element) return;
+    const root = document.documentElement;
+    const reserve = () =>
+      root.style.setProperty("--privacy-panel-space", `${element.offsetHeight + 16}px`);
+    reserve();
+    const observer = new ResizeObserver(reserve);
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+      root.style.removeProperty("--privacy-panel-space");
+    };
+  }, [showPanel]);
+
   function close() {
+    const hadFocus = panel.current?.contains(document.activeElement);
     setOpen(false);
     if (open) document.getElementById("cookie-settings")?.focus();
+    else if (hadFocus) document.getElementById("main-content")?.focus({ preventScroll: true });
   }
 
   function save(analytics: boolean, marketing: boolean) {
@@ -79,10 +100,17 @@ gtag('consent','default',{analytics_storage:'granted',ad_storage:'denied',ad_use
     {choice.marketing && <Script id="meta-pixel" strategy="afterInteractive">
       {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1630012237997794');fbq('track','PageView');`}
     </Script>}
-    {(!choice.chosen || open) && <section className={styles.panel} aria-labelledby="privacy-heading">
+    {showPanel && <section
+      ref={panel}
+      className={styles.panel}
+      aria-labelledby="privacy-heading"
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && open && choice.chosen) close();
+      }}
+    >
       <h2 ref={heading} id="privacy-heading" tabIndex={-1}>Your cookie choices</h2>
       <p>Essential tools keep this site and its forms working. You choose whether Google can measure visits and Meta can measure advertising. <Link href="/privacy-policy">Read our privacy policy</Link>.</p>
-      <form key={saved} onSubmit={submit}>
+      <form key={saved ?? ""} onSubmit={submit}>
         <div className={styles.options}>
           <label><input type="checkbox" name="analytics" defaultChecked={choice.analytics} /> Google Analytics</label>
           <label><input type="checkbox" name="marketing" defaultChecked={choice.marketing} /> Meta advertising</label>

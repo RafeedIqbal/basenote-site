@@ -5,8 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 
+import type { NavItem } from "@/data/site-content";
 import { setScrollLocked } from "@/lib/scroll";
-import { navigation } from "@/data/site-content";
 import { ScrollTrigger, useGSAP } from "@/lib/gsap";
 
 import styles from "./SiteChrome.module.css";
@@ -15,14 +15,13 @@ function isActivePath(pathname: string, href: string) {
   return href === "/" ? pathname === href : pathname.startsWith(href);
 }
 
-export default function SiteHeader() {
+export default function SiteHeader({ items }: { items: readonly NavItem[] }) {
   const pathname = usePathname();
   const privateLabel = pathname === "/private-label" || pathname === "/private-label/guide";
   const [hidden, setHidden] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDialogElement>(null);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
   function closeForNavigation(event: MouseEvent<HTMLAnchorElement>) {
@@ -36,18 +35,17 @@ export default function SiteHeader() {
     )
       return;
     setOpen(false);
-    // A link to the current route will not remount the page or move focus.
-    // Return focus before making the menu inert, including in that case.
-    menuButtonRef.current?.focus({ preventScroll: true });
   }
 
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 860px)");
     const closeOnDesktop = () => {
-      if (!desktop.matches) return;
-      if (menuRef.current?.contains(document.activeElement)) {
-        headerRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
-      }
+      const menu = menuRef.current;
+      if (!desktop.matches || !menu?.open) return;
+      const hadFocus = menu.contains(document.activeElement);
+      menu.close();
+      // The menu button that would regain focus is hidden at this width.
+      if (hadFocus) headerRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
       setOpen(false);
     };
     desktop.addEventListener("change", closeOnDesktop);
@@ -64,49 +62,18 @@ export default function SiteHeader() {
   }, { dependencies: [privateLabel, open], revertOnUpdate: true });
 
   useEffect(() => {
+    const menu = menuRef.current;
+    if (!menu) return;
     if (!open) {
+      if (menu.open) menu.close();
       return;
     }
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    setScrollLocked(true);
+    if (!menu.open) menu.showModal();
     firstLinkRef.current?.focus();
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setOpen(false);
-        menuButtonRef.current?.focus();
-        return;
-      }
-
-      if (event.key !== "Tab" || !menuRef.current) {
-        return;
-      }
-
-      const focusable = Array.from(
-        menuRef.current.querySelectorAll<HTMLElement>("a[href], button")
-      );
-      const first = focusable[0];
-      const last = focusable.at(-1);
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last?.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first?.focus();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      setScrollLocked(false);
-      window.removeEventListener("keydown", handleKeyDown);
-    };
+    // Lenis listens for wheel input on the window, which still reaches it from the top layer.
+    setScrollLocked(true);
+    return () => setScrollLocked(false);
   }, [open]);
 
   return (
@@ -125,7 +92,7 @@ export default function SiteHeader() {
           </Link>
 
           <nav className={styles.desktopNav} aria-label="Primary navigation">
-            {navigation.map((item) => {
+            {items.map((item) => {
               const active = isActivePath(pathname, item.href);
 
               return (
@@ -145,7 +112,6 @@ export default function SiteHeader() {
           </nav>
 
           <button
-            ref={menuButtonRef}
             type="button"
             className={styles.menuButton}
             aria-label="Open menu"
@@ -160,42 +126,36 @@ export default function SiteHeader() {
         </div>
       </header>
 
-      <div
+      <dialog
         ref={menuRef}
         id="mobile-navigation"
         data-lenis-prevent=""
-        className={`${styles.mobilePanel} ${open ? styles.mobilePanelOpen : ""}`}
-        role="dialog"
-        aria-modal={open ? true : undefined}
+        className={styles.mobilePanel}
         aria-label="Navigation"
-        aria-hidden={!open}
-        inert={!open}
+        onCancel={() => setOpen(false)}
+        onClose={() => setOpen(false)}
       >
         <div className={styles.mobileTopline}>
-          <Link href="/" className={styles.brand} aria-label="Basenote home" onClick={closeForNavigation} tabIndex={open ? 0 : -1}>
+          <Link href="/" className={styles.brand} aria-label="Basenote home" onClick={closeForNavigation}>
             <Image src="/media/basenote-handoff/logo-white.png" alt="" width={30} height={30} />
           </Link>
           <button
             type="button"
             className={styles.closeButton}
             aria-label="Close menu"
-            onClick={() => {
-              setOpen(false);
-              menuButtonRef.current?.focus();
-            }}
+            onClick={() => setOpen(false)}
           >
             ×
           </button>
         </div>
         <span className={styles.menuLabel}>Navigation</span>
         <nav className={styles.mobileNav} aria-label="Mobile navigation">
-          {navigation.map((item, index) => (
+          {items.map((item, index) => (
             <Link
               key={item.href}
               ref={index === 0 ? firstLinkRef : undefined}
               href={item.href}
               className={styles.mobileLink}
-              tabIndex={open ? 0 : -1}
               onClick={closeForNavigation}
               aria-current={isActivePath(pathname, item.href) ? "page" : undefined}
             >
@@ -203,15 +163,10 @@ export default function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <Link
-          href="/contact"
-          className={styles.mobileCta}
-          tabIndex={open ? 0 : -1}
-          onClick={closeForNavigation}
-        >
+        <Link href="/contact" className={styles.mobileCta} onClick={closeForNavigation}>
           Get in touch
         </Link>
-      </div>
+      </dialog>
     </>
   );
 }

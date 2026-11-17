@@ -39,13 +39,13 @@ function switchWithKeys(
 
 function UnavailableImage({ title }: { title: string }) {
   return (
-    <aside className={styles.mediaNote}>
+    <div className={styles.mediaNote}>
       <span className={styles.eyebrow}>{title}</span>
       <p>{content.labels.imageUnavailable}</p>
       <Link href={privateLabel.contactHref}>
         {content.back} <ArrowIcon />
       </Link>
-    </aside>
+    </div>
   );
 }
 
@@ -62,7 +62,7 @@ function Gallery({ images, title }: { images: GuideImage[]; title: string }) {
       className={styles.gallery}
       role="region"
       aria-roledescription="carousel"
-      aria-label={title}
+      aria-label={`${title} images`}
     >
       <div
         className={styles.galleryImage}
@@ -224,13 +224,13 @@ export function BottleAndCap() {
           <GuideChoiceCards cards={part.cards} />
         </section>
       ))}
-      <aside className={styles.sourcing}>
+      <div className={styles.sourcing}>
         <ArrowIcon />
         <div>
           <h3>{components.sourcingTitle}</h3>
           <p>{components.sourcingDescription}</p>
         </div>
-      </aside>
+      </div>
       <section
         className={styles.componentSection}
         aria-labelledby="finish-title"

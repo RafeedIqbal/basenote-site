@@ -6,7 +6,7 @@
   --amber-spill-x: -8%;
   position: relative;
   isolation: isolate;
-  min-height: 100vh;
+  min-height: 100svh;
   background: #010101;
   color: #fff;
 }
@@ -169,6 +169,20 @@
   text-transform: uppercase;
 }
 
+.eyebrowHeading {
+  margin: 0;
+  font: inherit;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .eyebrowRed {
   color: #e0a893;
 }
@@ -314,7 +328,7 @@
 
 .homeHero {
   position: relative;
-  min-height: min(94vh, 900px);
+  min-height: min(94svh, 900px);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -892,7 +906,7 @@
 
 .audienceGrid article > span,
 .teamGrid article > span {
-  color: #8a6a5a;
+  color: #9d7b69;
   font-family: var(--font-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -1001,14 +1015,14 @@
 }
 
 .articleMeta {
-  color: #8a6a5a;
+  color: #9d7b69;
   font-family: var(--font-mono), monospace;
   font-size: 10.5px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.editorialCopy h3 {
+.editorialCopy :is(h2, h3) {
   margin: 12px 0 10px;
   font-family: var(--font-serif), serif;
   font-size: 21px;
@@ -1412,7 +1426,7 @@
 }
 
 .contactSection {
-  min-height: calc(100vh - 72px);
+  min-height: calc(100svh - 72px);
   padding: clamp(80px, 10vw, 120px) 0;
 }
 
@@ -1509,6 +1523,21 @@
   color: #a8a8a8;
   font-size: 15px;
   line-height: 1.7;
+}
+
+/* Page heroes are on screen at first paint, so they animate in from CSS rather than
+   being hidden by script after the server HTML has already been seen. */
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    translate: 0 26px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.homeHero, .pageHero, .centerProductHero, .listingHero, .contactSection) [data-reveal] {
+    animation: heroReveal 0.9s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
 }
 
 @keyframes float {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import {
   privateLabelGuide as content,
@@ -14,6 +14,7 @@ export default function GuideProductionTimeline({
   steps: GuideStep[];
 }) {
   const root = useRef<HTMLOListElement>(null);
+  const id = useId();
 
   useGSAP(
     () => {
@@ -96,6 +97,7 @@ export default function GuideProductionTimeline({
           className={styles.step}
           tabIndex={0}
           aria-label={`${content.labels.step} ${index + 1}: ${step.title}`}
+          aria-describedby={`${id}-copy-${index}`}
         >
           <div className={styles.rail} aria-hidden="true">
             <span className={styles.number}>
@@ -105,7 +107,7 @@ export default function GuideProductionTimeline({
               <span className={styles.fill} data-step-fill="" />
             </span>
           </div>
-          <div className={styles.copy}>
+          <div id={`${id}-copy-${index}`} className={styles.copy}>
             <h3>{step.title}</h3>
             {step.paragraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>

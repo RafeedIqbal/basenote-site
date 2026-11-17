@@ -193,20 +193,23 @@ export default function CapabilityWheel() {
             aria-label={content.selectionLabel}
             onKeyDown={(event) => {
               if (event.altKey || event.ctrlKey || event.metaKey) return;
+              const buttons = Array.from(
+                event.currentTarget.querySelectorAll<HTMLButtonElement>("button"),
+              );
+              const focused = buttons.indexOf(event.target as HTMLButtonElement);
+              const from = focused >= 0 ? focused : activeIndex.current;
               let next: number;
-              if (event.key === "ArrowRight") next = activeIndex.current + 1;
-              else if (event.key === "ArrowLeft") next = activeIndex.current - 1;
+              if (event.key === "ArrowRight") next = from + 1;
+              else if (event.key === "ArrowLeft") next = from - 1;
               else if (event.key === "Home") next = 0;
               else if (event.key === "End") next = itemCount - 1;
               else return;
 
               event.preventDefault();
               choose(next);
-              event.currentTarget
-                .querySelectorAll<HTMLButtonElement>("button")[
-                  (next + itemCount) % itemCount
-                ]
-                ?.focus({ preventScroll: true });
+              buttons[(next + itemCount) % itemCount]?.focus({
+                preventScroll: true,
+              });
             }}
           >
             {content.items.map(({ label }, index) => (
