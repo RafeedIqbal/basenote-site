@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Architecture and routes
-Basenote Solutions is a Next.js 16 App Router marketing site using React 19 and strict TypeScript. The eleven public routes are `/`, `/private-label`, `/private-label/guide`, `/blend-engine`, `/alchemy-engine`, `/about`, `/blogs`, `/case-studies`, `/contact`, `/privacy-policy`, and `/terms`. Keep route registration in `lib/site.ts` (`PUBLIC_ROUTES`) aligned with page entrypoints and the generated sitemap.
+Basenote Solutions is a Next.js 16 App Router marketing site using React 19 and strict TypeScript. Public routes cover the homepage, Starter Kit, Private Label and its guide, Blend Engine, Alchemy Engine, About, the journal and case studies, Contact, Privacy Policy, and Terms. The journal and case study detail routes share typed articles in `data/site-editorial.ts`, exported through `data/site-content.ts`. Keep route registration in `lib/site.ts` (`PUBLIC_ROUTES`) aligned with page entrypoints and the generated sitemap.
 
 `app/` contains route entrypoints, metadata, global styles, and the contact server action. Most page views live in `components/site/SitePages.tsx` with `SitePages.module.css`. Shared navigation and footer live in `components/site/`; `shared.tsx` exports `SiteFrame`, `Eyebrow`, `SectionDivider`, and `FaqList`. `SitePages.tsx` and `shared.tsx` are server components: keep client hooks in the client islands (`PageShell` for hash alignment and `data-reveal` animations, `SiteHeader`, `FaqList`, `InquiryForm`) and pass data to them as props. The private label page and guide use dedicated components and co-located CSS Modules in `components/private-label/`.
 

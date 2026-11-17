@@ -594,8 +594,18 @@
 .serviceGrid {
   margin-top: clamp(36px, 4vw, 56px);
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+}
+
+@media (min-width: 1120px) {
+  .serviceGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.serviceSage {
+  border-color: #60735e;
+  background: linear-gradient(150deg, #0b1510, #24392b 65%, #3c5142);
+  color: #d6e1d1;
 }
 
 .serviceCard {
@@ -985,12 +995,21 @@
 }
 
 .editorialCard {
+  position: relative;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   background: #080808;
   transition: border-color 180ms ease;
 }
+
+.editorialCard h2 a::after, .editorialCard h3 a::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+}
+.editorialCard:focus-within { outline: 2px solid #f1e4cd; outline-offset: 3px; }
+.editorialCard:focus-within :is(h2, h3) a, .editorialCard:hover :is(h2, h3) a { text-decoration: underline; text-underline-offset: 0.16em; }
 
 @media (hover: hover) and (pointer: fine) {
   .editorialCard:hover {
@@ -1012,7 +1031,7 @@
 }
 
 .articleMeta {
-  color: #9d7b69;
+  color: #c4a794;
   font-family: var(--font-mono), monospace;
   font-size: 10.5px;
   letter-spacing: 0.14em;
@@ -1201,6 +1220,17 @@
 .centerProductHeroInner > a {
   margin-top: 34px;
 }
+
+.productActions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.readingLink { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+.listingIntro { max-width: 58ch; margin: 22px 0 0; color: #c3bbb2; font-size: 18px; }
 
 .centerProductHero {
   min-height: 650px;
@@ -1601,8 +1631,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .serviceCard:last-child,
-  .editorialCard:last-child {
+  .editorialCard:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
 

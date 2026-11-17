@@ -1,6 +1,5 @@
-"use client";
-
-import { privateLabel as content, privateLabelFaqs } from "@/data/site-content";
+import Link from "next/link";
+import { privateLabel as content, privateLabelArticle, privateLabelFaqs } from "@/data/site-content";
 import { SiteFrame, FaqList } from "@/components/site/shared";
 import PortfolioCarousel from "./PortfolioCarousel";
 import AudiencePanels from "./AudiencePanels";
@@ -23,7 +22,9 @@ export default function PrivateLabelPage() {
       <CapabilityWheel />
       <ClientJourney />
       {content.featured.enabled ? <FeaturedProject /> : null}
-      <CommercialStats />
+      <CommercialStats>
+        <Link href={privateLabelArticle.path} className={styles.readingLink}>{privateLabelArticle.title}</Link>
+      </CommercialStats>
       <GuideTeaser />
       <section
         id="faq"

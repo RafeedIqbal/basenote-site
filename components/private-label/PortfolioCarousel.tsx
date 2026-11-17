@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { scrollToAnchor, setScrollLocked } from "@/lib/scroll";
@@ -150,6 +151,7 @@ function PortfolioStory({
           <p className={styles.clientName}>{project.name}</p>
           <h2 id={id + "-title"}>{project.headline}</h2>
           {project.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          {project.caseStudy && <Link href={project.caseStudy.href} className={styles.storyLink}>{project.caseStudy.label}</Link>}
         </div>
       </div>
     </dialog>

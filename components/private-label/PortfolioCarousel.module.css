@@ -188,6 +188,7 @@
 }
 .story p { margin: 0 0 20px; color: #cbb9ae; font-size: 15px; line-height: 1.85; }
 .story p:last-child { margin-bottom: 0; }
+.storyLink { color: #eed5c5; text-decoration: underline; text-underline-offset: 0.25em; }
 @media (max-width: 859px) {
   .section { --logo-height: 28px; --logo-gap: 48px; }
   .dialog { padding: 20px; }

@@ -2,7 +2,7 @@
 
 The current identity uses the supplied Bn monogram in `public/media/basenote-handoff/logo-white.png`, the site's black canvas, Source Serif 4, and Lexend Deca. Keep the supplied artwork unchanged. Icon exports trim its transparent padding and center the complete mark.
 
-`lib/site.ts` owns the site identity, canonical origin, social-image descriptor, shared page metadata, and homepage Organization/WebSite structured data. Every public page uses `createPageMetadata`. Preserve each page's approved description; private-label descriptions retain their editorial status in `data/site-content.ts` and `docs/private-label.md`.
+`lib/site-brand.ts` supplies the site identity, canonical origin and default social image to both the site and the artwork generator. Every public page uses `createPageMetadata` in `lib/site.ts`. Private-label descriptions retain their editorial status in `data/site-content.ts` and `docs/private-label.md`.
 
 ## Regenerating assets
 
@@ -29,6 +29,11 @@ Font files in `assets/brand-fonts/` are only inputs to the asset generator; webs
 
 - Root viewport and manifest use the black brand color. The manifest keeps browser display mode.
 - Canonicals, Open Graph URLs, robots sitemap URL, and structured data use `SITE_ORIGIN`.
-- Structured data appears on the homepage and describes only the site identity and organization. Do not invent social profiles, contact details, reviews, or business facts.
+- The homepage describes the organization and website. Journal records in `data/site-editorial.ts` supply each article's HTML, Open Graph and Twitter preview, Article or BlogPosting, and breadcrumb trail. Set the record's date to its first publication date. A rebuild uses the same date.
+- ALPAC's case study has one URL under `/case-studies` and is also listed in the journal. The supplied portfolio photograph shows ẸWÀ. The accompanying [Drop 001 storefront](https://alpaclondon.com/drops/drop-001) capture is stored at `public/media/editorial/alpac-drop-001.webp`.
 - The sitemap covers `PUBLIC_ROUTES`. Add `lastModified` only when an actual content modification date is available, rather than reporting every build as a content change.
 - Validate the production HTML on all public routes, image responses/dimensions, favicon sizes, manifest icons, and JSON-LD after changes. Inspect social artwork and small icons visually. External crawlers and sharing services refresh after deployment on their own schedule.
+
+## Measuring product search traffic
+
+After publication, compare the first 28 days with the preceding 28 days in the verified site's [Search Console Performance report](https://support.google.com/webmasters/answer/7576553). Group queries around starting a fragrance brand, private label perfume manufacturing, retail perfume blending software, and fragrance factory ERP or formulation software. Compare impressions, clicks and average position within each group. For a new URL, use the Pages filter to follow its first impressions and the queries that brought visitors to it.

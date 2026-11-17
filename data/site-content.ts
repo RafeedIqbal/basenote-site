@@ -1,4 +1,10 @@
 import guideOptions from "./private-label-options.json";
+import { alpacCasePath, blendArticle, starterArticle } from "./site-editorial";
+
+export {
+  alchemyArticle, alpacArticle, blendArticle, blogArticles, journalArticles,
+  privateLabelArticle, starterArticle, type JournalArticle
+} from "./site-editorial";
 
 export type NavItem = {
   href: string;
@@ -11,23 +17,15 @@ export type FaqItem = {
 };
 
 export type ServiceCard = {
-  accent: "amber" | "blue" | "red";
+  accent: "amber" | "blue" | "red" | "sage";
   description: string;
   eyebrow: string;
   href: string;
   title: string;
 };
 
-export type EditorialCard = {
-  category: string;
-  date: string;
-  description: string;
-  href: string;
-  image: string;
-  title: string;
-};
-
 export const navigation: NavItem[] = [
+  { label: "Starter Kit", href: "/starter-kit" },
   { label: "Private Label", href: "/private-label" },
   { label: "Blend Engine", href: "/blend-engine" },
   { label: "Alchemy Engine", href: "/alchemy-engine" },
@@ -43,12 +41,18 @@ export const contactDetails = {
   booking: { label: "Book a call", href: consultationHref },
 };
 
-export const stats = [
-  { value: "$50B+", label: "Global market" },
-  { value: "UAE", label: "Direct factory access" },
-  { value: "4", label: "In-house capabilities" },
-  { value: "1", label: "Partner, end to end" },
-] as const;
+export const homePositioning = {
+  title: "Launch a fragrance brand",
+  intro: "Start with a scent idea, a retail counter or a factory floor.",
+  description: "Test your first perfume with the Fragrance Brand Starter Kit, plan private label production or find software for a blending bar or fragrance factory.",
+  servicesTitle: "Fragrance products and services",
+  servicesIntro: "Choose a starting point for your brand, shop or production team.",
+};
+
+export const journalIntro = {
+  title: "Fragrance Business Journal",
+  description: "Practical guides for founders, retailers and fragrance factories, with a look inside the brands we build.",
+};
 
 export const barriers = [
   {
@@ -90,8 +94,15 @@ export const audienceLabels = [
 
 export const services: ServiceCard[] = [
   {
-    accent: "red",
+    accent: "sage",
     eyebrow: "01",
+    title: "Fragrance Brand Starter Kit",
+    description: "Test your scent with a perfumer, a brand website and a waitlist. Add a small UK sample batch when you need bottles for early customers.",
+    href: "/starter-kit",
+  },
+  {
+    accent: "red",
+    eyebrow: "02",
     title: "Private Label",
     description:
       "Your product, your brand — bottles, caps, packaging and bespoke fragrance, manufactured to spec in the UAE.",
@@ -99,18 +110,18 @@ export const services: ServiceCard[] = [
   },
   {
     accent: "blue",
-    eyebrow: "02",
+    eyebrow: "03",
     title: "Blend Engine",
     description:
-      "Combine fragrance oils into market-ready perfumes with AI. Licensed as a subscription for labs, retailers and studios.",
+      "Run an in-store perfume blending bar with guided consultations, custom blends and a production ticket for each bottle. The software is licensed per location.",
     href: "/blend-engine",
   },
   {
     accent: "amber",
-    eyebrow: "03",
-    title: "Alchemy Engine",
+    eyebrow: "04",
+    title: "Alchemy Engine & Factory ERP",
     description:
-      "The world’s first fragrance formulation AI — trained on proprietary chemistry to accelerate how perfumes are created.",
+      "Track stock, formula revisions and factory work orders. Fragrance houses can also enquire about a limited formulation AI pilot.",
     href: "/alchemy-engine",
   },
 ];
@@ -120,7 +131,7 @@ export const audienceSegments = [
     number: "01",
     title: "Start-Ups & New Brands",
     description:
-      "You have an idea. We make it real — product to brand to market. Private label is the fastest way in.",
+      "Test your idea with the Starter Kit, or bring a launch-ready brief to our private label team.",
   },
   {
     number: "02",
@@ -175,15 +186,6 @@ export const processSteps = [
   },
 ] as const;
 
-export const trustedBrands = [
-  "Aurelia",
-  "Noctis",
-  "Maison V",
-  "Étier",
-  "Solace",
-  "Vireo",
-] as const;
-
 export const blendBars = [
   { name: "Bergamot", percentage: 72 },
   { name: "Amber", percentage: 88 },
@@ -191,52 +193,54 @@ export const blendBars = [
   { name: "Musk", percentage: 66 },
 ] as const;
 
-export const blendFeatures = [
-  {
-    title: "Guided Blending",
-    description:
-      "Combine oils with live feedback on balance, longevity and sillage.",
-  },
-  {
-    title: "Compliance Built In",
-    description: "Flags regulatory limits before you commit to production.",
-  },
-  {
-    title: "Licence & Scale",
-    description:
-      "Monthly subscription with quarterly oil purchases — built for labs and retailers.",
-  },
-] as const;
+export const starterKit = {
+  title: "Fragrance Brand Starter Kit",
+  description: "Develop a scent with our perfumer, show your audience the bottle and build a waitlist before you commit to a full production run.",
+  metadata: "Launch a fragrance brand with perfumer sampling, a website, mockups and waitlist content. Compare the digital Starter Kit and the optional 10–50-unit UK sample batch.",
+  tiers: [
+    {
+      title: "Digital",
+      description: "For founders and creators who want to put a fragrance idea in front of an audience.",
+      includes: ["Fragrance sampling with our perfumer", "A website for your brand and waitlist", "Product mockups and social content for the launch"],
+    },
+    {
+      title: "Digital + Sample Batch",
+      description: "For founders ready to give early supporters a bottle to wear and talk about.",
+      includes: ["Everything in the digital kit", "A UK-made run of 10–50 units", "A collector’s bottle with a question-mark label for early fans"],
+    },
+  ],
+  pricing: "Both tiers are quoted individually. Tell us who you want to reach, the scent you have in mind and whether you want bottles for sampling.",
+  nextTitle: "Ready for a production run?",
+  nextDescription: "When your wear tests and waitlist give you the confidence to order stock, we can develop the finished bottle, packaging and fragrance through Private Label.",
+};
 
-export const blogPosts: EditorialCard[] = [
-  {
-    category: "Blog",
-    date: "May 2024",
-    title: "The Art and Science of Fragrance",
-    description:
-      "A deep dive into the craftsmanship, innovation and raw materials that define modern perfumery.",
-    image: "/media/basenote-handoff/editorial-1.png",
-    href: "/blogs",
-  },
-  {
-    category: "Blog",
-    date: "Apr 2024",
-    title: "Building a Brand From a Single Note",
-    description:
-      "How a signature accord becomes the backbone of an entire fragrance identity.",
-    image: "/media/basenote-handoff/editorial-2.png",
-    href: "/blogs",
-  },
-  {
-    category: "Case Study",
-    date: "Mar 2024",
-    title: "Private Label, Start to Shelf",
-    description:
-      "Inside a full private-label launch delivered with TAC Perfumes.",
-    image: "/media/basenote-handoff/editorial-3.png",
-    href: "/case-studies",
-  },
-];
+export const blendEngine = {
+  title: "Perfume blending software for retailers",
+  description: "Turn a fragrance counter into an in-store perfume bar. Blend Engine guides staff and customers from a scent brief through smelling, refining and selecting a custom blend.",
+  metadata: "Run an in-store perfume bar with Blend Engine. Guide customers through scent preferences, compare custom blends and send each bottle to production.",
+  features: [
+    { title: "Guide the consultation", description: "Record a customer’s scent preferences and compare three suggested directions on blotters." },
+    { title: "Prepare the chosen bottle", description: "Review blend, size and stock together. Each bottle gets its own production ticket." },
+    { title: "License a location", description: "License the software per location and order oils and accords as needed. Ask us about terms for your shop." },
+  ],
+};
+
+export const alchemyEngine = {
+  title: "Factory ERP and fragrance formulation software",
+  description: "Manage materials, formula revisions and work orders in Factory ERP. For fragrance houses developing new scents, Alchemy Engine offers limited partner pilots of AI-assisted formulation.",
+  metadata: "Explore perfume manufacturing ERP for stock, sourcing, formula revisions and factory work orders, and enquire about a limited Alchemy Engine formulation AI pilot.",
+  pilot: { href: "/contact?interest=Alchemy%20Engine", label: "Enquire about a formulation AI pilot" },
+  stages: [
+    { title: "Formula", description: "Recipe revisions" },
+    { title: "Stock", description: "Material lots" },
+    { title: "Factory", description: "Work orders" },
+  ],
+  features: [
+    { title: "Sourcing and stock", description: "Follow a material from supplier quotation to goods receipt, then check what is available for a project." },
+    { title: "Factory production", description: "Issue work orders, record which lots went to the filling site and follow progress through to readiness." },
+    { title: "Formulation AI pilots", description: "Bring a brief and an evaluation question. Your chemist can assess proposed directions and decide what to trial at the bench." },
+  ],
+};
 
 export const teamMembers = [
   {
@@ -271,14 +275,18 @@ export const teamMembers = [
 
 export const homeFaqs: FaqItem[] = [
   {
+    question: "Can I test a perfume brand before ordering a full production run?",
+    answer: "Yes. The Starter Kit includes a brand website, product mockups, waitlist content and sampling with our perfumer. You can also add a UK-made batch of 10–50 units. Both tiers are priced on enquiry.",
+  },
+  {
     question: "What is the minimum order quantity for private label?",
     answer:
-      "MOQs vary depending on the product and packaging selected. Get in touch and we’ll confirm based on your brief.",
+      "A typical private label order starts at 500 units per fragrance. We confirm the minimum for your chosen components and packaging when we scope the brief.",
   },
   {
     question: "Do you work with clients outside the UK?",
     answer:
-      "Yes. We work with clients globally. Manufacturing is based in the UAE and we ship to multiple markets.",
+      "Yes. We work with clients internationally. Our private label manufacturing partners include a UAE facility, and the optional Starter Kit sample batch is made in the UK.",
   },
   {
     question: "Can I order fragrance oils without a full private label order?",
@@ -288,12 +296,12 @@ export const homeFaqs: FaqItem[] = [
   {
     question: "How long does a private label order take?",
     answer:
-      "Timelines depend on complexity, volume and production schedules. We give an accurate lead time at scoping.",
+      "A typical project takes around 8–12 weeks. Bespoke fragrance development, packaging, approvals and delivery can extend that window.",
   },
   {
     question: "What’s the difference between Blend Engine and Alchemy Engine?",
     answer:
-      "Blend Engine creates perfumes by combining existing oils — for labs, retailers and studios. Alchemy Engine is a deeper formulation AI for chemists, trained on proprietary chemical data.",
+      "Blend Engine helps retailers guide customers through an in-store perfume blending session. Factory ERP manages stock, sourcing and production. Alchemy Engine offers limited formulation AI pilots for chemists and fragrance houses.",
   },
   {
     question: "Do you offer branding as a standalone service?",
@@ -302,25 +310,30 @@ export const homeFaqs: FaqItem[] = [
   },
 ];
 
+const standaloneServices = [
+  { label: "Wholesale Oils", href: "/contact?interest=Fragrance%20Oils" },
+  { label: "Branding", href: "/contact?interest=Branding" },
+  { label: "Consultancy", href: "/contact?interest=Consultancy" },
+] as const satisfies readonly NavItem[];
+
 export const footerGroups = [
   {
     title: "Services",
     links: [
+      { label: "Fragrance Brand Starter Kit", href: "/starter-kit" },
       { label: "Private Label", href: "/private-label" },
       { label: "Private Label Guide", href: "/private-label/guide" },
-      { label: "Wholesale Oils", href: "/contact?interest=Fragrance%20Oils" },
-      { label: "Branding", href: "/contact?interest=Branding" },
-      { label: "Consultancy", href: "/contact?interest=Consultancy" },
+      ...standaloneServices,
     ],
   },
   {
     title: "Technology",
     links: [
       { label: "Blend Engine", href: "/blend-engine" },
-      { label: "Alchemy Engine", href: "/alchemy-engine" },
+      { label: "Alchemy Engine & Factory ERP", href: "/alchemy-engine" },
       {
-        label: "Websites & ERP",
-        href: "/contact?interest=Tech%20%26%20AI%20Products",
+        label: "Website development",
+        href: "/contact?interest=Branding",
       },
     ],
   },
@@ -556,6 +569,7 @@ export const privateLabel: PrivateLabelContent = {
       {
         name: "ALPAC London",
         slug: "alpac-london",
+        caseStudy: { href: alpacCasePath, label: "Read the ALPAC London Shopify case study" },
         logo: {
           src: "/media/private-label/portfolio/logos/alpac-london.png", alt: "ALPAC London",
           width: 1701, height: 569,
@@ -802,6 +816,38 @@ export const privateLabel: PrivateLabelContent = {
 };
 export const caseStudies: PortfolioProject[] = privateLabel.portfolio.slides;
 
+export const homePage = {
+  enquiry: { label: "Start a project", href: "/contact" },
+  hero: {
+    introduction: "We create scents, design brands and manufacture perfume in the UAE. We also build software for retailers and perfumers.",
+    image: {
+      src: "/media/basenote-handoff/editorial-3.png",
+      alt: "A glass perfume bottle on dark stone beside white blossoms and sample vials",
+    },
+    services: { label: "Explore our services", href: "#services" },
+  },
+  services: {
+    image: {
+      src: "/media/basenote-handoff/editorial-2.png",
+      alt: "Hands sorting raw fragrance ingredients beside sample vials and a lab notebook",
+    },
+    additionalLabel: "Individual services",
+    additional: standaloneServices,
+  },
+  work: {
+    title: "Selected work",
+    credit: "In association with TAC Perfumes",
+    projectSlugs: ["firmino", "rizla", "alpac-london"],
+    all: { label: "View all case studies", href: "/case-studies" },
+  },
+  questions: {
+    title: "Common questions",
+    guide: { label: "Read the Private Label Guide", href: privateLabel.guideHref },
+    readingTitle: "From the journal",
+    reading: [starterArticle, blendArticle],
+  },
+} as const;
+
 export type GuideImage = { src: string; alt: string };
 export type PortfolioProject = {
   name: string;
@@ -809,6 +855,7 @@ export type PortfolioProject = {
   headline: string;
   paragraphs: string[];
   images: GuideImage[];
+  caseStudy?: NavItem;
   logo?: GuideImage & {
     width: number;
     height: number;

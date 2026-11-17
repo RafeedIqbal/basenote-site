@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { type ReactNode, useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { privateLabel } from "@/data/site-content";
 import common from "./PrivateLabel.module.css";
@@ -18,8 +18,8 @@ const stats = content.stats.map((stat) => {
 });
 
 export default function CommercialStats({
-  variant,
-}: { variant?: "guide" } = {}) {
+  variant, children,
+}: { variant?: "guide"; children?: ReactNode } = {}) {
   const root = useRef<HTMLElement>(null);
   const revealed = useRef(false);
   const isGuide = variant === "guide";
@@ -143,6 +143,7 @@ export default function CommercialStats({
           </div>
         ))}
       </dl>
+      {children}
     </section>
   );
 }

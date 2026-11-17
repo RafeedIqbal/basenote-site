@@ -1,4 +1,4 @@
-import { LandingPage } from "@/components/site/SitePages";
+import LandingPage from "@/components/site/LandingPage";
 import {
   createPageMetadata,
   createSiteStructuredData,

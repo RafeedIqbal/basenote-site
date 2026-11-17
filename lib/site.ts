@@ -1,28 +1,13 @@
 import type { Metadata } from "next";
 
-import { socialLinks } from "@/data/site-content";
+import { journalArticles, socialLinks, type JournalArticle } from "@/data/site-content";
+import { SITE_DESCRIPTION, SITE_LOGO, SITE_NAME, SITE_ORIGIN, SITE_SHORT_NAME, SITE_SOCIAL_IMAGE } from "@/lib/site-brand";
 
-export const SITE_NAME = "Basenote Solutions";
-export const SITE_SHORT_NAME = "Basenote";
-export const SITE_ORIGIN = "https://www.basenotesolutions.com";
-export const SITE_TITLE = "Fragrance Brand Consultancy";
-export const SITE_TAGLINE = "Where Fragrance Meets Business";
-export const SITE_THEME_COLOR = "#000000";
-export const SITE_DESCRIPTION =
-  "Private-label manufacturing, fragrance brand creation, and purpose-built fragrance technology connected by one team.";
-export const SITE_LOGO_SOURCE = "/media/basenote-handoff/logo-white.png";
-export const SITE_LOGO = "/icons/icon-512.png";
-export const SITE_SOCIAL_IMAGE = {
-  // A new URL lets sharing services refresh the artwork after the rebrand.
-  url: "/og.png?v=bn-1",
-  width: 1200,
-  height: 630,
-  alt: `${SITE_NAME} — ${SITE_TAGLINE}`,
-  type: "image/png"
-};
+export * from "@/lib/site-brand";
 
 export const PUBLIC_ROUTES = [
   "/",
+  "/starter-kit",
   "/private-label",
   "/private-label/guide",
   "/blend-engine",
@@ -32,7 +17,8 @@ export const PUBLIC_ROUTES = [
   "/case-studies",
   "/contact",
   "/privacy-policy",
-  "/terms"
+  "/terms",
+  ...journalArticles.map((article) => article.path)
 ] as const;
 
 type PageMetadataInput = {
@@ -41,12 +27,11 @@ type PageMetadataInput = {
   title: string;
 };
 
-export function createPageMetadata({
-  description,
-  path,
-  title
-}: PageMetadataInput): Metadata {
+export function createPageMetadata(page: PageMetadataInput | JournalArticle): Metadata {
+  const { description, path, title } = page;
+  const article = "published" in page ? page : undefined;
   const pageTitle = `${title} | ${SITE_NAME}`;
+  const image = article ? { url: article.image.src, width: article.image.width, height: article.image.height, alt: article.image.alt } : SITE_SOCIAL_IMAGE;
 
   return {
     title: {
@@ -61,16 +46,57 @@ export function createPageMetadata({
       description,
       url: path,
       siteName: SITE_NAME,
-      locale: "en_US",
-      type: "website",
-      images: [SITE_SOCIAL_IMAGE]
+      locale: "en_GB",
+      ...(article
+        ? { type: "article", publishedTime: article.published, authors: [`${SITE_ORIGIN}/about`], section: article.topic }
+        : { type: "website" }),
+      images: [image]
     },
     twitter: {
       card: "summary_large_image",
       title: pageTitle,
       description,
-      images: [SITE_SOCIAL_IMAGE]
+      images: [image]
     }
+  };
+}
+
+export function articleBreadcrumbs(article: JournalArticle) {
+  const listing = article.path.startsWith("/blogs/")
+    ? { label: "Journal", href: "/blogs" }
+    : { label: "Case studies", href: "/case-studies" };
+  return [{ label: "Home", href: "/" }, listing, { label: article.topic, href: article.path }];
+}
+
+const dateFormat = new Intl.DateTimeFormat("en-GB", { dateStyle: "long", timeZone: "UTC" });
+
+export function formatArticleDate(date: string) {
+  return dateFormat.format(new Date(date));
+}
+
+export function createArticleStructuredData(article: JournalArticle) {
+  const url = SITE_ORIGIN + article.path;
+  const organisation = {
+    "@type": "Organization", "@id": SITE_ORIGIN + "/#organization",
+    name: SITE_NAME, url: SITE_ORIGIN + "/about", logo: SITE_ORIGIN + SITE_LOGO
+  };
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": article.path.startsWith("/blogs/") ? "BlogPosting" : "Article",
+        "@id": url + "#article", url, mainEntityOfPage: url, inLanguage: "en-GB",
+        headline: article.title, description: article.description, articleSection: article.topic,
+        datePublished: article.published, author: organisation, publisher: { "@id": organisation["@id"] },
+        image: { "@type": "ImageObject", url: SITE_ORIGIN + article.image.src, width: article.image.width, height: article.image.height }
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: articleBreadcrumbs(article).map((crumb, i) => ({
+          "@type": "ListItem", position: i + 1, name: crumb.label, item: SITE_ORIGIN + crumb.href
+        }))
+      }
+    ]
   };
 }
 

@@ -2,9 +2,9 @@ import { BlogsPage } from "@/components/site/SitePages";
 import { createPageMetadata } from "@/lib/site";
 
 export const metadata = createPageMetadata({
-  title: "Blogs",
+  title: "Fragrance Business Journal",
   description:
-    "Practical notes on private-label fragrance, guided blending, brand operations, and fragrance technology.",
+    "Guides to testing a perfume brand, comparing private label quotes, running a blending bar and managing factory production, with work from ALPAC London.",
   path: "/blogs"
 });
 

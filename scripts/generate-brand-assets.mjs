@@ -13,7 +13,7 @@ import {
   SITE_SOCIAL_IMAGE,
   SITE_TAGLINE,
   SITE_THEME_COLOR
-} from "../lib/site.ts";
+} from "../lib/site-brand.ts";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const logo = await sharp(join(root, "public", SITE_LOGO_SOURCE))

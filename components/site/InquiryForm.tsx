@@ -10,6 +10,7 @@ import { TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
 import styles from "./InquiryForm.module.css";
 
 const interestOptions = [
+  "Starter Kit",
   "Private Label",
   "Branding",
   "Fragrance Oils",
@@ -17,6 +18,7 @@ const interestOptions = [
   "Tech & AI Products",
   "Blend Engine",
   "Alchemy Engine",
+  "Factory ERP",
   "Not Sure Yet"
 ];
 

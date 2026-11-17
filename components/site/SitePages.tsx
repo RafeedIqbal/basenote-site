@@ -3,46 +3,39 @@ import Link from "next/link";
 import { type CSSProperties, type ReactNode } from "react";
 
 import {
-  audienceLabels,
-  audienceSegments,
-  barriers,
+  alchemyArticle,
+  alchemyEngine,
   blendBars,
-  blendFeatures,
-  blogPosts,
-  capabilities,
+  blendArticle,
+  blendEngine,
   caseStudies,
   contactDetails,
-  homeFaqs,
-  services,
-  stats,
+  journalArticles,
+  journalIntro,
   teamMembers,
-  trustedBrands,
-  type EditorialCard
+  type JournalArticle
 } from "@/data/site-content";
+import { formatArticleDate } from "@/lib/site";
 
 import InquiryForm from "./InquiryForm";
-import { SiteFrame, Eyebrow, SectionDivider, FaqList } from "./shared";
+import { SiteFrame, Eyebrow, SectionDivider } from "./shared";
 
 import styles from "./SitePages.module.css";
-
-const assetRoot = "/media/basenote-handoff";
 
 const waves = Array.from({ length: 24 }, (_, index) => ({
   duration: `${(0.7 + (index % 5) * 0.18).toFixed(2)}s`,
   height: `${25 + Math.round(60 * Math.abs(Math.sin(index * 0.9)))}%`
 }));
 
-function PageCta({ tone = "black" }: { tone?: "amber" | "black" | "blue" | "red" }) {
+function PageCta({ tone = "black", article }: { tone?: "amber" | "black" | "blue" | "red"; article?: JournalArticle }) {
   return (
     <section className={`${styles.ctaSection} ${styles[`tone${tone[0].toUpperCase()}${tone.slice(1)}`]}`}>
       <div className={styles.ctaGlow} />
       <div className={styles.ctaContent} data-reveal="">
-        <h2>Ready to Build Something?</h2>
-        <p>
-          Whether you need a product, a brand, or a technology partner — let&apos;s talk.
-        </p>
-        <Link href="/contact" className={styles.primaryButton}>
-          Get in touch
+        <h2>{article ? <Link href={article.path} className={styles.readingLink}>{article.title}</Link> : "Ready to Build Something?"}</h2>
+        <p>{article?.description ?? "Whether you need a product, a brand, or a technology partner — let’s talk."}</p>
+        <Link href={article?.enquiry.href ?? "/contact"} className={styles.primaryButton}>
+          {article?.enquiry.label ?? "Get in touch"}
         </Link>
       </div>
     </section>
@@ -54,8 +47,8 @@ function BlendInterface({ detailed = false }: { detailed?: boolean }) {
     <div className={`${styles.blendPanel} ${detailed ? styles.blendPanelDetailed : ""}`} data-reveal="">
       <div className={styles.panelTopline}>
         <span className={styles.liveDot} />
-        <span>{detailed ? "Blend Studio" : "blend-engine · live"}</span>
-        {detailed ? <span className={styles.sessionLabel}>session · demo</span> : null}
+        <span>Blend Studio</span>
+        <span className={styles.sessionLabel}>Example scent profile</span>
       </div>
       <div className={detailed ? styles.blendDetailGrid : ""}>
         <div>
@@ -73,18 +66,14 @@ function BlendInterface({ detailed = false }: { detailed?: boolean }) {
         </div>
         {detailed ? (
           <div className={styles.predictedProfile}>
-            <Eyebrow tone="blue">Predicted profile</Eyebrow>
+            <Eyebrow tone="blue">Scent direction</Eyebrow>
             <h3>Amber · Woody</h3>
-            <p>Warm, resinous, long-lasting dry-down. Est. compliance: pass.</p>
-            <div className={styles.scoreLarge}>
-              94<span>%</span>
-              <small>market-match<br />confidence</small>
-            </div>
+            <p>Smell this direction on a blotter and record what the customer would keep or change.</p>
           </div>
         ) : (
           <div className={styles.scoreRow}>
-            <span>Predicted match</span>
-            <strong>94<small>%</small></strong>
+            <span>Scent direction</span>
+            <strong>Amber · Woody</strong>
           </div>
         )}
       </div>
@@ -97,7 +86,7 @@ function AlchemyInterface({ detailed = false }: { detailed?: boolean }) {
     <div className={`${styles.alchemyPanel} ${detailed ? styles.alchemyPanelDetailed : ""}`} data-reveal="" data-loop="">
       <div className={styles.panelToplineAmber}>
         <span className={styles.trainingDot} />
-        <span>{detailed ? "Model training pipeline" : "alchemy-engine · training"}</span>
+        <span>Factory ERP · Production records</span>
       </div>
       <div className={`${styles.waveform} ${detailed ? styles.waveformLarge : ""}`} aria-hidden="true">
         {waves.map((wave, index) => (
@@ -110,19 +99,11 @@ function AlchemyInterface({ detailed = false }: { detailed?: boolean }) {
           />
         ))}
       </div>
-      {detailed ? (
-        <div className={styles.alchemyStats}>
-          <div><strong>2,481</strong><span>Formulations logged</span></div>
-          <div><strong>18,940</strong><span>Molecular pairs</span></div>
-          <div><strong>Q3</strong><span>Early access target</span></div>
-        </div>
-      ) : (
-        <div className={styles.terminalCopy}>
-          <span>&gt; logging formulations… <strong>2,481</strong></span>
-          <span>&gt; molecular pairs mapped… <strong>18,940</strong></span>
-          <span>&gt; model status… <strong>in development</strong></span>
-        </div>
-      )}
+      <div className={styles.alchemyStats}>
+        {alchemyEngine.stages.map((stage) => (
+          <div key={stage.title}><strong>{stage.title}</strong><span>{stage.description}</span></div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -132,7 +113,7 @@ function EditorialGrid({
   headingLevel = 3,
   showDates = false
 }: {
-  cards: EditorialCard[];
+  cards: JournalArticle[];
   headingLevel?: 2 | 3;
   showDates?: boolean;
 }) {
@@ -140,10 +121,10 @@ function EditorialGrid({
   return (
     <div className={styles.editorialGrid}>
       {cards.map((card) => (
-        <article key={card.title} className={styles.editorialCard} data-reveal="">
+        <article key={card.path} className={styles.editorialCard}>
           <div className={styles.editorialImage}>
             <Image
-              src={card.image}
+              src={card.image.src}
               alt=""
               fill
               sizes="(max-width: 900px) 100vw, 33vw"
@@ -151,243 +132,15 @@ function EditorialGrid({
           </div>
           <div className={styles.editorialCopy}>
             <span className={styles.articleMeta}>
-              {card.category}{showDates && card.date ? ` · ${card.date}` : ""}
+              {card.path.startsWith("/case-studies/") ? "Case study · " : ""}{card.topic}
+              {showDates && <> · <time dateTime={card.published}>{formatArticleDate(card.published)}</time></>}
             </span>
-            <Heading>{card.title}</Heading>
+            <Heading><Link href={card.path}>{card.title}</Link></Heading>
             <p>{card.description}</p>
           </div>
         </article>
       ))}
     </div>
-  );
-}
-
-export function LandingPage() {
-  return (
-    <SiteFrame>
-      <section className={`${styles.homeHero} ${styles.toneBlack}`}>
-        <div className={styles.heroVeil} />
-        <div className={styles.homeHeroInner}>
-          <div className={styles.homeHeroCopy}>
-            <Eyebrow>— The fragrance opportunity</Eyebrow>
-            <p className={styles.heroLead} data-reveal="">
-              Breaking into fragrance has always demanded connections, capital, and factory access most people never get.
-            </p>
-            <h1 data-reveal="">Where Fragrance<br />Meets Business</h1>
-            <p className={styles.heroBody} data-reveal="">
-              Private-label perfumes, brand creation, and AI-powered fragrance technology — built for founders, brands, and businesses ready to launch something that lasts.
-            </p>
-            <div className={styles.actions} data-reveal="">
-              <Link href="/contact" className={styles.primaryButton}>Get started</Link>
-              <Link href="#services" className={styles.secondaryButton}>Explore what we do</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider />
-
-      <section className={`${styles.section} ${styles.toneBlack}`}>
-        <div className={styles.container}>
-          <div className={styles.opportunityGrid}>
-            <div data-reveal="">
-              <Eyebrow>01 — The Opportunity</Eyebrow>
-              <h2 className={styles.sectionTitle}>The Fragrance Industry Is Wide Open</h2>
-            </div>
-            <div className={styles.opportunityCopy} data-reveal="">
-              <p>The global fragrance market is worth over <strong>$50 billion</strong> — and it&apos;s still growing. But breaking in has always required connections, capital, and manufacturing access most people don&apos;t have.</p>
-              <p className={styles.serifCallout}>Base Note changes that.</p>
-              <p>We combine direct access to a UAE-based manufacturing facility, in-house brand and tech capabilities, and AI tools that didn&apos;t exist five years ago — a faster, smarter path from idea to shelf.</p>
-            </div>
-          </div>
-          <div className={styles.statsGrid} data-reveal="">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <strong>{stat.value}</strong>
-                <span>{stat.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider />
-
-      <section className={`${styles.section} ${styles.solutionSection}`}>
-        <div className={styles.container}>
-          <div className={styles.centeredHeader} data-reveal="">
-            <Eyebrow>02 — What We Do</Eyebrow>
-            <h2 className={styles.sectionTitle}>One Partner For The Whole Fragrance Industry</h2>
-            <p>From your first product to a full brand rollout — we handle the parts that slow most people down.</p>
-          </div>
-          <div className={styles.solutionDiagram} data-reveal="">
-            <div className={styles.diagramColumnRed}>
-              <Eyebrow tone="red">The barriers</Eyebrow>
-              {barriers.map((item) => (
-                <div key={item.title} className={styles.diagramCard}>
-                  <strong>{item.title}</strong>
-                  <span>{item.description}</span>
-                </div>
-              ))}
-            </div>
-            <div className={styles.diagramCenter}>
-              <div className={styles.diagramOrb} data-loop="">
-                <Image src={`${assetRoot}/logo-white.png`} alt="" width={46} height={46} />
-                <span>Basenote</span>
-              </div>
-              <Eyebrow>The single solution</Eyebrow>
-            </div>
-            <div className={styles.diagramColumnBlue}>
-              <Eyebrow tone="blue">What we bring</Eyebrow>
-              {capabilities.map((item) => (
-                <div key={item.title} className={styles.diagramCard}>
-                  <strong>{item.title}</strong>
-                  <span>{item.description}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className={styles.builtFor} data-reveal="">
-            <Eyebrow>Built for</Eyebrow>
-            <div>
-              {audienceLabels.map((label) => <span key={label}>{label}</span>)}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider />
-
-      <section id="services" className={`${styles.section} ${styles.toneBlack}`}>
-        <div className={styles.container}>
-          <div className={styles.splitHeader} data-reveal="">
-            <div>
-              <Eyebrow>03 — Core Services</Eyebrow>
-              <h2 className={styles.sectionTitle}>Three Ways In</h2>
-            </div>
-            <p>Tap any tile to go deeper — each is a distinct route from idea to market.</p>
-          </div>
-          <div className={styles.serviceGrid}>
-            {services.map((service) => (
-              <Link
-                key={service.href}
-                href={service.href}
-                className={`${styles.serviceCard} ${styles[`service${service.accent[0].toUpperCase()}${service.accent.slice(1)}`]}`}
-                data-reveal=""
-              >
-                <span className={styles.serviceNumber}>{service.eyebrow}</span>
-                <h3>{service.title}</h3>
-                <p>{service.description}</p>
-                <span className={styles.serviceLink}>Explore →</span>
-              </Link>
-            ))}
-          </div>
-          <div className={styles.extraServices} data-reveal="">
-            <div>
-              <span><strong>Branding & Identity</strong><small>Logo, website & social setup</small></span>
-              <span><strong>Fragrance Oils</strong><small>Wholesale, direct, any volume</small></span>
-              <span><strong>Consultancy</strong><small>Compliance & market entry</small></span>
-            </div>
-            <Link href="/contact">Ask about the rest →</Link>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider tone="blue" />
-
-      <section className={`${styles.section} ${styles.toneBlue}`}>
-        <div className={styles.container}>
-          <div className={styles.centeredHeader} data-reveal="">
-            <Eyebrow>04 — Tech & AI</Eyebrow>
-            <h2 className={styles.sectionTitle}>Fragrance Technology For The Next Generation</h2>
-          </div>
-          <div className={styles.techRow}>
-            <div data-reveal="">
-              <Eyebrow tone="blue">Blend Engine</Eyebrow>
-              <h3 className={styles.featureTitle}>Create. Blend. License.</h3>
-              <p className={styles.bodyCopy}>An AI blending platform that turns fragrance oils into unique, market-ready perfumes. Available as a monthly licence for fragrance labs, retailers and studios.</p>
-              <Link href="/blend-engine" className={styles.secondaryButton}>Enquire about licensing →</Link>
-            </div>
-            <BlendInterface />
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider tone="amber" />
-
-      <section className={`${styles.section} ${styles.toneAmber}`}>
-        <div className={styles.container}>
-          <div className={`${styles.techRow} ${styles.techRowReverse}`}>
-            <AlchemyInterface />
-            <div data-reveal="">
-              <Eyebrow tone="amber">Alchemy Engine</Eyebrow>
-              <h3 className={styles.featureTitle}>The World&apos;s First Fragrance Formulation AI</h3>
-              <p className={styles.bodyCopy}>Built on proprietary formulation data logged by our in-house chemist — trained on the chemistry behind fragrance creation to accelerate formulation and reduce trial and error.</p>
-              <Link href="/alchemy-engine" className={styles.secondaryButton}>Register your interest →</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider />
-
-      <section className={`${styles.section} ${styles.toneBlack}`}>
-        <div className={styles.container}>
-          <div className={styles.narrowHeader} data-reveal="">
-            <Eyebrow>05 — Who We Work With</Eyebrow>
-            <h2 className={styles.sectionTitle}>Built For Founders, Brands & Businesses</h2>
-          </div>
-          <div className={styles.audienceGrid}>
-            {audienceSegments.map((audience) => (
-              <article key={audience.title} data-reveal="">
-                <span>{audience.number}</span>
-                <h3>{audience.title}</h3>
-                <p>{audience.description}</p>
-              </article>
-            ))}
-            <div className={styles.audienceCta} data-reveal="">
-              <h3>Not sure where you fit?</h3>
-              <Link href="/contact">Talk to us →</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider />
-
-      <section className={styles.trustedSection}>
-        <div className={styles.container} data-reveal="">
-          <Eyebrow>Trusted by brands · In association with TAC Perfumes</Eyebrow>
-          <div className={styles.brandList}>
-            {trustedBrands.map((brand) => <span key={brand}>{brand}</span>)}
-          </div>
-        </div>
-      </section>
-
-      <SectionDivider />
-
-      <section className={`${styles.section} ${styles.toneBlack}`}>
-        <div className={styles.container}>
-          <div className={styles.editorialHeader} data-reveal="">
-            <h2>Blogs &<br />Case Studies</h2>
-            <Link href="/blogs" className={styles.secondaryButton}>View all →</Link>
-          </div>
-          <EditorialGrid cards={blogPosts} />
-        </div>
-      </section>
-
-      <SectionDivider />
-
-      <section className={`${styles.section} ${styles.toneBlack}`}>
-        <div className={styles.faqContainer}>
-          <h2 className={styles.faqTitle} data-reveal="">Common Questions</h2>
-          <FaqList items={homeFaqs} />
-        </div>
-      </section>
-
-      <SectionDivider tone="red" />
-      <PageCta tone="red" />
-    </SiteFrame>
   );
 }
 
@@ -439,9 +192,9 @@ export function BlendEnginePage() {
       <section className={`${styles.centerProductHero} ${styles.toneBlue}`}>
         <div className={styles.centerProductHeroInner}>
           <Eyebrow tone="blue">Tech & AI · Blend Engine</Eyebrow>
-          <h1 data-reveal="">Create. Blend.<br />License.</h1>
-          <p data-reveal="">Our AI blending platform lets users combine fragrance oils to create unique, market-ready perfumes — licensed as a monthly subscription with quarterly oil commitments.</p>
-          <Link href="/contact?interest=Blend%20Engine" className={styles.blueButton} data-reveal="">Enquire about licensing</Link>
+          <h1 data-reveal="">{blendEngine.title}</h1>
+          <p data-reveal="">{blendEngine.description}</p>
+          <Link href={blendArticle.enquiry.href} className={styles.blueButton}>{blendArticle.enquiry.label}</Link>
         </div>
       </section>
       <SectionDivider tone="blue" />
@@ -450,7 +203,7 @@ export function BlendEnginePage() {
         <div className={styles.productDemoContainer}>
           <BlendInterface detailed />
           <div className={styles.featureGrid}>
-            {blendFeatures.map((feature) => (
+            {blendEngine.features.map((feature) => (
               <article key={feature.title} data-reveal="">
                 <h3>{feature.title}</h3>
                 <p>{feature.description}</p>
@@ -460,7 +213,7 @@ export function BlendEnginePage() {
         </div>
       </section>
       <SectionDivider tone="blue" />
-      <PageCta tone="blue" />
+      <PageCta tone="blue" article={blendArticle} />
     </SiteFrame>
   );
 }
@@ -470,21 +223,29 @@ export function AlchemyEnginePage() {
     <SiteFrame>
       <section className={`${styles.centerProductHero} ${styles.toneAmber}`}>
         <div className={styles.centerProductHeroInner}>
-          <Eyebrow tone="amber">Tech & AI · Alchemy Engine · In Development</Eyebrow>
-          <h1 data-reveal="">The World&apos;s First Fragrance Formulation AI</h1>
-          <p data-reveal="">Trained on the chemistry behind fragrance creation — designed for chemists and fragrance houses to accelerate formulation, reduce trial and error, and deepen understanding of how ingredients interact at a molecular level.</p>
-          <Link href="/contact?interest=Alchemy%20Engine" className={styles.amberButton} data-reveal="">Register your interest</Link>
+          <Eyebrow tone="amber">Alchemy Engine & Factory ERP</Eyebrow>
+          <h1 data-reveal="">{alchemyEngine.title}</h1>
+          <p data-reveal="">{alchemyEngine.description}</p>
+          <div className={styles.productActions}>
+            <Link href={alchemyArticle.enquiry.href} className={styles.amberButton}>{alchemyArticle.enquiry.label}</Link>
+            <Link href={alchemyEngine.pilot.href} className={styles.secondaryButton}>{alchemyEngine.pilot.label}</Link>
+          </div>
         </div>
       </section>
       <SectionDivider tone="amber" />
-      <section className={`${styles.sectionCompact} ${styles.toneAmber}`}>
+      <section className={`${styles.sectionCompact} ${styles.toneAmber}`} aria-labelledby="factory-records-title">
+        <h2 id="factory-records-title" className={styles.srOnly}>Factory records and formulation pilots</h2>
         <div className={styles.productDemoContainer}>
           <AlchemyInterface detailed />
-          <p className={styles.demoFootnote} data-reveal="">Alchemy Engine is currently in development. We&apos;re logging formulations, building the dataset, and preparing for early licensing partnerships.</p>
+          <div className={styles.featureGrid}>
+            {alchemyEngine.features.map((feature) => (
+              <article key={feature.title}><h3>{feature.title}</h3><p>{feature.description}</p></article>
+            ))}
+          </div>
         </div>
       </section>
       <SectionDivider tone="amber" />
-      <PageCta tone="amber" />
+      <PageCta tone="amber" article={alchemyArticle} />
     </SiteFrame>
   );
 }
@@ -494,14 +255,14 @@ export function BlogsPage() {
     <SiteFrame>
       <section className={`${styles.listingHero} ${styles.toneBlack}`}>
         <div className={styles.container}>
-          <Eyebrow>Journal</Eyebrow>
-          <h1 data-reveal="">Blogs</h1>
+          <h1>{journalIntro.title}</h1>
+          <p className={styles.listingIntro}>{journalIntro.description}</p>
         </div>
       </section>
       <SectionDivider />
       <section className={`${styles.listingSection} ${styles.toneBlack}`}>
         <div className={styles.container}>
-          <EditorialGrid cards={blogPosts} headingLevel={2} showDates />
+          <EditorialGrid cards={journalArticles} headingLevel={2} showDates />
         </div>
       </section>
       <SectionDivider tone="red" />
@@ -544,6 +305,7 @@ export function CaseStudiesPage() {
                 {study.paragraphs.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
+                {study.caseStudy && <Link href={study.caseStudy.href} className={styles.readingLink}>{study.caseStudy.label}</Link>}
               </div>
             </article>
           ))}

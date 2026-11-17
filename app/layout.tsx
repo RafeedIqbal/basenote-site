@@ -45,14 +45,6 @@ export const metadata: Metadata = {
     default: `${SITE_TITLE} | ${SITE_NAME}`,
     template: `%s | ${SITE_NAME}`
   },
-  keywords: [
-    "private label perfume",
-    "fragrance brand consultancy",
-    "AI fragrance technology",
-    "wholesale fragrance oils",
-    "perfume brand development",
-    SITE_NAME
-  ],
   robots: {
     index: true,
     follow: true,
@@ -72,7 +64,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="en-GB"
       className={`${sourceSerif.variable} ${lexendDeca.variable} ${spaceMono.variable}`}
     >
       <body>
