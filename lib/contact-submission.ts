@@ -15,7 +15,7 @@ export type ContactResult =
   | { success: false; error: string };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MAX_FIELD_LENGTHS = { company: 160, email: 320, fullName: 120, interest: 120, message: 5000 } as const;
+const MAX_FIELD_LENGTHS = { company: 160, email: 254, fullName: 120, interest: 120, message: 5000 } as const;
 
 function getTrimmedField(formData: FormData, fieldName: string) {
   const value = formData.get(fieldName);

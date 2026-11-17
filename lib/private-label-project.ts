@@ -10,7 +10,7 @@ type ProjectResult =
 export function parseProjectDetails(formData: FormData): ProjectResult {
   const limits = {
     fullName: 120,
-    email: 320,
+    email: 254,
     phone: 80,
     spoken: 3,
     packaging: 120,

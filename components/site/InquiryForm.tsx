@@ -116,7 +116,7 @@ export default function InquiryForm({
           id="email"
           name="email"
           type="email"
-          maxLength={320}
+          maxLength={254}
           autoComplete="email"
           required
         />
