@@ -11,7 +11,7 @@ import { FORM_HONEYPOT_FIELD, FORM_SUBMITTED_AT_FIELD } from "@/lib/form-guard-c
 import { TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
 
 type Failure = "http" | "network" | "timeout" | "invalid-json" | "invalid-response";
-type Options = { brevo?: Failure; sheet?: Failure; erp?: Failure | "on"; auth?: boolean; headers?: string[] };
+type Options = { brevo?: Failure; sheet?: Failure; erp?: Failure | "on"; erpStatus?: number; auth?: boolean; headers?: string[] };
 type Request = { url: URL; init?: RequestInit };
 type Mail = { sender: { name: string; email: string }; to: { email: string }[]; replyTo: { email: string; name: string }; subject: string; textContent: string; htmlContent: string; attachment?: { name: string; content: string }[] };
 
@@ -66,7 +66,9 @@ function setup(t: TestContext, options: Options = {}) {
       return Response.json({ values: [options.headers ?? CONTACT_SHEET_HEADERS] });
     }
     const failure = url.hostname === "api.brevo.com" ? options.brevo : url.hostname === "erp.example.invalid" ? (options.erp === "on" ? undefined : options.erp) : options.sheet;
-    if (failure === "http") return Response.json({ error: "Private upstream body" }, { status: 503 });
+    if (failure === "http") return Response.json({ error: "Private upstream body" }, {
+      status: url.hostname === "erp.example.invalid" ? (options.erpStatus ?? 503) : 503,
+    });
     if (failure === "network") throw new Error("Private upstream network details");
     if (failure === "timeout") throw new DOMException("Private upstream timeout details", "TimeoutError");
     if (failure === "invalid-json") return new Response("not-json", { status: 200 });
@@ -102,6 +104,57 @@ for (const [name, submit, source] of [
   ["contact", submitContactForm, "/contact"],
   ["guide", submitPrivateLabelProject, "/private-label/guide"],
 ] as const) {
+  for (const length of [254, 255]) {
+    test(`${name} ${length === 254 ? "accepts" : "rejects"} a ${length}-character email`, async (t) => {
+      const h = setup(t, { erp: "on" });
+      const email = `${"a".repeat(64)}@${"b".repeat(63)}.${"c".repeat(63)}.${"d".repeat(length - 198)}.test`;
+      assert.equal(email.length, length);
+      h.data.set("email", email);
+      assert.equal((await submit(h.data)).success, length === 254);
+      if (length === 254) {
+        const body = JSON.parse(h.erp()[0].init!.body as string);
+        assert.equal(body.email, email);
+        assert.equal(body.form, source);
+        assert.equal(body.submission_id, h.row()[1]);
+        assert.equal(h.mail().replyTo.email, email);
+      } else {
+        assert.equal(h.requests.length, 0);
+        assert.equal(h.auth.mock.callCount(), 0);
+      }
+    });
+  }
+
+  for (const failure of ["network", "timeout", "invalid-json", "invalid-response"] as const) {
+    test(`${name} isolates an ERP ${failure} without retrying or disclosing enquiry data`, async (t) => {
+      const h = setup(t, { erp: failure });
+      assert.deepEqual(await submit(h.data), { success: true });
+      assert.equal(h.erp().length, 1);
+      assert.equal(h.emails().length, 1);
+      assert.equal(h.appends().length, 1);
+      assert.equal(h.logs.mock.callCount(), 1);
+      assert.doesNotMatch(JSON.stringify(h.logs.mock.calls), /visitor@|test-only|Private upstream|A test enquiry/);
+      delete process.env.BREVO_API_KEY;
+      delete process.env.GOOGLE_SHEETS_PRIVATE_KEY;
+      h.data.set(TURNSTILE_RESPONSE_FIELD, `fresh-${failure}`);
+      assert.equal((await submit(h.data)).success, false);
+      assert.equal(h.erp().length, 2);
+    });
+  }
+
+  for (const erpStatus of [403, 409, 422, 429]) {
+    test(`${name} preserves email and Sheets delivery on ERP HTTP ${erpStatus}`, async (t) => {
+      const h = setup(t, { erp: "http", erpStatus });
+      assert.deepEqual(await submit(h.data), { success: true });
+      assert.equal(h.erp().length, 1);
+      assert.equal(h.emails().length, 1);
+      assert.equal(h.appends().length, 1);
+      assert.equal(h.logs.mock.callCount(), 1);
+      assert.deepEqual(h.logs.mock.calls[0].arguments, ["Contact delivery failed", {
+        submissionId: h.row()[1], destination: "erp", category: "http", status: erpStatus,
+      }]);
+    });
+  }
+
   test(`${name} delivers once, rejects token replay, and accepts a fresh submission`, async (t) => {
     const h = setup(t);
     h.data.set("form", "/untrusted-client-value");
@@ -231,8 +284,8 @@ test("contact maps all fields, escapes HTML, sanitizes headers and stores formul
   assert.equal(h.authClients[0].transporter.defaults.signal, h.appends()[0].init?.signal);
 });
 
-test("guide keeps project details together in both destinations", async (t) => {
-  const h = setup(t);
+test("guide keeps project details together in all three destinations", async (t) => {
+  const h = setup(t, { erp: "on" });
   h.data.set("phone", "+44 123456789");
   h.data.set("bottle", "100ml reference");
   h.data.set("cap", "round cap");
@@ -240,6 +293,11 @@ test("guide keeps project details together in both destinations", async (t) => {
   h.data.set("notes", "A detailed project brief\nwith references.");
   assert.deepEqual(await submitPrivateLabelProject(h.data), { success: true });
   assert.deepEqual(h.row().slice(2, 7), ["/private-label/guide", "Test Visitor", "visitor@example.invalid", "", "Private Label"]);
+  const body = JSON.parse(h.erp()[0].init!.body as string);
+  assert.equal(body.form, "/private-label/guide");
+  assert.equal(body.submission_id, h.row()[1]);
+  assert.equal(body.message, h.row()[7]);
+  assert.equal(body.attachments, undefined);
   for (const detail of ["Phone / WhatsApp: +44 123456789", "Already spoken to Basenote: No", "100ml reference", "round cap", "Fragrance route: Bespoke", "A detailed project brief\nwith references."]) {
     assert.ok(h.row()[7].includes(detail));
     assert.ok(h.mail().textContent.includes(detail));

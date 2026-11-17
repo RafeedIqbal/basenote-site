@@ -112,7 +112,7 @@ export default function GuideProjectForm() {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  maxLength={320}
+                  maxLength={254}
                   required
                 />
               </label>
