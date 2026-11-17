@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { type CSSProperties } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 
 import {
   audienceLabels,
@@ -579,16 +579,18 @@ export function ContactLandingPage({
 }
 
 type LegalSection = {
-  body: ReadonlyArray<string>;
+  body: ReadonlyArray<ReactNode>;
   title: string;
 };
 
 export function LegalPage({
+  draft = true,
   intro,
   lastUpdated,
   sections,
   title
 }: {
+  draft?: boolean;
   intro: string;
   lastUpdated: string;
   sections: ReadonlyArray<LegalSection>;
@@ -598,7 +600,7 @@ export function LegalPage({
     <SiteFrame>
       <section className={`${styles.listingHero} ${styles.toneBlack}`}>
         <div className={styles.container}>
-          <Eyebrow>Draft legal page</Eyebrow>
+          <Eyebrow>{draft ? "Draft legal page" : "Your privacy"}</Eyebrow>
           <h1 data-reveal="">{title}</h1>
           <p className={styles.legalIntro} data-reveal="">{intro}</p>
         </div>
@@ -609,13 +611,13 @@ export function LegalPage({
           <aside className={styles.legalMeta}>
             <Eyebrow>Last updated</Eyebrow>
             <strong>{lastUpdated}</strong>
-            <p>This page is a launch-preparation draft and should be reviewed with legal counsel before final publication.</p>
+            {draft && <p>This page is a launch-preparation draft and should be reviewed with legal counsel before final publication.</p>}
           </aside>
           <div className={styles.legalSections}>
             {sections.map((section) => (
               <section key={section.title} data-reveal="">
                 <h2>{section.title}</h2>
-                {section.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                {section.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
               </section>
             ))}
           </div>

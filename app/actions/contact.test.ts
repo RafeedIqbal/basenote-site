@@ -6,6 +6,7 @@ import { submitContactForm } from "@/app/actions/contact";
 import { submitPrivateLabelProject } from "@/app/actions/private-label-project";
 import { CONTACT_SHEET_HEADERS } from "@/lib/contact-delivery";
 import { visitorMatchFrom } from "@/lib/contact-submission";
+import { PRIVACY_COOKIE } from "@/lib/privacy-choice";
 import { FORM_HONEYPOT_FIELD, FORM_SUBMITTED_AT_FIELD } from "@/lib/form-guard-constants";
 import { TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
 
@@ -335,7 +336,7 @@ for (const [label, url, key] of [
 }
 
 test("visitor matching prefers the host's IP headers and truncates Meta cookies and the user agent", () => {
-  const cookies = (values: Record<string, string>) => ({ get: (name: string) => (name in values ? { value: values[name] } : undefined) });
+  const cookies = (values: Record<string, string>) => ({ get: (name: string) => name === PRIVACY_COOKIE ? { value: "v1.01" } : (name in values ? { value: values[name] } : undefined) });
   const match = visitorMatchFrom(cookies({ _fbc: `fb.1.1.${"c".repeat(300)}`, _fbp: "fb.1.1.123" }), new Headers({
     "x-real-ip": "203.0.113.7",
     "x-forwarded-for": "198.51.100.1, 10.0.0.1",
@@ -378,4 +379,13 @@ test("invalid contact fields and guide choices never start delivery", async (t) 
   h.data.set("packaging", "unlisted option");
   assert.equal((await submitPrivateLabelProject(h.data)).success, false);
   assert.equal(h.requests.length, 0);
+});
+
+test("Meta visitor identifiers require an explicit current advertising choice", () => {
+  for (const value of [undefined, "", "v1.00", "v1.10", "v1.01-extra", "v0.11"]) {
+    const requested: string[] = [];
+    const cookies = { get(name: string) { requested.push(name); return value === undefined ? undefined : { value }; } };
+    assert.deepEqual(visitorMatchFrom(cookies, new Headers({ "x-real-ip": "203.0.113.7", "user-agent": "Synthetic browser" })), { fbc: "", fbp: "", clientIp: "", userAgent: "" });
+    assert.deepEqual(requested, [PRIVACY_COOKIE], "Tracking cookies must not be read before consent");
+  }
 });

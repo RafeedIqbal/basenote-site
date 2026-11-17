@@ -61,6 +61,14 @@ For local browser checks, explicitly override the public key with a [Cloudflare 
 
 Tokens are single-use. Each form disables submission until verified, clears verification on expiry/error, and resets its own widget after each server attempt. Closing the guide disclosure retains the draft; navigating away removes the widget. To validate the real widget/secret pairing, obtain a fresh real token on an allowed hostname and invoke the actual server action with Google authentication and both delivery providers stubbed; verify one acceptance and rejection of the same token on replay. A dummy-token secret probe or mocked test alone does not establish live end-to-end acceptance.
 
+### Privacy choices
+
+The published `/privacy-policy` covers the company, enquiry delivery, Meta lead forms and CRM conversion reports, providers, retention criteria and privacy/deletion requests. Its contact uses `contactDetails.email`; Terms retain their separate draft status.
+
+`PrivacyChoices` keeps Google Analytics (through GTM) and Meta Pixel off until their individual purpose is accepted. No tracking fallback runs without JavaScript. The versioned, first-party `bn_privacy` cookie records the choice for 180 days; the footer reopens the controls. Withdrawal removes the corresponding accessible first-party cookies and refreshes the page to stop previously loaded SDKs. Google advertising consent stays denied in the current analytics-only GTM container. Review these controls before changing container purposes or adding tags.
+
+Website intake reads Meta cookies and passes IP/user agent only after an explicit current advertising choice. Enquiry delivery still works without that choice. The ERP's separate hashed-contact CRM milestone reporting remains active as disclosed in the policy; browser cookie rejection is not represented as an opt-out from that server-side processing. Privacy objections and deletion requests go to the published contact for handling.
+
 ## Where to make changes
 
 | Concern | Source |
