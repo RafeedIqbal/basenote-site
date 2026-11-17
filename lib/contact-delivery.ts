@@ -4,6 +4,10 @@ import { JWT } from "google-auth-library";
 
 export type EnquiryForm = "/contact" | "/private-label/guide";
 
+/** Meta's first-party cookies and the visitor's network details, for the ERP's Meta matching. */
+export type VisitorMatch = { fbc: string; fbp: string; clientIp: string; userAgent: string };
+export const NO_VISITOR_MATCH: VisitorMatch = { fbc: "", fbp: "", clientIp: "", userAgent: "" };
+
 export type ContactEnquiry = {
   id: string;
   receivedAt: string;
@@ -167,11 +171,43 @@ async function appendSheetRow(enquiry: ContactEnquiry) {
   }
 }
 
-export async function deliverContactEnquiry(enquiry: ContactEnquiry): Promise<boolean> {
-  // Neither destination may prevent the other from receiving the enquiry.
+async function sendToErp(enquiry: ContactEnquiry, visitor: VisitorMatch): Promise<boolean> {
+  const url = process.env.ERP_LEAD_INTAKE_URL?.trim();
+  const key = process.env.ERP_LEAD_INTAKE_KEY?.trim();
+  // Optional destination: unset, it is skipped silently and never counts as a delivery.
+  if (!url && !key) return false;
+  if (!url || !key || !url.startsWith("https://")) throw new DeliveryError("configuration");
+  const result = await readResponse(await fetch(url, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      submission_id: enquiry.id,
+      form: enquiry.form,
+      full_name: enquiry.fullName,
+      email: enquiry.email,
+      company: enquiry.company,
+      interest: enquiry.interest,
+      message: enquiry.message,
+      fbc: visitor.fbc,
+      fbp: visitor.fbp,
+      client_ip: visitor.clientIp,
+      user_agent: visitor.userAgent,
+    }),
+    signal: AbortSignal.timeout(DELIVERY_TIMEOUT_MS),
+    cache: "no-store",
+  }));
+  if (typeof result.lead !== "string" || !result.lead) throw new DeliveryError("response");
+  return true;
+}
+
+export async function deliverContactEnquiry(
+  enquiry: ContactEnquiry,
+  visitor: VisitorMatch = NO_VISITOR_MATCH,
+): Promise<boolean> {
+  // No destination may prevent another from receiving the enquiry.
   // Delivery writes are not retried: a timed-out write may already have succeeded.
-  const results = await Promise.allSettled([sendEmail(enquiry), appendSheetRow(enquiry)]);
-  const destinations = ["brevo", "google_sheets"] as const;
+  const results = await Promise.allSettled([sendEmail(enquiry), appendSheetRow(enquiry), sendToErp(enquiry, visitor)]);
+  const destinations = ["brevo", "google_sheets", "erp"] as const;
   results.forEach((result, index) => {
     if (result.status !== "rejected") return;
     const error: unknown = result.reason;
@@ -183,5 +219,6 @@ export async function deliverContactEnquiry(enquiry: ContactEnquiry): Promise<bo
       ...(error instanceof DeliveryError && error.status ? { status: error.status } : {}),
     });
   });
-  return results.some((result) => result.status === "fulfilled");
+  // A skipped ERP (not configured) resolves false: only a confirmed write counts.
+  return results.some((result) => result.status === "fulfilled" && result.value !== false);
 }
