@@ -22,7 +22,10 @@ try {
     rootDir: root,
     outDir: output,
     baseUrl: root,
-    paths: { "@/*": ["./*"] },
+    paths: {
+      "@/*": ["./*"],
+      "@payloadcms/next/withPayload": ["./node_modules/@payloadcms/next/dist/withPayload/withPayload.d.ts"],
+    },
   });
   const emitted = program.emit(undefined, undefined, undefined, undefined, {
     before: [(context) => (source) => {

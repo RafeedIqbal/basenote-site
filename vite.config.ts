@@ -1,8 +1,9 @@
+import { resolve } from "node:path";
 import vinext from "vinext";
 import { defineConfig } from "vite";
 
 import hostingConfig from "./.openai/hosting.json";
-import { sites } from "./sites-vite-plugin";
+import { publicSiteRoot, sites } from "./sites-vite-plugin";
 
 const { d1, r2 } = hostingConfig as {
   d1?: string;
@@ -40,8 +41,9 @@ export default defineConfig(async () => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
   return {
+    resolve: { alias: { "@/lib/cms/repository": resolve("worker/public-content.ts") } },
     plugins: [
-      vinext(),
+      vinext({ appDir: publicSiteRoot() }),
       sites(),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },

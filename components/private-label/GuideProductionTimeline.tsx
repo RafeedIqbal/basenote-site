@@ -2,10 +2,8 @@
 
 import { useId, useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
-import {
-  privateLabelGuide as content,
-  type GuideStep,
-} from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
+import type { GuideStep } from "@/data/site-content";
 import styles from "./GuideProductionTimeline.module.css";
 
 export default function GuideProductionTimeline({
@@ -13,6 +11,7 @@ export default function GuideProductionTimeline({
 }: {
   steps: GuideStep[];
 }) {
+  const { guide: content } = usePrivateContent();
   const root = useRef<HTMLOListElement>(null);
   const id = useId();
 

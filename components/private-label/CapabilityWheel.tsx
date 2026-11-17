@@ -4,16 +4,17 @@ import Image from "next/image";
 import { useRef, useState, type CSSProperties } from "react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { scrollToPosition } from "@/lib/scroll";
-import { privateLabel } from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
 import styles from "./CapabilityWheel.module.css";
 
-const content = privateLabel.capabilities;
-const itemCount = content.items.length;
 // Two copies keep the broad arc populated as each capability passes the logo.
-const orbitItems = [...content.items, ...content.items];
-const angleStep = 360 / orbitItems.length;
 
 export default function CapabilityWheel() {
+  const { privateLabel } = usePrivateContent();
+  const content = privateLabel.capabilities;
+  const itemCount = content.items.length;
+  const orbitItems = [...content.items, ...content.items];
+  const angleStep = 360 / orbitItems.length;
   const root = useRef<HTMLElement>(null);
   const orbit = useRef<HTMLDivElement>(null);
   const trigger = useRef<ScrollTrigger | null>(null);

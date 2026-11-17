@@ -1,0 +1,19 @@
+.editor { max-width: 58rem; }
+.editor label { display: grid; gap: .35rem; }
+.editor input, .editor select, .editor textarea { box-sizing: border-box; width: 100%; padding: .65rem .8rem; background: var(--theme-input-bg); color: var(--theme-text); border: 1px solid var(--theme-elevation-250); border-radius: 4px; font: inherit; }
+.editor textarea { resize: vertical; line-height: 1.5; }
+.editor :is(input, textarea, select, summary):focus-visible { outline: 2px solid var(--theme-text); outline-offset: 2px; }
+.search { margin: .6rem 0 1.4rem; }
+.note { border-left: 3px solid #9fd0e6; padding: .4rem 1rem; }
+.group { border-top: 1px solid var(--theme-elevation-200); }
+.group summary { padding: .9rem 0; cursor: pointer; font-size: 1.12rem; font-weight: 600; }
+.fields { display: grid; gap: 1rem; padding: .3rem 0 1.5rem; }
+
+.mark { display: inline-block; background: #000; padding: 3px; border-radius: 3px; }
+.brand { display: flex; align-items: center; justify-content: center; gap: .7rem; font: 500 2rem Georgia, serif; color: var(--theme-text); }
+
+.thumbnail { object-fit: contain; object-position: left center; max-width: 100%; }
+.library { margin: 0 0 1.2rem; color: var(--theme-elevation-700); }
+
+.draftNotice { position: fixed; z-index: 9000; bottom: 1rem; left: 1rem; display: flex; align-items: center; gap: 1rem; padding: .65rem 1rem; background: #fff; color: #151515; border: 1px solid #777; font-size: .85rem; }
+.draftNotice a { text-decoration: underline; }

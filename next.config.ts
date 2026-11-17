@@ -1,5 +1,6 @@
+import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
-import { validateProductionContactConfig } from "@/lib/contact-configuration";
+import { validateProductionContactConfig } from "./lib/contact-configuration";
 
 const securityHeaders = [
   // Script sources stay open: a strict script-src needs per-request nonces, which would
@@ -29,5 +30,5 @@ const nextConfig: NextConfig = {
 
 export default function createNextConfig(phase: string): NextConfig {
   validateProductionContactConfig(phase, process.env);
-  return nextConfig;
+  return withPayload(nextConfig);
 }

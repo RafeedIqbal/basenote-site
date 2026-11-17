@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { navigation } from "@/data/site-content";
+import { getPage } from "@/lib/cms/public";
 import PageShell from "./PageShell";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
@@ -7,7 +7,7 @@ import styles from "./SitePages.module.css";
 
 export { default as FaqList } from "./FaqList";
 
-export function SiteFrame({
+export async function SiteFrame({
   children,
   className = "",
   footer = <SiteFooter />,
@@ -16,6 +16,7 @@ export function SiteFrame({
   className?: string;
   footer?: ReactNode;
 }) {
+  const { navigation } = await getPage("shared");
   return (
     <PageShell className={`${styles.page} ${className}`}>
       <SiteHeader items={navigation} />

@@ -2,6 +2,8 @@
 
 Next.js 16 App Router marketing site with React 19 and TypeScript.
 
+The content management system is available at **/admin**. Setup, publishing, account recovery and rollout are covered in [the CMS guide](docs/cms.md).
+
 ## Development
 
 ```sh
@@ -79,7 +81,7 @@ Website intake reads Meta cookies and passes IP/user agent only after an explici
 | Main page views | `components/site/SitePages.tsx` and its CSS Module |
 | Shared header, footer, forms and FAQ behavior | `components/site/` |
 | Private Label page and guide | `components/private-label/` |
-| Fonts and global tokens | `app/layout.tsx`, `app/globals.css` |
+| Fonts and global tokens | `app/(site)/layout.tsx`, `app/globals.css` |
 | Scrolling, anchors and animation registration | `components/SmoothScroll.tsx`, `lib/scroll.ts`, `lib/gsap.ts` |
 | Contact validation, delivery and image uploads | `lib/contact-submission.ts`, `lib/contact-delivery.ts`, `lib/contact-form-guard.ts`, `lib/private-label-project.ts` |
 

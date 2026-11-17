@@ -1,20 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties } from "react";
 
-import {
-  alchemyArticle,
-  alchemyEngine,
-  blendBars,
-  blendArticle,
-  blendEngine,
-  caseStudies,
-  contactDetails,
-  journalArticles,
-  journalIntro,
-  teamMembers,
-  type JournalArticle
-} from "@/data/site-content";
+import { alchemyArticle as originalAlchemy, blendArticle as originalBlend, blendBars, contactDetails, type JournalArticle } from "@/data/site-content";
+import { getOptionalPage, getPage, findArticle, getArticles } from "@/lib/cms/public";
+import { LegalCopy } from "./LegalCopy";
 import { formatArticleDate } from "@/lib/site";
 
 import InquiryForm from "./InquiryForm";
@@ -81,7 +71,7 @@ function BlendInterface({ detailed = false }: { detailed?: boolean }) {
   );
 }
 
-function AlchemyInterface({ detailed = false }: { detailed?: boolean }) {
+function AlchemyInterface({ detailed = false, stages }: { detailed?: boolean; stages: { title: string; description: string }[] }) {
   return (
     <div className={`${styles.alchemyPanel} ${detailed ? styles.alchemyPanelDetailed : ""}`} data-reveal="" data-loop="">
       <div className={styles.panelToplineAmber}>
@@ -100,7 +90,7 @@ function AlchemyInterface({ detailed = false }: { detailed?: boolean }) {
         ))}
       </div>
       <div className={styles.alchemyStats}>
-        {alchemyEngine.stages.map((stage) => (
+        {stages.map((stage) => (
           <div key={stage.title}><strong>{stage.title}</strong><span>{stage.description}</span></div>
         ))}
       </div>
@@ -144,31 +134,31 @@ function EditorialGrid({
   );
 }
 
-export function AboutPage() {
+export async function AboutPage() {
+  const about = await getPage("about");
   return (
     <SiteFrame>
       <section className={`${styles.pageHero} ${styles.toneBlack}`}>
         <div className={styles.pageHeroInner}>
-          <Eyebrow>About Base Note</Eyebrow>
-          <h1 data-reveal="">Tech People.<br />Fragrance Industry.</h1>
+          <Eyebrow>{about.hero.eyebrow}</Eyebrow>
+          <h1 data-reveal="">{about.hero.title}<br />{about.hero.secondLine}</h1>
         </div>
       </section>
       <SectionDivider tone="red" />
       <section className={`${styles.sectionCompact} ${styles.toneRed}`}>
         <div className={`${styles.container} ${styles.aboutIntro}`}>
-          <p className={styles.serifIntro} data-reveal="">Base Note Solutions was built at the intersection of two worlds most companies don&apos;t connect — fragrance manufacturing and technology.</p>
+          <p className={styles.serifIntro} data-reveal="">{about.story.introduction}</p>
           <div data-reveal="">
-            <p>Founded by Taseen Ahmed Choudhury, Base Note draws on direct access to TAC Perfumes — a UAE-based fragrance factory — and a dedicated tech development team at Arizmi Labs.</p>
-            <p>The result is a company that can take a client from raw idea to finished product to functioning brand, with AI tools being developed in parallel that will change how the industry works. We&apos;re a small team. We operate lean. And we&apos;re building something that hasn&apos;t been built before.</p>
+            {about.story.paragraphs.map(p => <p key={p}>{p}</p>)}
           </div>
         </div>
       </section>
       <SectionDivider />
       <section className={`${styles.sectionCompact} ${styles.toneBlack}`}>
         <div className={styles.container}>
-          <h2 className={styles.eyebrowHeading}><Eyebrow>The Team</Eyebrow></h2>
+          <h2 className={styles.eyebrowHeading}><Eyebrow>{about.teamTitle}</Eyebrow></h2>
           <div className={styles.teamGrid}>
-            {teamMembers.map((member) => (
+            {about.team.map((member) => (
               <article key={member.name} data-reveal="">
                 <div className={styles.initial}>{member.initial}</div>
                 <h3>{member.name}</h3>
@@ -186,15 +176,17 @@ export function AboutPage() {
 }
 
 
-export function BlendEnginePage() {
+export async function BlendEnginePage() {
+  const [blendEngine, blendArticle] = await Promise.all([getPage("blend-engine"), findArticle(originalBlend.path)]);
+  const enquiry = blendArticle?.enquiry ?? originalBlend.enquiry;
   return (
     <SiteFrame>
       <section className={`${styles.centerProductHero} ${styles.toneBlue}`}>
         <div className={styles.centerProductHeroInner}>
-          <Eyebrow tone="blue">Tech & AI · Blend Engine</Eyebrow>
+          <Eyebrow tone="blue">{blendEngine.eyebrow}</Eyebrow>
           <h1 data-reveal="">{blendEngine.title}</h1>
           <p data-reveal="">{blendEngine.description}</p>
-          <Link href={blendArticle.enquiry.href} className={styles.blueButton}>{blendArticle.enquiry.label}</Link>
+          <Link href={enquiry.href} className={styles.blueButton}>{enquiry.label}</Link>
         </div>
       </section>
       <SectionDivider tone="blue" />
@@ -218,16 +210,18 @@ export function BlendEnginePage() {
   );
 }
 
-export function AlchemyEnginePage() {
+export async function AlchemyEnginePage() {
+  const [alchemyEngine, alchemyArticle] = await Promise.all([getPage("alchemy-engine"), findArticle(originalAlchemy.path)]);
+  const enquiry = alchemyArticle?.enquiry ?? originalAlchemy.enquiry;
   return (
     <SiteFrame>
       <section className={`${styles.centerProductHero} ${styles.toneAmber}`}>
         <div className={styles.centerProductHeroInner}>
-          <Eyebrow tone="amber">Alchemy Engine & Factory ERP</Eyebrow>
+          <Eyebrow tone="amber">{alchemyEngine.eyebrow}</Eyebrow>
           <h1 data-reveal="">{alchemyEngine.title}</h1>
           <p data-reveal="">{alchemyEngine.description}</p>
           <div className={styles.productActions}>
-            <Link href={alchemyArticle.enquiry.href} className={styles.amberButton}>{alchemyArticle.enquiry.label}</Link>
+            <Link href={enquiry.href} className={styles.amberButton}>{enquiry.label}</Link>
             <Link href={alchemyEngine.pilot.href} className={styles.secondaryButton}>{alchemyEngine.pilot.label}</Link>
           </div>
         </div>
@@ -236,7 +230,7 @@ export function AlchemyEnginePage() {
       <section className={`${styles.sectionCompact} ${styles.toneAmber}`} aria-labelledby="factory-records-title">
         <h2 id="factory-records-title" className={styles.srOnly}>Factory records and formulation pilots</h2>
         <div className={styles.productDemoContainer}>
-          <AlchemyInterface detailed />
+          <AlchemyInterface detailed stages={alchemyEngine.stages} />
           <div className={styles.featureGrid}>
             {alchemyEngine.features.map((feature) => (
               <article key={feature.title}><h3>{feature.title}</h3><p>{feature.description}</p></article>
@@ -250,7 +244,8 @@ export function AlchemyEnginePage() {
   );
 }
 
-export function BlogsPage() {
+export async function BlogsPage() {
+  const [journalIntro, journalArticles] = await Promise.all([getPage("journal"), getArticles()]);
   return (
     <SiteFrame>
       <section className={`${styles.listingHero} ${styles.toneBlack}`}>
@@ -271,13 +266,17 @@ export function BlogsPage() {
   );
 }
 
-export function CaseStudiesPage() {
+export async function CaseStudiesPage() {
+  const [work, privateLabel, articles] = await Promise.all([getPage("work"), getOptionalPage("private-label"), getArticles()]);
+  const caseStudies = privateLabel?.portfolio.slides ?? [];
+  const caseArticles = articles.filter(a => a.path.startsWith("/case-studies/"));
+  const extra = caseArticles.filter(a => !caseStudies.some(study => study.caseStudy?.href === a.path));
   return (
     <SiteFrame>
       <section className={`${styles.listingHero} ${styles.toneBlack}`}>
         <div className={styles.container}>
-          <Eyebrow>Selected Work · In association with TAC Perfumes</Eyebrow>
-          <h1 data-reveal="">Case Studies</h1>
+          <Eyebrow>{work.eyebrow}</Eyebrow>
+          <h1 data-reveal="">{work.title}</h1>
         </div>
       </section>
       <SectionDivider />
@@ -305,10 +304,11 @@ export function CaseStudiesPage() {
                 {study.paragraphs.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
-                {study.caseStudy && <Link href={study.caseStudy.href} className={styles.readingLink}>{study.caseStudy.label}</Link>}
+                {study.caseStudy && caseArticles.some(a => a.path === study.caseStudy?.href) && <Link href={study.caseStudy.href} className={styles.readingLink}>{study.caseStudy.label}</Link>}
               </div>
             </article>
           ))}
+          {extra.length > 0 && <EditorialGrid cards={extra} headingLevel={2} />}
         </div>
       </section>
       <SectionDivider tone="red" />
@@ -317,26 +317,27 @@ export function CaseStudiesPage() {
   );
 }
 
-export function ContactLandingPage({
+export async function ContactLandingPage({
   defaultInterest,
   defaultMessage
 }: {
   defaultInterest?: string;
   defaultMessage?: string;
 }) {
+  const contact = await getPage("contact");
   return (
     <SiteFrame>
       <section className={`${styles.contactSection} ${styles.toneBlack}`}>
         <div className={styles.contactGrid}>
           <div data-reveal="">
             <Eyebrow>Contact</Eyebrow>
-            <h1>Let&apos;s Talk</h1>
-            <p>Tell us what you&apos;re working on and we&apos;ll come back to you within one business day.</p>
+            <h1>{contact.title}</h1>
+            <p>{contact.introduction}</p>
             <div className={styles.contactDetails}>
-              <div><Eyebrow>{contactDetails.emailLabel}</Eyebrow><a href={"mailto:" + contactDetails.email}>{contactDetails.email}</a></div>
+              <div><Eyebrow>{contact.emailLabel}</Eyebrow><a href={"mailto:" + contactDetails.email}>{contactDetails.email}</a></div>
             </div>
-            <a href={contactDetails.booking.href} className={`${styles.primaryButton} ${styles.contactBooking}`}>
-              {contactDetails.booking.label}
+            <a href={contact.booking.href} className={`${styles.primaryButton} ${styles.contactBooking}`}>
+              {contact.booking.label}
             </a>
           </div>
           <div data-reveal="">
@@ -349,7 +350,7 @@ export function ContactLandingPage({
 }
 
 type LegalSection = {
-  body: ReadonlyArray<ReactNode>;
+  body: ReadonlyArray<string>;
   title: string;
 };
 
@@ -387,7 +388,7 @@ export function LegalPage({
             {sections.map((section) => (
               <section key={section.title} data-reveal="">
                 <h2>{section.title}</h2>
-                {section.body.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+                {section.body.map((paragraph, index) => <p key={index}><LegalCopy text={paragraph} /></p>)}
               </section>
             ))}
           </div>

@@ -8,6 +8,7 @@ export default defineConfig([
   globalIgnores([
     ".claude/**",
     ".next/**",
+    ".vinext/**",
     ".wrangler/**",
     "dist/**",
     "out/**",

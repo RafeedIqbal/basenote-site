@@ -4,7 +4,7 @@ import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import ArrowIcon from "@/components/site/ArrowIcon";
-import { privateLabel } from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
 import motion from "@/data/private-label-hero-motion.json";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { HeroFrameSequence, type HeroFrame } from "@/lib/hero-frame-sequence";
@@ -14,10 +14,12 @@ import styles from "./PrivateLabelHero.module.css";
 
 const closedPosterSizes = "(max-width: 859px) 100vw, 1440px";
 const openPosterSizes = "(max-width: 859px) 180vw, 1440px";
-const content = privateLabel.hero;
+
 const lastFrame = motion.frames.length - 1;
 
 export default function PrivateLabelHero() {
+  const { privateLabel } = usePrivateContent();
+  const content = privateLabel.hero;
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const art = useRef<HTMLElement>(null);

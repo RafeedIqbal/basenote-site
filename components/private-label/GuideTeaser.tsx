@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { privateLabel, privateLabelGuide } from "@/data/site-content";
+import { getPage, getOptionalPage } from "@/lib/cms/public";
 import { SITE_NAME } from "@/lib/site";
 import common from "./PrivateLabel.module.css";
 import styles from "./GuideTeaser.module.css";
 
-export default function GuideTeaser() {
+export default async function GuideTeaser() {
+  const [privateLabel, privateLabelGuide] = await Promise.all([getPage("private-label"), getOptionalPage("guide")]);
+  if (!privateLabelGuide) return null;
   return (
     <section
       id="private-label-guide"

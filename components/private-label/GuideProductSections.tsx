@@ -4,11 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import ArrowIcon from "@/components/site/ArrowIcon";
-import {
-  privateLabel,
-  privateLabelGuide as content,
-  type GuideImage,
-} from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
+import type { GuideImage } from "@/data/site-content";
 import GuideChoiceCards from "./GuideChoiceCards";
 import styles from "./PrivateLabelGuide.module.css";
 
@@ -38,6 +35,7 @@ function switchWithKeys(
 }
 
 function UnavailableImage({ title }: { title: string }) {
+  const { privateLabel, guide: content } = usePrivateContent();
   return (
     <div className={styles.mediaNote}>
       <span className={styles.eyebrow}>{title}</span>
@@ -50,6 +48,7 @@ function UnavailableImage({ title }: { title: string }) {
 }
 
 function Gallery({ images, title }: { images: GuideImage[]; title: string }) {
+  const { guide: content } = usePrivateContent();
   const [active, setActive] = useState(0);
   const pointer = useRef<{ id: number; x: number; y: number } | null>(null);
   if (!images.length) return <UnavailableImage title={title} />;
@@ -130,6 +129,7 @@ function Gallery({ images, title }: { images: GuideImage[]; title: string }) {
 }
 
 function Customisation() {
+  const { guide: content } = usePrivateContent();
   const packaging = content.packaging;
   return (
     <div className={styles.customisation}>
@@ -157,6 +157,7 @@ function Customisation() {
 }
 
 export function Packaging() {
+  const { guide: content } = usePrivateContent();
   const [active, setActive] = useState(0);
   const packaging = content.packaging;
   return (
@@ -205,6 +206,7 @@ export function Packaging() {
 }
 
 export function BottleAndCap() {
+  const { guide: content } = usePrivateContent();
   const [active, setActive] = useState(0);
   const [expanded, setExpanded] = useState<number | null>(0);
   const components = content.components;

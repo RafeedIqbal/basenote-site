@@ -7,10 +7,12 @@ import { submitPrivateLabelProject } from "@/app/actions/private-label-project";
 import FormGuardFields from "@/components/contact/FormGuardFields";
 import TurnstileField, { type TurnstileHandle } from "@/components/contact/TurnstileField";
 import { TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
-import { privateLabelGuide as content } from "@/data/site-content";
+import { privateLabelGuide as initial } from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
 import styles from "./PrivateLabelGuide.module.css";
 
 export default function GuideProjectForm() {
+  const { guide: content } = usePrivateContent();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState({ message: "", attempt: 0 });
   const [success, setSuccess] = useState(false);
@@ -153,8 +155,8 @@ export default function GuideProjectForm() {
                   {[
                     content.packaging.paperTitle,
                     ...content.packaging.types.map((type) => type.title),
-                  ].map((title) => (
-                    <option key={title}>{title}</option>
+                  ].map((title, index) => (
+                    <option key={index} value={index === 0 ? initial.packaging.paperTitle : initial.packaging.types[index - 1].title}>{title}</option>
                   ))}
                 </select>
               </label>
@@ -170,8 +172,8 @@ export default function GuideProjectForm() {
                 {content.formFields.finish}
                 <select id="project-finish" name="finish" defaultValue="">
                   <option value="">{content.formFields.undecided}</option>
-                  {content.components.finishes.map((finish) => (
-                    <option key={finish.title}>{finish.title}</option>
+                  {content.components.finishes.map((finish, index) => (
+                    <option key={index} value={initial.components.finishes[index].title}>{finish.title}</option>
                   ))}
                 </select>
               </label>
@@ -180,13 +182,13 @@ export default function GuideProjectForm() {
                 <select
                   id="project-fragrance"
                   name="fragrance"
-                  defaultValue={content.formFields.undecided}
+                  defaultValue={initial.formFields.undecided}
                 >
                   {[
                     ...content.fragrance.routes.map((route) => route.title),
                     content.formFields.undecided,
-                  ].map((title) => (
-                    <option key={title}>{title}</option>
+                  ].map((title, index) => (
+                    <option key={index} value={initial.fragrance.routes[index]?.title ?? initial.formFields.undecided}>{title}</option>
                   ))}
                 </select>
               </label>

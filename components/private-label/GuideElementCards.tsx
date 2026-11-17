@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import {
-  privateLabelGuide as content,
-  type PrivateLabelGuideContent,
-} from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
+import type { PrivateLabelGuideContent } from "@/data/site-content";
 import { setScrollLocked } from "@/lib/scroll";
 import styles from "./GuideElementCards.module.css";
 
@@ -15,6 +13,7 @@ function ElementCard({
   element: PrivateLabelGuideContent["elements"][number];
   index: number;
 }) {
+  const { guide: content } = usePrivateContent();
   const id = useId();
   const number = String(index + 1).padStart(2, "0");
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -123,6 +122,7 @@ function ElementCard({
 }
 
 export default function GuideElementCards() {
+  const { guide: content } = usePrivateContent();
   return (
     <div className={styles.cards}>
       {content.elements.map((element, index) => (

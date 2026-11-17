@@ -1,10 +1,11 @@
 import ArrowIcon from "@/components/site/ArrowIcon";
 import SiteFooter from "@/components/site/SiteFooter";
-import { privateLabel as content } from "@/data/site-content";
+import { getPage } from "@/lib/cms/public";
 import WebglBackground from "./WebglBackground";
 import styles from "./PrivateLabel.module.css";
 
-export default function PrivateLabelClosing() {
+export default async function PrivateLabelClosing() {
+  const content = await getPage("private-label");
   return (
     <div className={styles.closing}>
       <div className={styles.closingBackground} aria-hidden="true">

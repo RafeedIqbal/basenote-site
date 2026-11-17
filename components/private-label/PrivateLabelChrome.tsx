@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ArrowIcon from "@/components/site/ArrowIcon";
-import { privateLabel } from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
 import styles from "./PrivateLabel.module.css";
 
 export function FloatingChat({ heroId }: { heroId: string }) {
+  const { privateLabel } = usePrivateContent();
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const hero = document.getElementById(heroId);

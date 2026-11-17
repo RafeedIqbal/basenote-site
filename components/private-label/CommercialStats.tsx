@@ -2,24 +2,24 @@
 
 import { type ReactNode, useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { privateLabel } from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
 import common from "./PrivateLabel.module.css";
 import styles from "./CommercialStats.module.css";
-
-const content = privateLabel.commercial;
-const stats = content.stats.map((stat) => {
-  const parts = stat.value.match(/^(.*?)(£?\d+(?:–\d+)?)(.*)$/);
-  return {
-    ...stat,
-    prefix: parts?.[1],
-    number: parts?.[2],
-    suffix: parts?.[3],
-  };
-});
 
 export default function CommercialStats({
   variant, children,
 }: { variant?: "guide"; children?: ReactNode } = {}) {
+  const { privateLabel } = usePrivateContent();
+  const content = privateLabel.commercial;
+  const stats = content.stats.map((stat) => {
+    const parts = stat.value.match(/^(.*?)(£?\d+(?:–\d+)?)(.*)$/);
+    return {
+      ...stat,
+      prefix: parts?.[1],
+      number: parts?.[2],
+      suffix: parts?.[3],
+    };
+  });
   const root = useRef<HTMLElement>(null);
   const revealed = useRef(false);
   const isGuide = variant === "guide";

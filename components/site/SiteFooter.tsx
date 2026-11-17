@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { footerGroups, socialLinks } from "@/data/site-content";
+import { getPage } from "@/lib/cms/public";
 import CurrentYear from "./CurrentYear";
 import { CookieSettings } from "./PrivacyChoices";
 
 import styles from "./SiteChrome.module.css";
 
-export default function SiteFooter({ overlay = false }: { overlay?: boolean }) {
+export default async function SiteFooter({ overlay = false }: { overlay?: boolean }) {
+  const { footer: footerGroups, social: socialLinks, tagline } = await getPage("shared");
   return (
     <footer className={`${styles.footer} ${overlay ? styles.footerOverlay : ""}`}>
       <div className={styles.footerInner}>
@@ -22,7 +23,7 @@ export default function SiteFooter({ overlay = false }: { overlay?: boolean }) {
               />
               <span>Basenote</span>
             </Link>
-            <p>Where Fragrance Meets Business</p>
+            <p>{tagline}</p>
           </div>
 
           {footerGroups.map((group) => (

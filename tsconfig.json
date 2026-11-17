@@ -6,7 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -24,6 +24,7 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@payload-config": ["./payload.config.ts"],
       "@/*": [
         "./*"
       ]
@@ -37,6 +38,7 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".vinext"
   ]
 }

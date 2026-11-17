@@ -1,33 +1,29 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import {
-  caseStudies,
-  homeFaqs,
-  homePage,
-  homePositioning,
-  services,
-} from "@/data/site-content";
-import { SITE_TAGLINE } from "@/lib/site";
+import { homePage as originalHome } from "@/data/site-content";
+import { getOptionalPage, getPage, getArticles } from "@/lib/cms/public";
 import ArrowIcon from "./ArrowIcon";
 import { FaqList, SiteFrame } from "./shared";
 import styles from "./LandingPage.module.css";
 
-const featuredProjects = homePage.work.projectSlugs
-  .map((slug) => caseStudies.find((project) => project.slug === slug && project.images.length > 0))
-  .filter((project) => project !== undefined);
-
-function ProjectEnquiry() {
+function ProjectEnquiry({ enquiry }: { enquiry: { href: string; label: string } }) {
   return (
-    <Link href={homePage.enquiry.href} className={styles.enquiry}>
-      {homePage.enquiry.label}
+    <Link href={enquiry.href} className={styles.enquiry}>
+      {enquiry.label}
       <ArrowIcon />
     </Link>
   );
 }
 
-export default function LandingPage() {
-  const { hero, work, questions } = homePage;
+export default async function LandingPage() {
+  const [homePage, privateLabel, articles] = await Promise.all([getPage("home"), getOptionalPage("private-label"), getArticles()]);
+  const { hero, work, questions, positioning: homePositioning, serviceCards: services, faqs: homeFaqs } = homePage;
+  const caseStudies = privateLabel?.portfolio.slides ?? [];
+  const reading = originalHome.questions.reading.flatMap(ref => articles.filter(article => article.path === ref.path));
+  const featuredProjects = homePage.work.projectSlugs
+    .map((slug) => caseStudies.find((project) => project.slug === slug && project.images.length > 0))
+    .filter((project) => project !== undefined);
 
   return (
     <SiteFrame className={styles.home}>
@@ -44,10 +40,10 @@ export default function LandingPage() {
         </div>
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
-            <h1 id="home-title">{SITE_TAGLINE}</h1>
+            <h1 id="home-title">{hero.title}</h1>
             <p>{hero.introduction}</p>
             <div className={styles.actions}>
-              <ProjectEnquiry />
+              <ProjectEnquiry enquiry={homePage.enquiry} />
               <a href={hero.services.href} className={styles.textLink}>{hero.services.label}</a>
             </div>
           </div>
@@ -98,7 +94,7 @@ export default function LandingPage() {
         <div className={styles.projects}>
           {featuredProjects.map((project, index) => (
             <article key={project.slug} className={styles.project}>
-              <Link href={project.caseStudy?.href ?? `${work.all.href}#${project.slug}`}>
+              <Link href={(articles.some(a => a.path === project.caseStudy?.href) ? project.caseStudy?.href : undefined) ?? `${work.all.href}#${project.slug}`}>
                 <div className={styles.projectImage}>
                   <Image
                     src={project.images[0].src}
@@ -128,7 +124,7 @@ export default function LandingPage() {
         <div className={styles.answers}><FaqList items={homeFaqs} /></div>
         <aside className={styles.reading} aria-labelledby="home-reading">
           <h3 id="home-reading">{questions.readingTitle}</h3>
-          {questions.reading.map((article) => (
+          {reading.map((article) => (
             <Link key={article.path} href={article.path}>{article.title}<ArrowIcon /></Link>
           ))}
         </aside>
@@ -139,7 +135,7 @@ export default function LandingPage() {
           <h2 id="home-closing" className={styles.sectionTitle}>{homePositioning.title}</h2>
           <p>{homePositioning.intro}</p>
         </div>
-        <ProjectEnquiry />
+        <ProjectEnquiry enquiry={homePage.enquiry} />
       </section>
     </SiteFrame>
   );

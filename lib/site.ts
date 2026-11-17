@@ -1,25 +1,12 @@
+import { pageRoutes } from "@/data/site-routes";
 import type { Metadata } from "next";
 
-import { journalArticles, socialLinks, type JournalArticle } from "@/data/site-content";
+import { socialLinks, type JournalArticle } from "@/data/site-content";
 import { SITE_DESCRIPTION, SITE_LOGO, SITE_NAME, SITE_ORIGIN, SITE_SHORT_NAME, SITE_SOCIAL_IMAGE } from "@/lib/site-brand";
 
 export * from "@/lib/site-brand";
 
-export const PUBLIC_ROUTES = [
-  "/",
-  "/starter-kit",
-  "/private-label",
-  "/private-label/guide",
-  "/blend-engine",
-  "/alchemy-engine",
-  "/about",
-  "/blogs",
-  "/case-studies",
-  "/contact",
-  "/privacy-policy",
-  "/terms",
-  ...journalArticles.map((article) => article.path)
-] as const;
+export const PUBLIC_ROUTES = Array.from(new Set(Object.values(pageRoutes).map(page => page.path)));
 
 type PageMetadataInput = {
   description: string;
@@ -100,7 +87,7 @@ export function createArticleStructuredData(article: JournalArticle) {
   };
 }
 
-export function createSiteStructuredData() {
+export function createSiteStructuredData(description: string = SITE_DESCRIPTION, profiles: readonly { href: string }[] = socialLinks) {
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -110,7 +97,7 @@ export function createSiteStructuredData() {
         name: SITE_NAME,
         alternateName: SITE_SHORT_NAME,
         url: SITE_ORIGIN,
-        description: SITE_DESCRIPTION,
+        description,
         logo: {
           "@type": "ImageObject",
           url: `${SITE_ORIGIN}${SITE_LOGO}`,
@@ -118,7 +105,7 @@ export function createSiteStructuredData() {
           height: 512,
           caption: SITE_NAME
         },
-        sameAs: socialLinks.map((link) => link.href)
+        sameAs: profiles.map((link) => link.href)
       },
       {
         "@type": "WebSite",
@@ -126,7 +113,7 @@ export function createSiteStructuredData() {
         name: SITE_NAME,
         alternateName: SITE_SHORT_NAME,
         url: SITE_ORIGIN,
-        description: SITE_DESCRIPTION,
+        description,
         inLanguage: "en",
         publisher: { "@id": `${SITE_ORIGIN}/#organization` }
       }

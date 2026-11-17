@@ -23,3 +23,5 @@ pnpm-debug.log*
 .agent
 .claude
 .env    
+.env*
+.vinext/

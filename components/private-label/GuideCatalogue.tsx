@@ -10,11 +10,8 @@ import {
   type CSSProperties,
   type KeyboardEvent,
 } from "react";
-import {
-  privateLabel,
-  privateLabelGuide as content,
-  type GuideCatalogueItem,
-} from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
+import type { GuideCatalogueItem } from "@/data/site-content";
 import styles from "./GuideCatalogue.module.css";
 
 const DECK_SIZE = 9;
@@ -51,6 +48,7 @@ export default function GuideCatalogue({
   items: GuideCatalogueItem[];
   title: string;
 }) {
+  const { privateLabel, guide: content } = usePrivateContent();
   const id = useId();
   const stage = useRef<HTMLDivElement>(null);
   const deck = useRef<HTMLUListElement>(null);

@@ -5,13 +5,13 @@ import { useRef, type KeyboardEvent } from "react";
 import ArrowIcon from "@/components/site/ArrowIcon";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { scrollToPosition } from "@/lib/scroll";
-import { privateLabel } from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
 import common from "./PrivateLabel.module.css";
 import styles from "./ClientJourney.module.css";
 
-const content = privateLabel.journey;
-
 export default function ClientJourney() {
+  const { privateLabel } = usePrivateContent();
+  const content = privateLabel.journey;
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLOListElement>(null);
   const viewport = useRef<HTMLDivElement>(null);

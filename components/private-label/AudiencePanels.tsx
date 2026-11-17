@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import ArrowIcon from "@/components/site/ArrowIcon";
 import { ScrollTrigger } from "@/lib/gsap";
-import { privateLabel } from "@/data/site-content";
+import { usePrivateContent } from "./PrivateContent";
 import styles from "./PrivateLabel.module.css";
 
 const LAYOUT_MEDIA = "(min-width: 40rem) and (prefers-reduced-motion: no-preference)";
@@ -14,6 +14,7 @@ const LAYOUT_TIMING = {
 };
 
 export default function AudiencePanels() {
+  const { privateLabel } = usePrivateContent();
   const [open, setOpen] = useState<number | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const panelRefs = useRef(new Map<number, HTMLElement>());

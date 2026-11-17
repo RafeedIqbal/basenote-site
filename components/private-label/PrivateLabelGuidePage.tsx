@@ -5,11 +5,8 @@ import { useRef, useState, type ReactNode } from "react";
 import ArrowIcon from "@/components/site/ArrowIcon";
 import { ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { navigateToAnchor } from "@/lib/scroll";
-import {
-  privateLabelGuide as content,
-  type PrivateLabelGuideChapter,
-} from "@/data/site-content";
-import { SiteFrame } from "@/components/site/shared";
+import { usePrivateContent } from "./PrivateContent";
+import type { PrivateLabelGuideChapter } from "@/data/site-content";
 import { Packaging, BottleAndCap } from "./GuideProductSections";
 import GuideProjectForm from "./GuideProjectForm";
 import GuideElementCards from "./GuideElementCards";
@@ -17,7 +14,6 @@ import GuideProductionTimeline from "./GuideProductionTimeline";
 import GuideTimeline from "./GuideTimeline";
 import CommercialStats from "./CommercialStats";
 import { FloatingChat } from "./PrivateLabelChrome";
-import common from "./PrivateLabel.module.css";
 import styles from "./PrivateLabelGuide.module.css";
 
 const number = (index: number) => String(index + 1).padStart(2, "0");
@@ -29,6 +25,7 @@ function Chapter({
   chapter: PrivateLabelGuideChapter;
   children?: ReactNode;
 }) {
+  const { guide: content } = usePrivateContent();
   return (
     <section
       id={chapter.id}
@@ -51,6 +48,7 @@ function Chapter({
 }
 
 function Fragrance() {
+  const { guide: content } = usePrivateContent();
   return (
     <>
       <div className={styles.fragranceRoutes}>
@@ -79,6 +77,7 @@ function Fragrance() {
 }
 
 function Production() {
+  const { guide: content } = usePrivateContent();
   return (
     <>
       <GuideProductionTimeline steps={content.production.steps} />
@@ -89,6 +88,7 @@ function Production() {
 }
 
 function MakeItReal() {
+  const { guide: content } = usePrivateContent();
   const [formStarted, setFormStarted] = useState(false);
   return (
     <div>
@@ -117,6 +117,7 @@ function MakeItReal() {
 }
 
 function ChapterRail() {
+  const { guide: content } = usePrivateContent();
   const root = useRef<HTMLElement>(null);
   const progress = useRef<HTMLProgressElement>(null);
   const [active, setActive] = useState(0);
@@ -201,8 +202,9 @@ function ChapterRail() {
 }
 
 export default function PrivateLabelGuidePage() {
+  const { guide: content } = usePrivateContent();
   return (
-    <SiteFrame className={`${common.page} ${styles.page}`}>
+    <>
       <header id="guide-intro" className={styles.cover} tabIndex={-1}>
         <div className={styles.coverTop}>
           <Link href="/private-label" className={styles.back}>
@@ -252,6 +254,6 @@ export default function PrivateLabelGuidePage() {
         </div>
       </div>
       <FloatingChat heroId="guide-intro" />
-    </SiteFrame>
+    </>
   );
 }
