@@ -67,7 +67,7 @@ export default function LandingPage() {
             />
           </div>
         </div>
-        <div className={styles.servicesDetails}>
+        <div>
           <ul className={styles.serviceList}>
             {services.map((service) => (
               <li key={service.href}>
@@ -98,10 +98,7 @@ export default function LandingPage() {
         <div className={styles.projects}>
           {featuredProjects.map((project, index) => (
             <article key={project.slug} className={styles.project}>
-              <Link
-                href={project.caseStudy?.href ?? `${work.all.href}#${project.slug}`}
-                aria-labelledby={`home-${project.slug} home-${project.slug}-headline`}
-              >
+              <Link href={project.caseStudy?.href ?? `${work.all.href}#${project.slug}`}>
                 <div className={styles.projectImage}>
                   <Image
                     src={project.images[0].src}
@@ -113,9 +110,9 @@ export default function LandingPage() {
                   />
                 </div>
                 <div className={styles.projectCaption}>
-                  <h3 id={`home-${project.slug}`}>{project.name}</h3>
+                  <h3>{project.name}</h3>
                   <ArrowIcon />
-                  <p id={`home-${project.slug}-headline`}>{project.headline}</p>
+                  <p>{project.headline}</p>
                 </div>
               </Link>
             </article>

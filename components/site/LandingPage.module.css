@@ -471,3 +471,35 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Keep the enquiry within reach when cookie choices occupy most of a short phone. */
+@media (max-width: 359px) and (max-height: 835px) {
+  .heroArt {
+    mask-image: linear-gradient(#000 14%, #0008 40%, #0003 74%, transparent);
+  }
+
+  .heroInner {
+    margin-block-start: -84px;
+  }
+
+  .heroCopy {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .heroCopy p {
+    order: 1;
+    margin-top: 16px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    margin-top: 10px;
+  }
+
+  .actions .enquiry {
+    gap: 7px;
+    padding-inline: 11px;
+  }
+}
