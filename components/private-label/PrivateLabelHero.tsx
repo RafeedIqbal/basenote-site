@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import ArrowIcon from "@/components/site/ArrowIcon";
@@ -12,6 +12,8 @@ import { navigateToAnchor, scrollToPosition } from "@/lib/scroll";
 import common from "./PrivateLabel.module.css";
 import styles from "./PrivateLabelHero.module.css";
 
+const closedPosterSizes = "(max-width: 859px) 100vw, 1440px";
+const openPosterSizes = "(max-width: 859px) 180vw, 1440px";
 const content = privateLabel.hero;
 const lastFrame = motion.frames.length - 1;
 
@@ -141,7 +143,7 @@ export default function PrivateLabelHero() {
       const restoreCopy = () => {
         heading.style.removeProperty("opacity");
         heading.style.removeProperty("transform");
-        buttons.inert = false;
+        buttons.style.removeProperty("pointer-events");
       };
 
       const showStatic = () => {
@@ -186,7 +188,8 @@ export default function PrivateLabelHero() {
             const opacity = 1 - gsap.utils.clamp(0, 1, value / 0.24);
             heading.style.opacity = String(opacity);
             heading.style.transform = `translateY(${-18 * (1 - opacity)}px)`;
-            buttons.inert = opacity < 0.05;
+            // Faded CTAs ignore clicks but stay focusable; focusing them scrolls the copy back.
+            buttons.style.pointerEvents = opacity < 0.05 ? "none" : "";
           }
           const frame = Math.min(1, value / 0.9) * lastFrame;
           sequence?.request(frame);
@@ -276,9 +279,15 @@ export default function PrivateLabelHero() {
     };
   }, { scope: root });
 
+  // Each breakpoint shows one poster; preload only that one and let the hidden one stay lazy.
+  const closedPoster = getImageProps({ src: content.image, alt: "", fill: true, sizes: closedPosterSizes }).props;
+  const openPoster = getImageProps({ src: content.openImage, alt: "", fill: true, sizes: openPosterSizes }).props;
+
   return (
     <section id="hero" ref={root} className={styles.hero} aria-labelledby="private-label-title">
       <link rel="preload" as="image" href={content.preview.image} fetchPriority="high" media="(prefers-reduced-motion: no-preference)" />
+      <link rel="preload" as="image" imageSrcSet={closedPoster.srcSet} imageSizes={closedPosterSizes} fetchPriority="high" media="(min-width: 860px)" />
+      <link rel="preload" as="image" imageSrcSet={openPoster.srcSet} imageSizes={openPosterSizes} fetchPriority="high" media="(max-width: 859px), (prefers-reduced-motion: reduce)" />
       <div ref={stage} className={styles.stage}>
         <div className={styles.background} aria-hidden="true" />
         <div ref={copy} className={styles.copy}>
@@ -295,8 +304,8 @@ export default function PrivateLabelHero() {
           </div>
         </div>
         <figure ref={art} className={styles.art} aria-label={content.imageAlt}>
-          <Image className={styles.closedPoster} src={content.image} alt="" fill priority sizes="(max-width: 859px) 100vw, 1440px" />
-          <Image className={styles.openPoster} src={content.openImage} alt="" fill loading="eager" sizes="(max-width: 859px) 180vw, 1440px" />
+          <Image className={styles.closedPoster} src={content.image} alt="" fill sizes={closedPosterSizes} />
+          <Image className={styles.openPoster} src={content.openImage} alt="" fill sizes={openPosterSizes} />
           <canvas ref={canvas} className={styles.canvas} aria-hidden="true" />
           <svg ref={leaders} className={styles.leaders} viewBox="0 0 1920 1080" aria-hidden="true">
             {content.callouts.map((callout) => (

@@ -542,7 +542,6 @@
   border-radius: 50%;
   background: radial-gradient(circle at 50% 35%, #1c1c1c, #000);
   box-shadow: 0 0 60px rgba(255, 255, 255, 0.06);
-  animation: float 7s ease-in-out infinite;
 }
 
 .diagramOrb span {
@@ -787,7 +786,6 @@
 
 .trainingDot {
   background: #c68a00;
-  animation: pulse 1.8s ease-in-out infinite;
 }
 
 .sessionLabel {
@@ -866,7 +864,6 @@
   border-radius: 2px;
   background: linear-gradient(180deg, #e6c04a, #8a6c0a);
   transform-origin: bottom;
-  animation: wave var(--wave-duration) ease-in-out infinite alternate;
 }
 
 .terminalCopy {
@@ -1553,10 +1550,26 @@
 @keyframes pulse {
   0%,
   100% {
-    opacity: 0.4;
+    opacity: 1;
   }
   50% {
-    opacity: 1;
+    opacity: 0.4;
+  }
+}
+
+/* Decorative loops start once seen and settle within five seconds (WCAG 2.2.2),
+   beginning and ending on their resting state. */
+@media (prefers-reduced-motion: no-preference) {
+  .diagramOrb[data-loop="play"] {
+    animation: float 4.8s ease-in-out;
+  }
+
+  [data-loop="play"] .trainingDot {
+    animation: pulse 1.8s ease-in-out 2;
+  }
+
+  [data-loop="play"] .waveform span {
+    animation: wave var(--wave-duration) ease-in-out 2 alternate-reverse;
   }
 }
 
@@ -1717,10 +1730,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .diagramOrb,
-  .trainingDot,
-  .blendTrack span,
-  .waveform span {
+  .blendTrack span {
     animation: none;
   }
 

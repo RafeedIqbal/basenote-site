@@ -46,6 +46,10 @@ export default function FeaturedProject() {
       element?.pause();
     };
   }, []);
+  useEffect(() => {
+    // The play button unmounts once playback starts; keep focus on the player.
+    if (started) video.current?.focus();
+  }, [started]);
   async function play() {
     setError(false);
     try {
@@ -76,6 +80,7 @@ export default function FeaturedProject() {
               muted
               playsInline
               controls={started}
+              tabIndex={started ? 0 : -1}
               preload="none"
               aria-label={content.title}
               onError={() => setError(true)}
@@ -111,11 +116,9 @@ export default function FeaturedProject() {
             </>
           ) : null}
         </div>
-        {error ? (
-          <p className={styles.error} role="status">
-            {content.error}
-          </p>
-        ) : null}
+        <p className={styles.error} role="status">
+          {error ? content.error : ""}
+        </p>
       </div>
     </section>
   );

@@ -2,7 +2,12 @@ import type { NextConfig } from "next";
 import { validateProductionContactConfig } from "@/lib/contact-configuration";
 
 const securityHeaders = [
-  { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+  // Script sources stay open: a strict script-src needs per-request nonces, which would
+  // stop static prerendering and must cover GTM, Meta Pixel and Turnstile.
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+  },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },

@@ -39,6 +39,22 @@ export default function PageShell({
       window.removeEventListener("hashchange", alignHash);
     };
   }, []);
+  useEffect(() => {
+    const loops = rootRef.current?.querySelectorAll<HTMLElement>("[data-loop]");
+    if (!loops?.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          (entry.target as HTMLElement).dataset.loop = "play";
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.5 },
+    );
+    loops.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
   useGSAP(
     () => {
       const media = gsap.matchMedia();

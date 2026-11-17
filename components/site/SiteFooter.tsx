@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { footerGroups, socialLinks } from "@/data/site-content";
+import CurrentYear from "./CurrentYear";
 import { CookieSettings } from "./PrivacyChoices";
 
 import styles from "./SiteChrome.module.css";
@@ -39,7 +40,7 @@ export default function SiteFooter({ overlay = false }: { overlay?: boolean }) {
         </div>
 
         <div className={styles.footerBottom}>
-          <span>© {new Date().getFullYear()} Base Note Solutions. All rights reserved.</span>
+          <span>© <CurrentYear buildYear={new Date().getFullYear()} /> Base Note Solutions. All rights reserved.</span>
           <CookieSettings />
           <div className={styles.socialLinks}>
             {socialLinks.map((social) => (

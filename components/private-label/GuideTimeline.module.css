@@ -152,7 +152,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .timeline[data-in-view="true"] .step[data-active="true"] .marker::after {
-    animation: pulse 1.8s ease-out infinite;
+    animation: pulse 1.8s ease-out 2;
   }
 }
 

@@ -94,7 +94,7 @@ function BlendInterface({ detailed = false }: { detailed?: boolean }) {
 
 function AlchemyInterface({ detailed = false }: { detailed?: boolean }) {
   return (
-    <div className={`${styles.alchemyPanel} ${detailed ? styles.alchemyPanelDetailed : ""}`} data-reveal="">
+    <div className={`${styles.alchemyPanel} ${detailed ? styles.alchemyPanelDetailed : ""}`} data-reveal="" data-loop="">
       <div className={styles.panelToplineAmber}>
         <span className={styles.trainingDot} />
         <span>{detailed ? "Model training pipeline" : "alchemy-engine · training"}</span>
@@ -231,7 +231,7 @@ export function LandingPage() {
               ))}
             </div>
             <div className={styles.diagramCenter}>
-              <div className={styles.diagramOrb}>
+              <div className={styles.diagramOrb} data-loop="">
                 <Image src={`${assetRoot}/logo-white.png`} alt="" width={46} height={46} />
                 <span>Basenote</span>
               </div>

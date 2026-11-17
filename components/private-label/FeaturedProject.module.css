@@ -58,6 +58,14 @@
 .error {
   color: #dfb19e;
 }
+/* Stay in the accessibility tree while empty so a playback error is announced. */
+.error:empty {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
 @media (max-width: 859px) {
   .player {
     border-radius: 6px;
