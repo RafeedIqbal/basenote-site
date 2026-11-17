@@ -5,11 +5,12 @@ import { JWT } from "google-auth-library";
 import { submitContactForm } from "@/app/actions/contact";
 import { submitPrivateLabelProject } from "@/app/actions/private-label-project";
 import { CONTACT_SHEET_HEADERS } from "@/lib/contact-delivery";
+import { visitorMatchFrom } from "@/lib/contact-submission";
 import { FORM_HONEYPOT_FIELD, FORM_SUBMITTED_AT_FIELD } from "@/lib/form-guard-constants";
 import { TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
 
 type Failure = "http" | "network" | "timeout" | "invalid-json" | "invalid-response";
-type Options = { brevo?: Failure; sheet?: Failure; auth?: boolean; headers?: string[] };
+type Options = { brevo?: Failure; sheet?: Failure; erp?: Failure | "on"; auth?: boolean; headers?: string[] };
 type Request = { url: URL; init?: RequestInit };
 type Mail = { sender: { name: string; email: string }; to: { email: string }[]; replyTo: { email: string; name: string }; subject: string; textContent: string; htmlContent: string; attachment?: { name: string; content: string }[] };
 
@@ -24,6 +25,9 @@ function setup(t: TestContext, options: Options = {}) {
     GOOGLE_SHEETS_PRIVATE_KEY: "test-only\\nprivate-key",
     GOOGLE_SHEETS_SPREADSHEET_ID: "test-only-spreadsheet",
   };
+  if (options.erp) {
+    Object.assign(environment, { ERP_LEAD_INTAKE_URL: "https://erp.example.invalid/api/v1/lead-intake", ERP_LEAD_INTAKE_KEY: "test-only-erp-key" });
+  }
   const previous = { ...process.env };
   Object.assign(process.env, environment);
   t.after(() => {
@@ -54,18 +58,19 @@ function setup(t: TestContext, options: Options = {}) {
       used.add(token);
       return Response.json({ success: true, action: "contact", hostname: "www.basenotesolutions.com" });
     }
-    assert.ok(["api.brevo.com", "sheets.googleapis.com"].includes(url.hostname), "Unexpected network destination");
+    assert.ok(["api.brevo.com", "sheets.googleapis.com", "erp.example.invalid"].includes(url.hostname), "Unexpected network destination");
     assert.equal(init?.cache, "no-store");
     assert.ok(init?.signal instanceof AbortSignal);
     if (url.hostname === "sheets.googleapis.com" && init?.method !== "POST") {
       return Response.json({ values: [options.headers ?? CONTACT_SHEET_HEADERS] });
     }
-    const failure = url.hostname === "api.brevo.com" ? options.brevo : options.sheet;
+    const failure = url.hostname === "api.brevo.com" ? options.brevo : url.hostname === "erp.example.invalid" ? (options.erp === "on" ? undefined : options.erp) : options.sheet;
     if (failure === "http") return Response.json({ error: "Private upstream body" }, { status: 503 });
     if (failure === "network") throw new Error("Private upstream network details");
     if (failure === "timeout") throw new DOMException("Private upstream timeout details", "TimeoutError");
     if (failure === "invalid-json") return new Response("not-json", { status: 200 });
     if (failure === "invalid-response") return Response.json({});
+    if (url.hostname === "erp.example.invalid") return Response.json({ lead: "00000000-0000-7000-8000-000000000001" });
     return url.hostname === "api.brevo.com"
       ? Response.json({ messageId: "test-message-id" }, { status: 201 })
       : Response.json({ updates: { updatedRows: 1 } });
@@ -83,6 +88,7 @@ function setup(t: TestContext, options: Options = {}) {
     data, requests, auth, authClients, logs,
     emails: () => requests.filter(({ url }) => url.hostname === "api.brevo.com"),
     appends: () => requests.filter(({ url, init }) => url.hostname === "sheets.googleapis.com" && init?.method === "POST"),
+    erp: () => requests.filter(({ url }) => url.hostname === "erp.example.invalid"),
     mail: () => JSON.parse(requests.find(({ url }) => url.hostname === "api.brevo.com")!.init!.body as string) as Mail,
     row: () => (JSON.parse(requests.find(({ url, init }) => url.hostname === "sheets.googleapis.com" && init?.method === "POST")!.init!.body as string) as { values: string[][] }).values[0],
   };
@@ -271,6 +277,79 @@ test("missing both configurations returns a retryable failure", async (t) => {
   assert.equal(result.success, false);
   if (!result.success) assert.match(result.error, /try again/i);
   assert.equal(h.emails().length + h.appends().length, 0);
+});
+
+test("the ERP receives the enquiry with its bearer key, and an ERP-only delivery counts as success", async (t) => {
+  const h = setup(t, { erp: "on" });
+  h.data.set("company", "Example Brand");
+  assert.deepEqual(await submitContactForm(h.data), { success: true });
+  const [request] = h.erp();
+  assert.equal((request.init?.headers as Record<string, string>).Authorization, "Bearer test-only-erp-key");
+  const body = JSON.parse(request.init!.body as string) as Record<string, string>;
+  assert.deepEqual({ ...body, submission_id: "id" }, {
+    submission_id: "id", form: "/contact", full_name: "Test Visitor", email: "visitor@example.invalid",
+    company: "Example Brand", interest: "Private Label", message: "A test enquiry that must never leave this process.",
+    fbc: "", fbp: "", client_ip: "", user_agent: "",
+  });
+  assert.equal(body.submission_id, h.row()[1]);
+  delete process.env.BREVO_API_KEY;
+  delete process.env.GOOGLE_SHEETS_PRIVATE_KEY;
+  h.data.set(TURNSTILE_RESPONSE_FIELD, "fresh-erp-only");
+  assert.deepEqual(await submitContactForm(h.data), { success: true });
+  assert.equal(h.erp().length, 2);
+});
+
+test("without the ERP variables nothing goes to the ERP and nothing is logged", async (t) => {
+  const h = setup(t);
+  assert.deepEqual(await submitContactForm(h.data), { success: true });
+  assert.equal(h.erp().length, 0);
+  assert.equal(h.logs.mock.callCount(), 0);
+});
+
+test("an ERP failure is logged by category only and blocks neither other destination", async (t) => {
+  const h = setup(t, { erp: "http" });
+  assert.deepEqual(await submitContactForm(h.data), { success: true });
+  assert.equal(h.emails().length + h.appends().length, 2);
+  assert.equal(h.erp().length, 1);
+  assert.equal(h.logs.mock.callCount(), 1);
+  assert.match(JSON.stringify(h.logs.mock.calls), /"destination":"erp","category":"http","status":503/);
+  assert.doesNotMatch(JSON.stringify(h.logs.mock.calls), /visitor@|test-only|Private upstream|A test enquiry/);
+});
+
+for (const [label, url, key] of [
+  ["only the URL", "https://erp.example.invalid/api/v1/lead-intake", undefined],
+  ["only the key", undefined, "test-only-erp-key"],
+  ["a URL that is not https", "http://erp.example.invalid/api/v1/lead-intake", "test-only-erp-key"],
+] as const) {
+  test(`an ERP configured with ${label} is a configuration failure that sends nothing`, async (t) => {
+    const h = setup(t, { erp: "on" });
+    if (url) process.env.ERP_LEAD_INTAKE_URL = url;
+    else delete process.env.ERP_LEAD_INTAKE_URL;
+    if (key) process.env.ERP_LEAD_INTAKE_KEY = key;
+    else delete process.env.ERP_LEAD_INTAKE_KEY;
+    assert.deepEqual(await submitContactForm(h.data), { success: true });
+    assert.equal(h.erp().length, 0);
+    assert.equal(h.logs.mock.callCount(), 1);
+    assert.match(JSON.stringify(h.logs.mock.calls), /"destination":"erp","category":"configuration"/);
+  });
+}
+
+test("visitor matching prefers the host's IP headers and truncates Meta cookies and the user agent", () => {
+  const cookies = (values: Record<string, string>) => ({ get: (name: string) => (name in values ? { value: values[name] } : undefined) });
+  const match = visitorMatchFrom(cookies({ _fbc: `fb.1.1.${"c".repeat(300)}`, _fbp: "fb.1.1.123" }), new Headers({
+    "x-real-ip": "203.0.113.7",
+    "x-forwarded-for": "198.51.100.1, 10.0.0.1",
+    "cf-connecting-ip": "192.0.2.99",
+    "user-agent": "u".repeat(600),
+  }));
+  assert.equal(match.fbc.length, 255);
+  assert.equal(match.fbp, "fb.1.1.123");
+  assert.equal(match.clientIp, "203.0.113.7");
+  assert.equal(match.userAgent.length, 512);
+  const forwarded = (headers: Record<string, string>) => visitorMatchFrom(cookies({}), new Headers(headers)).clientIp;
+  assert.equal(forwarded({ "x-real-ip": "not-an-ip", "x-forwarded-for": " 2001:db8::1 , 10.0.0.1" }), "2001:db8::1");
+  assert.equal(forwarded({ "x-forwarded-for": "unknown, 198.51.100.1", "cf-connecting-ip": "192.0.2.99" }), "");
+  assert.deepEqual(visitorMatchFrom(cookies({}), new Headers()), { fbc: "", fbp: "", clientIp: "", userAgent: "" });
 });
 
 test("Google authentication failure still delivers email without logging credentials", async (t) => {
