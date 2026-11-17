@@ -55,7 +55,7 @@ const sections = [
   {
     title: "Who receives information",
     body: [
-      "Team members handling your enquiry and service providers supporting that work receive the information they need. Our website uses Vercel for hosting, Cloudflare for delivery/security services, Brevo for enquiry email delivery, Google Workspace and Google Sheets for communications and enquiry records, and Render to host Base Note ERP. Image attachments are delivered by email; the enquiry sheet records attachment filenames. The ERP website intake receives enquiry text and permitted matching data, not image attachments.",
+      "Team members handling your enquiry and service providers supporting that work receive the information they need. Our website uses Vercel for hosting, Cloudflare for delivery/security services, Resend for enquiry email delivery, Google Workspace and Google Sheets for communications and enquiry records, and Render to host Base Note ERP. Image attachments are delivered by email; the enquiry sheet records attachment filenames. The ERP website intake receives enquiry text and permitted matching data, not image attachments.",
       "Google and Meta receive analytics or advertising information as described above and may act as independent controllers for their own purposes. We may also disclose relevant information to professional advisers, authorities where required by law, or a successor in a business transfer subject to appropriate confidentiality and data-protection arrangements. We do not sell enquiry lists."
     ]
   },

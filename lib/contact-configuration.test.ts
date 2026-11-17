@@ -11,8 +11,8 @@ function configuration(): Record<string, string | undefined> {
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: "production-site-key",
     TURNSTILE_SECRET_KEY: "private-production-secret",
     TURNSTILE_ALLOWED_HOSTNAMES: "www.basenotesolutions.com,basenotesolutions.com",
-    BREVO_API_KEY: "private-brevo-key",
-    BREVO_SENDER_EMAIL: "sender@example.invalid",
+    RESEND_API_KEY: "private-resend-key",
+    RESEND_SENDER_EMAIL: "sender@example.invalid",
     DESTINATION_INBOX: "recipient@example.invalid",
     GOOGLE_SHEETS_CLIENT_EMAIL: "service-account@example.invalid",
     GOOGLE_SHEETS_PRIVATE_KEY: "private-google-key",
@@ -84,11 +84,11 @@ test("accepts reordered production hostnames with surrounding whitespace", () =>
 
 test("reports every invalid variable without disclosing values", () => {
   const env = configuration();
-  env.BREVO_API_KEY = "";
+  env.RESEND_API_KEY = "";
   env.GOOGLE_SHEETS_PRIVATE_KEY = undefined;
   env.TURNSTILE_ALLOWED_HOSTNAMES = "private-host.example";
   assert.throws(() => validateProductionContactConfig(PHASE_PRODUCTION_BUILD, env), {
-    message: "Invalid production enquiry configuration: BREVO_API_KEY, GOOGLE_SHEETS_PRIVATE_KEY, TURNSTILE_ALLOWED_HOSTNAMES",
+    message: "Invalid production enquiry configuration: RESEND_API_KEY, GOOGLE_SHEETS_PRIVATE_KEY, TURNSTILE_ALLOWED_HOSTNAMES",
   });
 });
 

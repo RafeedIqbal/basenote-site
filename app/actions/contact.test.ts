@@ -11,16 +11,16 @@ import { FORM_HONEYPOT_FIELD, FORM_SUBMITTED_AT_FIELD } from "@/lib/form-guard-c
 import { TURNSTILE_RESPONSE_FIELD } from "@/lib/turnstile-constants";
 
 type Failure = "http" | "network" | "timeout" | "invalid-json" | "invalid-response";
-type Options = { brevo?: Failure; sheet?: Failure; erp?: Failure | "on"; erpStatus?: number; auth?: boolean; headers?: string[] };
+type Options = { resend?: Failure; sheet?: Failure; erp?: Failure | "on"; erpStatus?: number; auth?: boolean; headers?: string[] };
 type Request = { url: URL; init?: RequestInit };
-type Mail = { sender: { name: string; email: string }; to: { email: string }[]; replyTo: { email: string; name: string }; subject: string; textContent: string; htmlContent: string; attachment?: { name: string; content: string }[] };
+type Mail = { from: string; to: string[]; reply_to: string; subject: string; text: string; html: string; attachments?: { filename: string; content: string }[] };
 
 function setup(t: TestContext, options: Options = {}) {
   const environment = {
     TURNSTILE_SECRET_KEY: "test-only-secret",
     TURNSTILE_ALLOWED_HOSTNAMES: "www.basenotesolutions.com",
-    BREVO_API_KEY: "test-only-brevo-key",
-    BREVO_SENDER_EMAIL: "sender@example.invalid",
+    RESEND_API_KEY: "test-only-resend-key",
+    RESEND_SENDER_EMAIL: "sender@example.invalid",
     DESTINATION_INBOX: "marketing@example.invalid",
     GOOGLE_SHEETS_CLIENT_EMAIL: "service-account@example.invalid",
     GOOGLE_SHEETS_PRIVATE_KEY: "test-only\\nprivate-key",
@@ -59,13 +59,13 @@ function setup(t: TestContext, options: Options = {}) {
       used.add(token);
       return Response.json({ success: true, action: "contact", hostname: "www.basenotesolutions.com" });
     }
-    assert.ok(["api.brevo.com", "sheets.googleapis.com", "erp.example.invalid"].includes(url.hostname), "Unexpected network destination");
+    assert.ok(["api.resend.com", "sheets.googleapis.com", "erp.example.invalid"].includes(url.hostname), "Unexpected network destination");
     assert.equal(init?.cache, "no-store");
     assert.ok(init?.signal instanceof AbortSignal);
     if (url.hostname === "sheets.googleapis.com" && init?.method !== "POST") {
       return Response.json({ values: [options.headers ?? CONTACT_SHEET_HEADERS] });
     }
-    const failure = url.hostname === "api.brevo.com" ? options.brevo : url.hostname === "erp.example.invalid" ? (options.erp === "on" ? undefined : options.erp) : options.sheet;
+    const failure = url.hostname === "api.resend.com" ? options.resend : url.hostname === "erp.example.invalid" ? (options.erp === "on" ? undefined : options.erp) : options.sheet;
     if (failure === "http") return Response.json({ error: "Private upstream body" }, {
       status: url.hostname === "erp.example.invalid" ? (options.erpStatus ?? 503) : 503,
     });
@@ -74,8 +74,8 @@ function setup(t: TestContext, options: Options = {}) {
     if (failure === "invalid-json") return new Response("not-json", { status: 200 });
     if (failure === "invalid-response") return Response.json({});
     if (url.hostname === "erp.example.invalid") return Response.json({ lead: "00000000-0000-7000-8000-000000000001" });
-    return url.hostname === "api.brevo.com"
-      ? Response.json({ messageId: "test-message-id" }, { status: 201 })
+    return url.hostname === "api.resend.com"
+      ? Response.json({ id: "test-message-id" }, { status: 201 })
       : Response.json({ updates: { updatedRows: 1 } });
   });
   const data = new FormData();
@@ -89,10 +89,10 @@ function setup(t: TestContext, options: Options = {}) {
   data.set(TURNSTILE_RESPONSE_FIELD, "fresh-token");
   return {
     data, requests, auth, authClients, logs,
-    emails: () => requests.filter(({ url }) => url.hostname === "api.brevo.com"),
+    emails: () => requests.filter(({ url }) => url.hostname === "api.resend.com"),
     appends: () => requests.filter(({ url, init }) => url.hostname === "sheets.googleapis.com" && init?.method === "POST"),
     erp: () => requests.filter(({ url }) => url.hostname === "erp.example.invalid"),
-    mail: () => JSON.parse(requests.find(({ url }) => url.hostname === "api.brevo.com")!.init!.body as string) as Mail,
+    mail: () => JSON.parse(requests.find(({ url }) => url.hostname === "api.resend.com")!.init!.body as string) as Mail,
     row: () => (JSON.parse(requests.find(({ url, init }) => url.hostname === "sheets.googleapis.com" && init?.method === "POST")!.init!.body as string) as { values: string[][] }).values[0],
   };
 }
@@ -116,7 +116,7 @@ for (const [name, submit, source] of [
         assert.equal(body.email, email);
         assert.equal(body.form, source);
         assert.equal(body.submission_id, h.row()[1]);
-        assert.equal(h.mail().replyTo.email, email);
+        assert.equal(h.mail().reply_to, email);
       } else {
         assert.equal(h.requests.length, 0);
         assert.equal(h.auth.mock.callCount(), 0);
@@ -133,7 +133,7 @@ for (const [name, submit, source] of [
       assert.equal(h.appends().length, 1);
       assert.equal(h.logs.mock.callCount(), 1);
       assert.doesNotMatch(JSON.stringify(h.logs.mock.calls), /visitor@|test-only|Private upstream|A test enquiry/);
-      delete process.env.BREVO_API_KEY;
+      delete process.env.RESEND_API_KEY;
       delete process.env.GOOGLE_SHEETS_PRIVATE_KEY;
       h.data.set(TURNSTILE_RESPONSE_FIELD, `fresh-${failure}`);
       assert.equal((await submit(h.data)).success, false);
@@ -163,6 +163,12 @@ for (const [name, submit, source] of [
     assert.equal(h.appends().length, 1);
     assert.equal(h.row()[2], source);
     const firstId = h.row()[1];
+    const emailRequest = h.emails()[0];
+    assert.equal(emailRequest.url.href, "https://api.resend.com/emails");
+    assert.equal(emailRequest.init?.method, "POST");
+    const emailHeaders = new Headers(emailRequest.init?.headers);
+    assert.equal(emailHeaders.get("Authorization"), "Bearer test-only-resend-key");
+    assert.equal(emailHeaders.get("Idempotency-Key"), `enquiry/${firstId}`);
     assert.equal((await submit(h.data)).success, false);
     assert.equal(h.emails().length, 1);
     assert.equal(h.appends().length, 1);
@@ -202,13 +208,13 @@ for (const [name, submit, source] of [
     assert.equal(h.auth.mock.callCount(), 0);
   });
 
-  for (const [brevo, sheet, success] of [[true, false, true], [false, true, true], [true, true, false]] as const) {
-    test(`${name} handles failures independently: Brevo=${brevo}, Sheets=${sheet}`, async (t) => {
-      const h = setup(t, { brevo: brevo ? "http" : undefined, sheet: sheet ? "http" : undefined });
+  for (const [resend, sheet, success] of [[true, false, true], [false, true, true], [true, true, false]] as const) {
+    test(`${name} handles failures independently: Resend=${resend}, Sheets=${sheet}`, async (t) => {
+      const h = setup(t, { resend: resend ? "http" : undefined, sheet: sheet ? "http" : undefined });
       assert.equal((await submit(h.data)).success, success);
       assert.equal(h.emails().length, 1);
       assert.equal(h.appends().length, 1);
-      assert.equal(h.logs.mock.callCount(), Number(brevo) + Number(sheet));
+      assert.equal(h.logs.mock.callCount(), Number(resend) + Number(sheet));
       assert.match(JSON.stringify(h.logs.mock.calls), /submissionId/);
       assert.doesNotMatch(JSON.stringify(h.logs.mock.calls), /visitor@|test-only|Private upstream|A test enquiry/);
     });
@@ -219,9 +225,9 @@ for (const [name, submit, source] of [
     h.data.append("inspiration", new File([png], "../../private-name.png", { type: "image/png" }));
     h.data.append("inspiration", new File([jpg], "private-name.jpg", { type: "image/jpeg" }));
     assert.deepEqual(await submit(h.data), { success: true });
-    assert.deepEqual(h.mail().attachment, [
-      { name: "inspiration-1.png", content: png.toString("base64") },
-      { name: "inspiration-2.jpg", content: jpg.toString("base64") },
+    assert.deepEqual(h.mail().attachments, [
+      { filename: "inspiration-1.png", content: png.toString("base64") },
+      { filename: "inspiration-2.jpg", content: jpg.toString("base64") },
     ]);
     assert.equal(h.row()[8], "inspiration-1.png, inspiration-2.jpg");
   });
@@ -266,14 +272,14 @@ test("contact maps all fields, escapes HTML, sanitizes headers and stores formul
   assert.match(row[1], /^[a-f\d-]{36}$/);
   assert.deepEqual(row.slice(2), ["/contact", "Visitor\r\nBcc: someone", "visitor@example.invalid", "=HYPERLINK(\"https://example.invalid\",\"company\")", "Private Label", "<script>alert('x')</script>\n& next line", ""]);
   const mail = h.mail();
-  assert.deepEqual(mail.sender, { name: "Basenote Contact", email: "sender@example.invalid" });
-  assert.deepEqual(mail.to, [{ email: "marketing@example.invalid" }]);
-  assert.deepEqual(mail.replyTo, { email: "visitor@example.invalid", name: "Visitor Bcc: someone" });
+  assert.equal(mail.from, "Basenote Contact <sender@example.invalid>");
+  assert.deepEqual(mail.to, ["marketing@example.invalid"]);
+  assert.equal(mail.reply_to, "visitor@example.invalid");
   assert.equal(mail.subject, "[Basenote] Private Label enquiry from Visitor Bcc: someone");
-  assert.match(mail.htmlContent, /&lt;script&gt;alert\(&#39;x&#39;\)&lt;\/script&gt;<br \/>&amp; next line/);
-  assert.ok(mail.textContent.includes(row[7]));
-  assert.ok(mail.textContent.includes(row[1]));
-  assert.equal(mail.attachment, undefined);
+  assert.match(mail.html, /&lt;script&gt;alert\(&#39;x&#39;\)&lt;\/script&gt;<br \/>&amp; next line/);
+  assert.ok(mail.text.includes(row[7]));
+  assert.ok(mail.text.includes(row[1]));
+  assert.equal(mail.attachments, undefined);
   assert.equal(h.appends()[0].url.searchParams.get("valueInputOption"), "RAW");
   assert.equal(h.appends()[0].url.searchParams.get("insertDataOption"), "INSERT_ROWS");
   assert.ok(decodeURIComponent(h.appends()[0].url.pathname).endsWith("/'Sheet1'!A:I:append"));
@@ -300,12 +306,12 @@ test("guide keeps project details together in all three destinations", async (t)
   assert.equal(body.attachments, undefined);
   for (const detail of ["Phone / WhatsApp: +44 123456789", "Already spoken to Basenote: No", "100ml reference", "round cap", "Fragrance route: Bespoke", "A detailed project brief\nwith references."]) {
     assert.ok(h.row()[7].includes(detail));
-    assert.ok(h.mail().textContent.includes(detail));
+    assert.ok(h.mail().text.includes(detail));
   }
 });
 
 for (const failure of ["network", "timeout", "invalid-json", "invalid-response"] as const) {
-  for (const destination of ["brevo", "sheet"] as const) {
+  for (const destination of ["resend", "sheet"] as const) {
     test(`${destination} ${failure} still allows the other destination without retrying`, async (t) => {
       const h = setup(t, { [destination]: failure });
       assert.deepEqual(await submitContactForm(h.data), { success: true });
@@ -316,7 +322,7 @@ for (const failure of ["network", "timeout", "invalid-json", "invalid-response"]
   }
 }
 
-for (const variable of ["BREVO_API_KEY", "BREVO_SENDER_EMAIL", "DESTINATION_INBOX", "GOOGLE_SHEETS_CLIENT_EMAIL", "GOOGLE_SHEETS_PRIVATE_KEY", "GOOGLE_SHEETS_SPREADSHEET_ID"]) {
+for (const variable of ["RESEND_API_KEY", "RESEND_SENDER_EMAIL", "DESTINATION_INBOX", "GOOGLE_SHEETS_CLIENT_EMAIL", "GOOGLE_SHEETS_PRIVATE_KEY", "GOOGLE_SHEETS_SPREADSHEET_ID"]) {
   test(`missing ${variable} only disables its own destination`, async (t) => {
     const h = setup(t);
     delete process.env[variable];
@@ -330,7 +336,7 @@ for (const variable of ["BREVO_API_KEY", "BREVO_SENDER_EMAIL", "DESTINATION_INBO
 
 test("missing both configurations returns a retryable failure", async (t) => {
   const h = setup(t);
-  delete process.env.BREVO_API_KEY;
+  delete process.env.RESEND_API_KEY;
   delete process.env.GOOGLE_SHEETS_PRIVATE_KEY;
   const result = await submitContactForm(h.data);
   assert.equal(result.success, false);
@@ -351,7 +357,7 @@ test("the ERP receives the enquiry with its bearer key, and an ERP-only delivery
     fbc: "", fbp: "", client_ip: "", user_agent: "",
   });
   assert.equal(body.submission_id, h.row()[1]);
-  delete process.env.BREVO_API_KEY;
+  delete process.env.RESEND_API_KEY;
   delete process.env.GOOGLE_SHEETS_PRIVATE_KEY;
   h.data.set(TURNSTILE_RESPONSE_FIELD, "fresh-erp-only");
   assert.deepEqual(await submitContactForm(h.data), { success: true });
