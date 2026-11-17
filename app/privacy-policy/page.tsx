@@ -1,51 +1,101 @@
 import { LegalPage } from "@/components/site/SitePages";
+import { contactDetails } from "@/data/site-content";
 import { createPageMetadata } from "@/lib/site";
 
 export const metadata = createPageMetadata({
   title: "Privacy Policy",
-  description:
-    "Draft privacy policy for Basenote Solutions covering enquiry submissions, operational communications, and website data handling.",
+  description: "How Basenote Solutions handles website enquiries, Meta lead forms, cookies and advertising measurement, and how to exercise your privacy rights.",
   path: "/privacy-policy"
 });
 
+const privacyContact = <a href={`mailto:${contactDetails.email}?subject=Privacy%20request`}>{contactDetails.email}</a>;
+
 const sections = [
   {
-    title: "Information We Collect",
+    title: "Who is responsible for your information",
     body: [
-      "When you contact Basenote Solutions, we may collect your name, email address, company or brand name, and the details you choose to share about your project or enquiry.",
-      "We may also collect limited technical information required to protect the contact form from abuse, such as submission timing and basic request metadata needed for fraud prevention and delivery reliability."
+      "BASENOTE SOLUTIONS LTD, trading as Basenote Solutions, is the controller of the personal information described here. We are registered in England and Wales, company number 16514935. Our registered office is 3 The Ridgeway, Chatham, United Kingdom, ME4 6PD.",
+      <>For privacy questions or requests, email {privacyContact} with “Privacy request” in the subject, or write to our registered office.</>
     ]
   },
   {
-    title: "How We Use Your Information",
+    title: "Information we collect and where it comes from",
     body: [
-      "We use the information you submit to review enquiries, respond to requests, scope potential projects, and maintain an internal record of prospective client conversations.",
-      "We do not use contact-form submissions for unrelated marketing campaigns without a clear lawful basis and an appropriate opt-in process."
+      "You give us information when you use our contact or private-label project forms, email us, discuss a project, or submit one of our lead forms on Facebook or Instagram. This can include your name, email, phone number, business or brand, project requirements, messages, preferences, and images or other files you choose to send. Please avoid sending sensitive personal information that is unnecessary for your enquiry.",
+      "Meta lead forms also provide the submission, form and Page identifiers and submission time. We keep correspondence, enquiry ownership, follow-up notes and progress through our sales process in our internal Base Note ERP customer relationship system.",
+      "Our website and security providers process technical data such as IP address, browser and device information, page requests, submission timing and security-check results. If you allow the relevant optional cookies, Google and Meta also collect visit and advertising identifiers, page activity and referral information."
     ]
   },
   {
-    title: "Sharing and Storage",
+    title: "Why we use information and our lawful bases",
     body: [
-      "Enquiry details may be processed by our website hosting provider, email delivery tools, and the internal team members responsible for replying to your request. We limit access to people who need it for operational or commercial follow-up.",
-      "We aim to retain enquiry records only for as long as reasonably necessary to manage communication, evaluate business opportunities, and meet legal or administrative requirements."
+      "We use enquiry and project information to answer you, discuss requirements, prepare proposals and deliver agreed services. Where you are entering a contract personally, this is to take steps at your request or perform that contract. For contacts acting for an organisation, we rely on our legitimate interests in managing business relationships and responding to relevant enquiries.",
+      "We rely on our legitimate interests to maintain customer records, protect our website, prevent misuse, troubleshoot delivery and understand which enquiries and advertising lead to business, taking account of the effects on people and their rights. We process information to comply with applicable legal obligations, including required business records and lawful requests.",
+      "We ask for consent before loading optional analytics or advertising cookies. You can decline them and still use the website and send an enquiry. Submitting an enquiry is not a subscription to unrelated email or text marketing; where such marketing requires consent, we will ask separately."
     ]
   },
   {
-    title: "Your Rights",
+    title: "Meta lead forms and advertising measurement",
     body: [
-      "Depending on your jurisdiction, you may have rights to request access to, correction of, or deletion of personal information that we hold about you.",
-      "This draft policy should be updated with the correct legal contact route and jurisdiction-specific language before the page is treated as final."
+      "When you submit a Facebook or Instagram lead form, Meta sends the details you choose to share to us so we can respond. We import them into Base Note ERP and assign the enquiry to a team member. Meta also processes information under its own privacy policy.",
+      "We use Meta’s Conversions API to report enquiry and sales milestones, including a new lead, qualification, conversion and a won project. These reports include an event identifier and time, hashed email address, phone number and first/last name where available, a Meta lead identifier where applicable, and a won project’s value and currency. Website browser/click identifiers, IP address and user agent are included with website enquiries only when you allow Meta advertising cookies.",
+      "Hashing replaces contact details with a consistent coded value so Meta can match them; it does not make them anonymous. These reports help measure and improve our advertising and may be used by Meta for advertising matching, delivery and measurement. We do not include your enquiry message, project images, formulation details or internal notes in conversion events.",
+      <>Cookie choices control the Meta Pixel and extra website matching identifiers. Server-side reporting of enquiry milestones is separate and relies on our legitimate interests in measuring and improving relevant advertising. You can object to use of your personal information for direct marketing, including associated profiling, at any time by contacting {privacyContact}. See also <a href="https://www.facebook.com/privacy/policy/">Meta’s Privacy Policy</a> and <a href="https://www.facebook.com/adpreferences/">Meta’s ad preferences</a>.</>
+    ]
+  },
+  {
+    title: "Cookies and your choices",
+    body: [
+      "Essential website and security tools support page delivery and protect our forms from automated abuse. Cloudflare Turnstile processes browser and security signals for this purpose. Our bn_privacy cookie remembers your choices for 180 days; it is not used for advertising.",
+      "Google Analytics, loaded through Google Tag Manager only if you allow analytics, helps us understand website use. Meta Pixel, loaded only if you allow Meta advertising, reports website activity and helps connect visits with advertising. Common first-party cookies include Google’s _ga and _ga_* cookies and Meta’s _fbp and _fbc cookies. Their expiry can be inspected in your browser; provider settings, subsequent visits and browser restrictions affect how long they remain.",
+      "Use Cookie settings in the footer to accept, reject or change either optional purpose. Withdrawing a previously enabled choice refreshes the page to stop loaded tracking code and removes the corresponding first-party cookies we can access. It does not undo processing that already occurred. Your browser also lets you inspect and delete cookies, including cookies set by third-party sites.",
+      <>For more information, see <a href="https://policies.google.com/privacy">Google’s Privacy Policy</a>, <a href="https://www.facebook.com/privacy/policies/cookies/">Meta’s Cookies Policy</a>, and <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s Privacy Policy</a>.</>
+    ]
+  },
+  {
+    title: "Who receives information",
+    body: [
+      "Team members handling your enquiry and service providers supporting that work receive the information they need. Our website uses Vercel for hosting, Cloudflare for delivery/security services, Brevo for enquiry email delivery, Google Workspace and Google Sheets for communications and enquiry records, and Render to host Base Note ERP. Image attachments are delivered by email; the enquiry sheet records attachment filenames. The ERP website intake receives enquiry text and permitted matching data, not image attachments.",
+      "Google and Meta receive analytics or advertising information as described above and may act as independent controllers for their own purposes. We may also disclose relevant information to professional advisers, authorities where required by law, or a successor in a business transfer subject to appropriate confidentiality and data-protection arrangements. We do not sell enquiry lists."
+    ]
+  },
+  {
+    title: "International processing and security",
+    body: [
+      "Our team and providers may process information outside the United Kingdom, including in the United States and Singapore. Where UK data-protection law requires safeguards for a restricted transfer, these may include an applicable adequacy decision or approved contractual safeguards, such as the UK International Data Transfer Agreement or UK Addendum to standard contractual clauses. Contact us for information about the safeguards relevant to your data.",
+      "We restrict internal access according to responsibilities and use authenticated systems and encrypted connections. No internet transmission or storage system is completely secure. Please contact us if you believe information has been sent to us in error or exposed."
+    ]
+  },
+  {
+    title: "How long we keep information",
+    body: [
+      "We keep enquiries and correspondence while they remain relevant to an active discussion, an ongoing business relationship or a reasonable follow-up need. Retention depends on whether an opportunity remains active, when we last had meaningful contact, and whether you have asked us to stop. We retain records for longer only where a legal, contractual or dispute-related reason requires it.",
+      "For customers, relevant information may be retained with project, contract and statutory business records for the applicable retention period. Security logs and backups follow the operational retention of the relevant service; deleted information can remain in restricted backups until those copies expire. Contact us for retention information relating to a particular record or to request erasure."
+    ]
+  },
+  {
+    title: "Your rights and complaints",
+    body: [
+      "Under applicable data-protection law, you can ask to access, correct or erase personal information, restrict its use, receive portable information where that right applies, or object to processing based on legitimate interests. The right to object to direct marketing is absolute. You can withdraw consent at any time without affecting the lawfulness of earlier processing. Other rights can be subject to statutory exceptions.",
+      <>Send a request to {privacyContact}. To request deletion of information received through a Meta lead form or our Meta app, use “Meta data deletion” as the subject and tell us the contact details used in the form so we can find the record. We may need proportionate information to verify your identity; do not send identity documents unless we request them securely. We normally respond within one month, and will explain any lawful extension or reason we cannot fully act.</>,
+      <>You can complain to the UK <a href="https://ico.org.uk/make-a-complaint/">Information Commissioner’s Office</a> or your local supervisory authority. We welcome the opportunity to address a concern first, but you do not have to contact us before complaining.</>
+    ]
+  },
+  {
+    title: "Other information and changes",
+    body: [
+      "Providing enquiry details is voluntary, but we need the fields marked as required to respond through the form. We do not use these enquiries to make solely automated decisions that produce legal or similarly significant effects. Our business website and enquiry services are not directed at children.",
+      "We update this policy when our processing changes. The date on this page identifies the current version; where required, we will give additional notice or ask for fresh consent."
     ]
   }
 ] as const;
 
 export default function PrivacyPolicyPage() {
-  return (
-    <LegalPage
-      title="Privacy Policy"
-      intro="This draft privacy policy explains the categories of information Basenote Solutions may collect through the website and how that information is used to respond to enquiries and support operations."
-      lastUpdated="March 28, 2026"
-      sections={sections}
-    />
-  );
+  return <LegalPage
+    draft={false}
+    title="Privacy Policy"
+    intro="How Basenote Solutions uses personal information from website visitors, enquiries and Meta lead forms, the choices you have, and how to contact us."
+    lastUpdated="17 November 2026"
+    sections={sections}
+  />;
 }

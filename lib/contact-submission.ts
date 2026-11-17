@@ -8,6 +8,7 @@ import { cookies, headers } from "next/headers";
 import { deliverContactEnquiry, NO_VISITOR_MATCH, type EnquiryForm, type VisitorMatch } from "@/lib/contact-delivery";
 import { guardPublicSubmission } from "@/lib/contact-form-guard";
 import { parseProjectImages } from "@/lib/private-label-project";
+import { PRIVACY_COOKIE, privacyChoice } from "@/lib/privacy-choice";
 
 export type ContactResult =
   | { success: true }
@@ -22,14 +23,15 @@ function getTrimmedField(formData: FormData, fieldName: string) {
 }
 
 /**
- * Meta's _fbc/_fbp cookies and the visitor's IP and user agent. The IP is the host's own
- * x-real-ip, else the first x-forwarded-for entry; cf-connecting-ip is ignored because a
+ * With advertising consent, Meta's _fbc/_fbp cookies and the visitor's IP and user agent.
+ * The IP is the host's x-real-ip, else the first x-forwarded-for entry; cf-connecting-ip is ignored because a
  * client can set it on Vercel.
  */
 export function visitorMatchFrom(
   cookieStore: { get(name: string): { value: string } | undefined },
   headerStore: { get(name: string): string | null },
 ): VisitorMatch {
+  if (!privacyChoice(cookieStore.get(PRIVACY_COOKIE)?.value).marketing) return NO_VISITOR_MATCH;
   const forwarded = headerStore.get("x-forwarded-for")?.split(",")[0] ?? "";
   const clientIp = [headerStore.get("x-real-ip") ?? "", forwarded]
     .map((value) => value.trim())
